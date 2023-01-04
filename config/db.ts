@@ -1,8 +1,15 @@
 import { ConnectOptions } from 'mongodb';
-import { connect } from 'mongoose';
+import mongoose from 'mongoose';
 
+
+mongoose.set("strictQuery", false);
 
 export const connectDB = async () => {
-  await connect(process.env.MONGO_URI!);
-  console.log('MongoDb Connected');
+  try {
+    await mongoose.connect(process.env.MONGO_URI!);
+    console.log('MongoDb Connected');
+  } catch (error) {
+    console.log("Couldn't connect to DB");
+
+  }
 }
