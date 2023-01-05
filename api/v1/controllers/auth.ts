@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
 import express from 'express'
+import UserModel from '../../../models/user.model';
+
 
 
 export default () => {
@@ -16,6 +18,8 @@ export default () => {
       // check for validation errors
       const errors = validationResult(req);
       if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+
+      // await UserModel.findone
 
       return res.status(200).json({
 
