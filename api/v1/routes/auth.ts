@@ -8,14 +8,28 @@ const AdminController = Controller();
 router.post(
   '/login',
   [
-    body('email', 'Failed! Email cant be blank')
+    body('email', 'Failed! Email is required')
       .exists()
       .bail()
       .isEmail()
       .withMessage('Invalid Email format'),
-    body('password', 'Failed! Password cant be blank').exists(),
+    body('password', 'Failed! Password is required').exists(),
   ],
   AdminController.Login
+);
+
+router.post(
+  '/register',
+  [
+    body('email', 'Failed! Email is required')
+      .exists()
+      .bail()
+      .isEmail()
+      .withMessage('Invalid Email format'),
+    body('password', 'Failed! Password is required').exists(),
+    body('fullname', 'Failed! Full name is required').exists(),
+  ],
+  AdminController.Register
 );
 
 export default router;
