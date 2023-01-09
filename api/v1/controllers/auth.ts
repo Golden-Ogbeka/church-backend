@@ -115,7 +115,7 @@ export default () => {
           name: existingUser?.fullname,
           intro: 'You have received this email because a password reset request for your account was received.',
           action: {
-            instructions: `Click the button below to reset your password or use ${verificationCode} as your verification code :`,
+            instructions: `Click the button below to reset your password or use <b>${verificationCode}</b> as your verification code :`,
             button: {
               color: '#DC4D2F',
               text: "Reset password",
