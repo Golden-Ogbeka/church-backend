@@ -22,11 +22,11 @@ export default () => {
 
       // find user
       const existingUser = await UserModel.findOne({ email });
-      if (!existingUser) return res.status(404).json({ message: "Invalid email or password" })
+      if (!existingUser) return res.status(401).json({ message: "Invalid email or password" })
 
       // compare passwords
       bcrypt.compare(password, existingUser.password, function (err, matched) {
-        if (!matched) return res.status(404).json({ message: "Invalid email or password" })
+        if (!matched) return res.status(401).json({ message: "Invalid email or password" })
 
         // Generate JWT Token
         jwt.sign(existingUser.toJSON(), process.env.JWT_SECRET || "secret", { expiresIn: "2d" }, (err, token) => {
@@ -146,7 +146,7 @@ export default () => {
 
       // Hash password
       bcrypt.hash(newPassword, 8, async function (err, hash) {
-        if (!existingUser) return res.status(404).json({ message: "Invalid email or verification code" });
+        if (!existingUser) return res.status(401).json({ message: "Invalid email or verification code" });
 
         const verificationCode = crypto.randomUUID().substring(0, 5);
 
