@@ -4,8 +4,8 @@ import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
 import express from 'express'
 import UserModel from '../../../models/user.model';
-
-
+import { sendEmail } from '../../../utils/mailer';
+import crypto from "crypto"
 
 
 export default () => {
@@ -36,11 +36,7 @@ export default () => {
             token
           });
         })
-
-
       });
-
-
     } catch (error) {
       return res.status(500).json({ message: 'Internal Server Error' });
     }
@@ -93,10 +89,61 @@ export default () => {
     }
   };
 
+  // Request Password Reset
+  const ResetPasswordRequest = async (req: express.Request<never, never, { email: string }>, res: express.Response) => {
+    try {
+
+      // check for validation errors
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+
+      const { email } = req.body
+
+      // check if user exists
+      let existingUser = await UserModel.findOne({ email });
+      if (!existingUser) return res.status(404).json({ message: "User not found" })
+
+      const verificationCode = crypto.randomUUID().substring(0, 5);
+
+      existingUser.verificationCode = verificationCode;
+
+      existingUser.save();
+
+      const emailToSend = {
+        body: {
+          greeting: 'Dear',
+          name: existingUser?.fullname,
+          intro: 'You have received this email because a password reset request for your account was received.',
+          action: {
+            instructions: `Click the button below to reset your password or use ${verificationCode} as your verification code :`,
+            button: {
+              color: '#DC4D2F',
+              text: "Reset password",
+              fallback: true,
+              link: `https://tfhconline.org.ng/reset-password-update?code=${verificationCode}`
+            }
+          },
+          signature: "Regards",
+          outro: 'If you did not request a password reset, no further action is required on your part.'
+        }
+      };
+
+      sendEmail(email, "Reset Password", emailToSend)
+
+      return res.status(200).json({
+        message: "Reset password request successful",
+      });
+
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
 
 
   return {
     Login,
-    Register
+    Register,
+    ResetPasswordRequest
   };
 };

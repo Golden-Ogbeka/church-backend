@@ -41,4 +41,21 @@ router.post(
   AuthController.Register
 );
 
+router.post(
+  '/reset-password',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+    body('email', 'Failed! Email is required')
+      .exists()
+      .bail()
+      .isEmail()
+      .withMessage('Invalid Email format'),
+
+  ],
+  AuthController.ResetPasswordRequest
+);
+
 export default router;
