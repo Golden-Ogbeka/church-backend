@@ -52,7 +52,6 @@ export default () => {
 
   const Register = async (req: express.Request<never, never, RegistrationDetails>, res: express.Response) => {
     try {
-
       // check for validation errors
       const errors = validationResult(req);
       if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
@@ -62,8 +61,6 @@ export default () => {
       // check if user exists
       let existingUser = await UserModel.findOne({ email });
       if (existingUser && Object.keys(existingUser).length) return res.status(401).json({ message: "User already exists" });
-
-
 
       // Hash password
       bcrypt.hash(password, 8, async function (err, hash) {
@@ -80,10 +77,6 @@ export default () => {
         });
 
       });
-
-
-
-
     } catch (error) {
       return res.status(500).json({ message: 'Internal Server Error' });
     }
@@ -135,7 +128,46 @@ export default () => {
       });
 
     } catch (error) {
-      console.log(error)
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
+
+  const ResetPasswordUpdate = async (req: express.Request<never, never, { email: string, newPassword: string, verificationCode: string }>, res: express.Response) => {
+    try {
+
+      // check for validation errors
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+
+      const { email, newPassword, verificationCode } = req.body
+
+      // check if user exists
+      let existingUser = await UserModel.findOne({ email, verificationCode });
+
+      // Hash password
+      bcrypt.hash(newPassword, 8, async function (err, hash) {
+        if (!existingUser) return res.status(404).json({ message: "Invalid email or verification code" });
+
+        existingUser.password = hash;
+        existingUser.save();
+
+        const emailToSend = {
+          body: {
+            greeting: 'Dear',
+            name: existingUser?.fullname,
+            intro: 'You have successfully reset your password',
+            signature: "Regards",
+            outro: 'If you did not request a password reset, please contact TFH Admin.'
+          }
+        };
+
+        sendEmail(email, "Reset password update", emailToSend)
+
+        return res.status(200).json({
+          message: "Password updated successfully",
+        });
+      });
+    } catch (error) {
       return res.status(500).json({ message: 'Internal Server Error' });
     }
   };
@@ -144,6 +176,7 @@ export default () => {
   return {
     Login,
     Register,
-    ResetPasswordRequest
+    ResetPasswordRequest,
+    ResetPasswordUpdate
   };
 };

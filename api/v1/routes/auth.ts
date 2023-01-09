@@ -13,12 +13,12 @@ router.post(
       .exists()
       .bail()
       .custom((value) => isValidAPI(value)),
-    body('email', 'Failed! Email is required')
+    body('email', 'Email is required')
       .exists()
       .bail()
       .isEmail()
       .withMessage('Invalid Email format'),
-    body('password', 'Failed! Password is required').exists(),
+    body('password', 'Password is required').exists(),
   ],
   AuthController.Login
 );
@@ -30,13 +30,13 @@ router.post(
       .exists()
       .bail()
       .custom((value) => isValidAPI(value)),
-    body('email', 'Failed! Email is required')
+    body('email', 'Email is required')
       .exists()
       .bail()
       .isEmail()
       .withMessage('Invalid Email format'),
-    body('password', 'Failed! Password is required').exists(),
-    body('fullname', 'Failed! Full name is required').exists(),
+    body('password', 'Password is required').exists(),
+    body('fullname', 'Full name is required').exists(),
   ],
   AuthController.Register
 );
@@ -48,7 +48,7 @@ router.post(
       .exists()
       .bail()
       .custom((value) => isValidAPI(value)),
-    body('email', 'Failed! Email is required')
+    body('email', 'Email is required')
       .exists()
       .bail()
       .isEmail()
@@ -56,6 +56,25 @@ router.post(
 
   ],
   AuthController.ResetPasswordRequest
+);
+
+router.post(
+  '/reset-password/update',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+    body('email', 'Email is required')
+      .exists()
+      .bail()
+      .isEmail()
+      .withMessage('Invalid Email format'),
+    body('newPassword', 'New password is required').exists(),
+    body('verificationCode', 'Verification code is required').exists(),
+
+  ],
+  AuthController.ResetPasswordUpdate
 );
 
 export default router;
