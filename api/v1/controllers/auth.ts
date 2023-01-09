@@ -148,7 +148,11 @@ export default () => {
       bcrypt.hash(newPassword, 8, async function (err, hash) {
         if (!existingUser) return res.status(404).json({ message: "Invalid email or verification code" });
 
+        const verificationCode = crypto.randomUUID().substring(0, 5);
+
+
         existingUser.password = hash;
+        existingUser.verificationCode = verificationCode; //resetting the verification code also
         existingUser.save();
 
         const emailToSend = {

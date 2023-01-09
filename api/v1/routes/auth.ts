@@ -70,7 +70,7 @@ router.post(
       .bail()
       .isEmail()
       .withMessage('Invalid Email format'),
-    body('newPassword', 'New password is required').exists(),
+    body('newPassword', 'New password is required').exists().notEmpty().withMessage("New password cannot be empty"),
     body('verificationCode', 'Verification code is required').exists(),
 
   ],
