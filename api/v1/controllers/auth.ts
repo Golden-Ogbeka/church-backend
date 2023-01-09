@@ -29,7 +29,7 @@ export default () => {
         if (!matched) return res.status(404).json({ message: "Invalid email or password" })
 
         // Generate JWT Token
-        jwt.sign(existingUser, process.env.JWT_SECRET || "secret", { expiresIn: "2d" }, (err, token) => {
+        jwt.sign(existingUser.toJSON(), process.env.JWT_SECRET || "secret", { expiresIn: "2d" }, (err, token) => {
           return res.status(200).json({
             message: "Login successful",
             user: existingUser,
