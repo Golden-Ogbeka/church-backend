@@ -1,4 +1,5 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Document, PaginateModel } from "mongoose";
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 export interface IDevotional extends Document {
   date: any;
@@ -36,6 +37,12 @@ devotionalSchema.methods.toJSON = function () {
   return obj;
 }
 
-const DevotionalModel = model<IDevotional>('Devotional', devotionalSchema)
+devotionalSchema.plugin(mongoosePaginate);
+
+// declare a mongoose document based on a Typescript interface representing your schema
+
+const DevotionalModel = model<IDevotional, PaginateModel<IDevotional>>('Devotional', devotionalSchema)
+
+// DevotionalModel.paginate
 
 export default DevotionalModel
