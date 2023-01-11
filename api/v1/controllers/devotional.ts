@@ -7,7 +7,7 @@ import express from 'express'
 import DevotionalModel from '../../../models/devotional.model';
 
 export default () => {
-  const GetAllDevotionals = async (req: express.Request<never, never, never, { page: number, limit: number }>, res: express.Response) => {
+  const GetAllDevotionals = async (req: express.Request<never, never, never, { page: number, limit: number, from: string, to: string }>, res: express.Response) => {
     try {
       // check for validation errors
       const errors = validationResult(req);
@@ -15,8 +15,15 @@ export default () => {
 
       const paginationOptions = getPaginationOptions(req)
 
+      const { from, to } = req.query
+
       // find all devotionals
-      const devotionalsData = await DevotionalModel.paginate({}, paginationOptions);
+      const devotionalsData = await DevotionalModel.paginate({
+        createdAt: {
+          $gte: from ? new Date(from) : "",
+          $lte: to ? new Date(to) : ""
+        }
+      }, paginationOptions);
 
       return res.status(200).json({
         message: "All Devotionals Retrieved",

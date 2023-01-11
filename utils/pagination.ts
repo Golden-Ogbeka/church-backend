@@ -21,6 +21,7 @@ export const getPaginationOptions = (req: express.Request<never, never, never, {
     page,
     limit: limit || defaultLimit,
     customLabels: myCustomLabels,
+    sort: ({ createdAt: -1 })
   };
 
   return pageOptions
