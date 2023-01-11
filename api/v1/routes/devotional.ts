@@ -73,4 +73,21 @@ router.get(
   DevotionalController.GetDayDevotional
 );
 
+// Delete devotional by id
+router.delete(
+  '/:id',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+    header('authorization', 'Please specify an authorization header')
+      .exists()
+      .bail()
+      .custom((value) => isAdmin(value)),
+    param("id", "ID is required").exists().custom(value => isValidObjectId(value))
+  ],
+  DevotionalController.DeleteDevotional
+);
+
 export default router;

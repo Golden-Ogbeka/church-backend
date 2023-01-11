@@ -30,7 +30,7 @@ app.use('/api', ApiVersions);
 
 // Not found route
 app.use((req, res) => {
-  res.status(404).json({ message: 'API not found.' });
+  res.status(404).json({ message: 'API route not found.' });
 });
 
 app.listen(

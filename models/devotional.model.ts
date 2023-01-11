@@ -17,7 +17,7 @@ export interface IDevotional extends Document {
 
 
 const devotionalSchema = new Schema<IDevotional>({
-  date: { type: Date, required: true },
+  date: { type: Date, required: true, unique: true },
   title: { type: String, required: true },
   text: { type: String, required: true },
   mainText: { type: String, required: true },

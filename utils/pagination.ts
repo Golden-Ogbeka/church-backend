@@ -12,7 +12,7 @@ const myCustomLabels = {
   meta: 'pagination',
 };
 
-export const getPaginationOptions = (req: express.Request<never, never, never, { page: number, limit: number }>) => {
+export const getPaginationOptions = (req: express.Request<never, never, never, { page: number, limit: number }>, sortBy?: {}) => {
   const { page = 1, limit } = req.query
 
   const defaultLimit: number = Number(process.env.PAGE_LIMIT)
@@ -21,7 +21,7 @@ export const getPaginationOptions = (req: express.Request<never, never, never, {
     page,
     limit: limit || defaultLimit,
     customLabels: myCustomLabels,
-    sort: ({ createdAt: -1 })
+    sort: sortBy ? sortBy : { createdAt: -1 }
   };
 
   return pageOptions
