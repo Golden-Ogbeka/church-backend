@@ -1,7 +1,8 @@
+import { isValidObjectId } from './../../../middlewares/shared';
 import { isAdmin } from './../../../middlewares/auth';
 import { isValidAPI } from '../../../middlewares/shared';
 import { Router } from 'express';
-import { body, header } from 'express-validator';
+import { body, header, param, query } from 'express-validator';
 import Controller from '../controllers/devotional';
 
 const router = Router();
@@ -45,6 +46,31 @@ router.post(
 
   ],
   DevotionalController.AddDevotional
+);
+
+// Get devotional by id
+router.get(
+  '/view/:id',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+    param("id", "ID is required").exists().custom(value => isValidObjectId(value))
+  ],
+  DevotionalController.ViewDevotional
+);
+
+// Get today's devotional
+router.get(
+  '/today',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+  ],
+  DevotionalController.GetDayDevotional
 );
 
 export default router;
