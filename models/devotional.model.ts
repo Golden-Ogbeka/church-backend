@@ -12,6 +12,7 @@ export interface IDevotional extends Document {
   oneYearBibleReading: string[];
   twoYearsBibleReading: string[];
   createdBy: string;
+  updatedBy: string;
   views: number
 }
 
@@ -27,6 +28,7 @@ const devotionalSchema = new Schema<IDevotional>({
   oneYearBibleReading: { type: [String], required: true },
   twoYearsBibleReading: { type: [String], required: true },
   createdBy: { type: String, required: true },
+  updatedBy: { type: String, required: true },
   views: { type: Number, required: true, default: 0 },
 }, { timestamps: true });
 

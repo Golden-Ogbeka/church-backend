@@ -65,7 +65,8 @@ export default () => {
         furtherReading,
         oneYearBibleReading,
         twoYearsBibleReading,
-        createdBy: userDetails.fullname
+        createdBy: userDetails.fullname,
+        updatedBy: userDetails.fullname
       })
 
       await newDevotional.save()
@@ -166,11 +167,67 @@ export default () => {
     }
   };
 
+  interface UpdateBody extends DevotionalType {
+    id: string
+  }
+  const UpdateDevotional = async (req: express.Request<never, never, UpdateBody>, res: express.Response) => {
+    try {
+      // check for validation errors
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+
+      const {
+        id,
+        date,
+        title,
+        text,
+        mainText,
+        content,
+        confession,
+        furtherReading,
+        oneYearBibleReading,
+        twoYearsBibleReading,
+      } = req.body
+
+      const userDetails = await getUserDetails(req as any)
+
+
+      const existingDevotional = await DevotionalModel.findById(id);
+      if (!existingDevotional) return res.status(401).json({ message: "Devotional not found" })
+
+      // Check if devotional exists for this date
+      const existingDevotionalWithDate = await DevotionalModel.findOne({ date: new Date(date) });
+      if (existingDevotionalWithDate && (JSON.stringify(existingDevotionalWithDate) !== JSON.stringify(existingDevotional))) return res.status(401).json({ message: "Devotional for this date already exists" })
+
+      existingDevotional.title = title;
+      existingDevotional.text = text;
+      existingDevotional.mainText = mainText;
+      existingDevotional.content = content;
+      existingDevotional.confession = confession;
+      existingDevotional.furtherReading = furtherReading;
+      existingDevotional.oneYearBibleReading = oneYearBibleReading;
+      existingDevotional.twoYearsBibleReading = twoYearsBibleReading;
+      existingDevotional.updatedBy = userDetails.fullname;
+
+
+      await existingDevotional.save()
+
+      return res.status(200).json({
+        message: "Devotional updated successfully",
+        devotional: existingDevotional
+      });
+
+    } catch (error) {
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
+
   return {
     GetAllDevotionals,
     AddDevotional,
     ViewDevotional,
     GetDayDevotional,
-    DeleteDevotional
+    DeleteDevotional,
+    UpdateDevotional
   };
 };

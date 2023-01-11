@@ -9,5 +9,7 @@ export interface DevotionalType {
   oneYearBibleReading: string[];
   twoYearsBibleReading: string[];
   createdBy: string;
+  updatedBy: string;
   views: number;
+  _id: string
 }
