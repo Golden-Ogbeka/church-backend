@@ -15,7 +15,10 @@ export default () => {
 
       const paginationOptions = getPaginationOptions(req)
 
+      const { from, to } = req.query
+
       // find all devotionals
+
       const devotionalsData = await DevotionalModel.paginate(getDateFilters(req), paginationOptions);
 
       return res.status(200).json({
