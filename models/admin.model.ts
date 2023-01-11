@@ -1,6 +1,6 @@
 import { Schema, model, Document } from "mongoose";
 
-export interface IUser extends Document {
+export interface IAdmin extends Document {
   fullname: string;
   email: string;
   avatar: string;
@@ -11,7 +11,7 @@ export interface IUser extends Document {
 }
 
 
-const userSchema = new Schema<IUser>({
+const adminSchema = new Schema<IAdmin>({
   fullname: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   avatar: { type: String, required: false },
@@ -22,13 +22,13 @@ const userSchema = new Schema<IUser>({
 }, { timestamps: true });
 
 // Hide Password in responses
-userSchema.methods.toJSON = function () {
+adminSchema.methods.toJSON = function () {
   let obj = this.toObject();
   delete obj.password;
   delete obj.verificationCode;
   return obj;
 }
 
-const UserModel = model<IUser>('User', userSchema)
+const AdminModel = model<IAdmin>('Admin', adminSchema)
 
-export default UserModel
+export default AdminModel
