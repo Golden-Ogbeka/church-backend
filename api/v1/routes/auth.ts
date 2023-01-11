@@ -13,12 +13,12 @@ router.post(
       .exists()
       .bail()
       .custom((value) => isValidAPI(value)),
-    body('email', 'Email is required')
+    body('email', 'Email is required').trim()
       .exists()
       .bail()
       .isEmail()
       .withMessage('Invalid Email format'),
-    body('password', 'Password is required').exists(),
+    body('password', 'Password is required').trim().exists(),
   ],
   AuthController.Login
 );
@@ -30,13 +30,13 @@ router.post(
       .exists()
       .bail()
       .custom((value) => isValidAPI(value)),
-    body('email', 'Email is required')
+    body('email', 'Email is required').trim()
       .exists()
       .bail()
       .isEmail()
       .withMessage('Invalid Email format'),
-    body('password', 'Password is required').exists(),
-    body('fullname', 'Full name is required').exists(),
+    body('password', 'Password is required').trim().exists(),
+    body('fullname', 'Full name is required').trim().exists(),
   ],
   AuthController.Register
 );
@@ -48,7 +48,7 @@ router.post(
       .exists()
       .bail()
       .custom((value) => isValidAPI(value)),
-    body('email', 'Email is required')
+    body('email', 'Email is required').trim()
       .exists()
       .bail()
       .isEmail()
@@ -65,13 +65,13 @@ router.post(
       .exists()
       .bail()
       .custom((value) => isValidAPI(value)),
-    body('email', 'Email is required')
+    body('email', 'Email is required').trim()
       .exists()
       .bail()
       .isEmail()
       .withMessage('Invalid Email format'),
-    body('newPassword', 'New password is required').exists().notEmpty().withMessage("New password cannot be empty"),
-    body('verificationCode', 'Verification code is required').exists(),
+    body('newPassword', 'New password is required').trim().exists().notEmpty().withMessage("New password cannot be empty"),
+    body('verificationCode', 'Verification code is required').trim().exists(),
 
   ],
   AuthController.ResetPasswordUpdate
