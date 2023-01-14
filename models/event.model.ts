@@ -4,6 +4,8 @@ import mongoosePaginate from 'mongoose-paginate-v2';
 
 export interface IEvent extends Document {
   name: string;
+  theme: string; //Topic of event
+  mainText: string; // Bible verse of event
   date: string; // Event dates would be entered as desired. E.g: Every Tuesday in August
   time: string; // Time would also be entered as desired. E.g: 6pm on Tuesday, 8pm on Monday and Saturday
   allowRegistration: boolean;
@@ -21,6 +23,8 @@ export interface IEvent extends Document {
 
 const eventSchema = new Schema<IEvent>({
   name: { type: String, required: true },
+  theme: { type: String, required: false },
+  mainText: { type: String, required: false },
   date: { type: String, required: true },
   time: { type: String, required: true },
   allowRegistration: { type: Boolean, required: true, default: false },
