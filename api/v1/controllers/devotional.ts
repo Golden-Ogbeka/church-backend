@@ -197,8 +197,11 @@ export default () => {
 
       // Check if devotional exists for this date
       const existingDevotionalWithDate = await DevotionalModel.findOne({ date: new Date(date) });
-      if (existingDevotionalWithDate && (JSON.stringify(existingDevotionalWithDate) !== JSON.stringify(existingDevotional))) return res.status(401).json({ message: "Devotional for this date already exists" })
+      if (existingDevotionalWithDate
+        && (JSON.stringify(existingDevotionalWithDate) !== JSON.stringify(existingDevotional))
+      ) return res.status(401).json({ message: "Devotional for this date already exists" })
 
+      existingDevotional.date = date;
       existingDevotional.title = title;
       existingDevotional.text = text;
       existingDevotional.mainText = mainText;
