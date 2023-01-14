@@ -2,7 +2,7 @@ import { Schema, model, Document, PaginateModel } from "mongoose";
 import mongoosePaginate from 'mongoose-paginate-v2';
 
 export interface IDevotional extends Document {
-  date: any;
+  date: Date;
   title: string;
   text: string;
   mainText: string;
@@ -31,13 +31,6 @@ const devotionalSchema = new Schema<IDevotional>({
   updatedBy: { type: String, required: true },
   views: { type: Number, required: true, default: 0 },
 }, { timestamps: true });
-
-// Hide Password in responses
-devotionalSchema.methods.toJSON = function () {
-  let obj = this.toObject();
-  delete obj.password;
-  return obj;
-}
 
 devotionalSchema.plugin(mongoosePaginate);
 

@@ -13,3 +13,7 @@ export interface DevotionalType {
   views: number;
   _id: string
 }
+
+export type UncertainObjectType = {
+  [key: string]: any;
+};
