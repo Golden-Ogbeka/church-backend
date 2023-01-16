@@ -17,3 +17,21 @@ export interface DevotionalType {
 export type UncertainObjectType = {
   [key: string]: any;
 };
+
+export interface EventType {
+  name: string;
+  theme: string;
+  mainText: string;
+  date: string;
+  time: string;
+  allowRegistration: boolean;
+  registrationEntries: any[];
+  gallery: string[];
+  limitedNumberRegistration: boolean;
+  registrationNumberLimit: number;
+  limitedDateRegistration: boolean;
+  registrationDateLimit: Date;
+  poster: string;
+  createdBy: string;
+  updatedBy: string;
+}
