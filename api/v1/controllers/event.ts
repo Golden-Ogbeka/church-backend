@@ -52,13 +52,7 @@ export default () => {
                 poster,
             } = req.body
 
-            const userDetails = await getUserDetails(req as any)
-
-            // Check if devotional exists for this date
-
-            const existingDevotional = await EventsModel.findOne({ date: new Date(date) });
-            if (existingDevotional) return res.status(401).json({ message: "Devotional for this date already exists" })
-
+            const userDetails = await getUserDetails(req as any);
             const newEvent = new EventsModel({
                 date,
                 name,
@@ -126,14 +120,14 @@ export default () => {
 
             // find devotional
 
-            const devotionalData = await EventsModel.findById(id)
+            const eventData = await EventsModel.findById(id)
 
-            if (!devotionalData) return res.status(404).json({ message: "Devotional not found" })
+            if (!eventData) return res.status(404).json({ message: "Event not found" })
 
             await EventsModel.findByIdAndDelete(id)
 
             return res.status(200).json({
-                message: "Devotional deleted"
+                message: "Event deleted"
             });
 
         } catch (error) {
