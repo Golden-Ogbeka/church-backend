@@ -113,7 +113,7 @@ export default () => {
 							fallback: true,
 							link: `${
 								process.env.ADMIN_DASHBOARD_URL || ''
-							}/reset-password-update?code=${verificationCode}`,
+							}/reset-password/update/${verificationCode}`,
 						},
 					},
 					signature: 'Regards',
