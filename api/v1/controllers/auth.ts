@@ -1,19 +1,16 @@
-/* eslint-disable import/extensions */
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
 import express from 'express'
-import UserModel from '../../../models/user.model';
+import AdminModel from '../../../models/admin.model';
 import { sendEmail } from '../../../utils/mailer';
 import crypto from "crypto"
 
 
 export default () => {
-
   // Login an Admin into their Account
   const Login = async (req: express.Request<never, never, { email: string, password: string }>, res: express.Response) => {
     try {
-
       // check for validation errors
       const errors = validationResult(req);
       if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
@@ -21,7 +18,7 @@ export default () => {
       const { email, password } = req.body
 
       // find user
-      const existingUser = await UserModel.findOne({ email });
+      const existingUser = await AdminModel.findOne({ email });
       if (!existingUser) return res.status(401).json({ message: "Invalid email or password" })
 
       // compare passwords
@@ -59,14 +56,14 @@ export default () => {
       const { email, password, fullname } = req.body
 
       // check if user exists
-      let existingUser = await UserModel.findOne({ email });
+      let existingUser = await AdminModel.findOne({ email });
       if (existingUser && Object.keys(existingUser).length) return res.status(401).json({ message: "User already exists" });
 
       // Hash password
       bcrypt.hash(password, 8, async function (err, hash) {
         // Store hash in your password DB.
         //Store new user
-        let newUser = await UserModel.create({
+        let newUser = await AdminModel.create({
           email,
           password: hash,
           fullname,
@@ -93,7 +90,7 @@ export default () => {
       const { email } = req.body
 
       // check if user exists
-      let existingUser = await UserModel.findOne({ email });
+      let existingUser = await AdminModel.findOne({ email });
       if (!existingUser) return res.status(404).json({ message: "User not found" })
 
       const verificationCode = crypto.randomUUID().substring(0, 5);
@@ -146,7 +143,7 @@ export default () => {
       const { email, newPassword, verificationCode } = req.body
 
       // check if user exists
-      let existingUser = await UserModel.findOne({ email, verificationCode });
+      let existingUser = await AdminModel.findOne({ email, verificationCode });
 
       // Hash password
       bcrypt.hash(newPassword, 8, async function (err, hash) {
