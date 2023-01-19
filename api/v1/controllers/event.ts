@@ -109,6 +109,60 @@ export default () => {
         }
     };
 
+    const UpdateEvent = async (req: express.Request<{ id: string }>, res: express.Response) => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+
+            const {
+                id,
+                date,
+                name,
+                theme,
+                mainText,
+                time,
+                allowRegistration,
+                limitedNumberRegistration,
+                registrationNumberLimit,
+                limitedDateRegistration,
+                registrationDateLimit,
+                poster,
+            } = req.body
+
+            const userDetails = await getUserDetails(req as any)
+
+
+            const existingEvent = await EventsModel.findById(id);
+            if (!existingEvent) return res.status(401).json({ message: "Event not found" })
+
+            // Check if Event exists for this date
+
+            existingEvent.name = name;
+            existingEvent.theme = theme;
+            existingEvent.mainText = mainText;
+            existingEvent.date = date;
+            existingEvent.time = time;
+            existingEvent.allowRegistration = allowRegistration;
+            existingEvent.limitedNumberRegistration = limitedNumberRegistration;
+            existingEvent.registrationNumberLimit = registrationNumberLimit;
+            existingEvent.registrationDateLimit = registrationDateLimit;
+            existingEvent.limitedDateRegistration = limitedDateRegistration;
+            existingEvent.poster = poster;
+            existingEvent.updatedBy = userDetails.fullname;
+
+
+            await existingEvent.save();
+
+            return res.status(200).json({
+                message: "Event updated successfully",
+                devotional: existingEvent
+            });
+
+        } catch (error) {
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+    }
+
 
     const DeleteEvent = async (req: express.Request<{ id: string }>, res: express.Response) => {
         try {
@@ -127,7 +181,7 @@ export default () => {
             await EventsModel.findByIdAndDelete(id)
 
             return res.status(200).json({
-                message: "Event deleted"
+                message: "Event deleted Successfully"
             });
 
         } catch (error) {
@@ -144,5 +198,6 @@ export default () => {
         AddEvent,
         ViewEvent,
         DeleteEvent,
+        UpdateEvent
     };
 };
