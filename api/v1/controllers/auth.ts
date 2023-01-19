@@ -100,23 +100,27 @@ export default () => {
       existingUser.save();
 
       const emailToSend = {
-        body: {
-          greeting: 'Dear',
-          name: existingUser?.fullname,
-          intro: 'You have received this email because a password reset request for your account was received.',
-          action: {
-            instructions: `Click the button below to reset your password or use <b>${verificationCode}</b> as your verification code :`,
-            button: {
-              color: '#DC4D2F',
-              text: "Reset password",
-              fallback: true,
-              link: `https://tfhconline.org.ng/reset-password-update?code=${verificationCode}`
-            }
-          },
-          signature: "Regards",
-          outro: 'If you did not request a password reset, no further action is required on your part.'
-        }
-      };
+				body: {
+					greeting: 'Dear',
+					name: existingUser?.fullname,
+					intro:
+						'You have received this email because a password reset request for your account was received.',
+					action: {
+						instructions: `Click the button below to reset your password or use <b>${verificationCode}</b> as your verification code :`,
+						button: {
+							color: '#DC4D2F',
+							text: 'Reset password',
+							fallback: true,
+							link: `${
+								process.env.ADMIN_DASHBOARD_URL || ''
+							}/reset-password/update/${verificationCode}`,
+						},
+					},
+					signature: 'Regards',
+					outro:
+						'If you did not request a password reset, no further action is required on your part.',
+				},
+			};
 
       sendEmail(email, "Reset Password", emailToSend)
 
