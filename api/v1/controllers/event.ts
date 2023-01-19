@@ -2,202 +2,216 @@ import { getUserDetails } from './../../../functions/auth';
 import { EventType } from './../../../types/index';
 import { getPaginationOptions } from './../../../utils/pagination';
 import { validationResult } from 'express-validator';
-import express from 'express'
+import express from 'express';
 import EventsModel from '../../../models/event.model';
 import { getDateFilters } from '../../../functions/filters';
-import { ObjectId } from 'mongodb'
+import { ObjectId } from 'mongodb';
 
 export default () => {
-    const GetAllEvents = async (req: express.Request<never, never, never, { page: number, limit: number, from: string, to: string }>, res: express.Response) => {
-        try {
-            // check for validation errors
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+	const GetAllEvents = async (
+		req: express.Request<
+			never,
+			never,
+			never,
+			{ page: number; limit: number; from: string; to: string }
+		>,
+		res: express.Response
+	) => {
+		try {
+			// check for validation errors
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
 
-            const paginationOptions = getPaginationOptions(req, { date: -1 })
+			const paginationOptions = getPaginationOptions(req, { date: -1 });
 
-            // find all devotionals
+			// find all events
 
-            const eventsData = await EventsModel.paginate(getDateFilters(req), paginationOptions);
+			const eventsData = await EventsModel.paginate(
+				getDateFilters(req),
+				paginationOptions
+			);
 
-            return res.status(200).json({
-                message: "All Events Retrieved",
-                data: eventsData
-            });
+			return res.status(200).json({
+				message: 'All Events Retrieved',
+				data: eventsData,
+			});
+		} catch (error) {
+			return res.status(500).json({ message: 'Internal Server Error' });
+		}
+	};
 
-        } catch (error) {
-            return res.status(500).json({ message: 'Internal Server Error' });
-        }
-    };
+	const AddEvent = async (
+		req: express.Request<never, never, EventType>,
+		res: express.Response
+	) => {
+		try {
+			// check for validation errors
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
 
-    const AddEvent = async (req: express.Request<never, never, EventType>, res: express.Response) => {
-        try {
-            // check for validation errors
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+			const {
+				date,
+				name,
+				theme,
+				mainText,
+				time,
+				allowRegistration,
+				registrationEntries,
+				gallery,
+				limitedNumberRegistration,
+				registrationNumberLimit,
+				limitedDateRegistration,
+				registrationDateLimit,
+				poster,
+			} = req.body;
 
-            const {
-                date,
-                name,
-                theme,
-                mainText,
-                time,
-                allowRegistration,
-                registrationEntries,
-                gallery,
-                limitedNumberRegistration,
-                registrationNumberLimit,
-                limitedDateRegistration,
-                registrationDateLimit,
-                poster,
-            } = req.body
+			const userDetails = await getUserDetails(req as any);
+			const newEvent = new EventsModel({
+				date,
+				name,
+				theme,
+				mainText,
+				time,
+				allowRegistration,
+				registrationEntries,
+				gallery,
+				limitedNumberRegistration,
+				registrationNumberLimit,
+				limitedDateRegistration,
+				registrationDateLimit,
+				poster,
+				createdBy: userDetails.fullname,
+				updatedBy: userDetails.fullname,
+			});
 
-            const userDetails = await getUserDetails(req as any);
-            const newEvent = new EventsModel({
-                date,
-                name,
-                theme,
-                mainText,
-                time,
-                allowRegistration,
-                registrationEntries,
-                gallery,
-                limitedNumberRegistration,
-                registrationNumberLimit,
-                limitedDateRegistration,
-                registrationDateLimit,
-                poster,
-                createdBy: userDetails.fullname,
-                updatedBy: userDetails.fullname
-            })
+			await newEvent.save();
 
-            await newEvent.save()
+			return res.status(200).json({
+				message: 'Event added successfully',
+				event: newEvent,
+			});
+		} catch (error) {
+			console.log(error);
+			return res.status(500).json({ message: 'Internal Server Error' });
+		}
+	};
 
-            return res.status(200).json({
-                message: "Event added successfully",
-                devotional: newEvent
-            });
+	const ViewEvent = async (
+		req: express.Request<{ id: string }>,
+		res: express.Response
+	) => {
+		try {
+			// check for validation errors
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
 
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({ message: 'Internal Server Error' });
-        }
-    };
+			const { id } = req.params;
 
-    const ViewEvent = async (req: express.Request<{ id: string }>, res: express.Response) => {
-        try {
-            // check for validation errors
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+			// find event
 
-            const { id } = req.params
+			const eventData = await EventsModel.findById(id);
 
-            // find devotional
+			if (!eventData) return res.status(404).json({ message: 'Event not found' });
 
-            const eventData = await EventsModel.findById(id)
+			return res.status(200).json({
+				message: 'Event retrieved successfully',
+				event: eventData,
+			});
+		} catch (error) {
+			return res.status(500).json({ message: 'Internal Server Error' });
+		}
+	};
 
+	const UpdateEvent = async (
+		req: express.Request<{ id: string }>,
+		res: express.Response
+	) => {
+		try {
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
 
-            if (!eventData) return res.status(404).json({ message: "Event not found" })
+			const {
+				id,
+				date,
+				name,
+				theme,
+				mainText,
+				time,
+				allowRegistration,
+				limitedNumberRegistration,
+				registrationNumberLimit,
+				limitedDateRegistration,
+				registrationDateLimit,
+				poster,
+			} = req.body;
 
-            return res.status(200).json({
-                message: "Event retrieved successfully",
-                event: eventData
-            });
+			const userDetails = await getUserDetails(req as any);
 
-        } catch (error) {
-            return res.status(500).json({ message: 'Internal Server Error' });
-        }
-    };
+			const existingEvent = await EventsModel.findById(id);
+			if (!existingEvent) return res.status(401).json({ message: 'Event not found' });
 
-    const UpdateEvent = async (req: express.Request<{ id: string }>, res: express.Response) => {
-        try {
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+			// Check if Event exists for this date
 
-            const {
-                id,
-                date,
-                name,
-                theme,
-                mainText,
-                time,
-                allowRegistration,
-                limitedNumberRegistration,
-                registrationNumberLimit,
-                limitedDateRegistration,
-                registrationDateLimit,
-                poster,
-            } = req.body
+			existingEvent.name = name;
+			existingEvent.theme = theme;
+			existingEvent.mainText = mainText;
+			existingEvent.date = date;
+			existingEvent.time = time;
+			existingEvent.allowRegistration = allowRegistration;
+			existingEvent.limitedNumberRegistration = limitedNumberRegistration;
+			existingEvent.registrationNumberLimit = registrationNumberLimit;
+			existingEvent.registrationDateLimit = registrationDateLimit;
+			existingEvent.limitedDateRegistration = limitedDateRegistration;
+			existingEvent.poster = poster;
+			existingEvent.updatedBy = userDetails.fullname;
 
-            const userDetails = await getUserDetails(req as any)
+			await existingEvent.save();
 
+			return res.status(200).json({
+				message: 'Event updated successfully',
+				event: existingEvent,
+			});
+		} catch (error) {
+			return res.status(500).json({ message: 'Internal Server Error' });
+		}
+	};
 
-            const existingEvent = await EventsModel.findById(id);
-            if (!existingEvent) return res.status(401).json({ message: "Event not found" })
+	const DeleteEvent = async (
+		req: express.Request<{ id: string }>,
+		res: express.Response
+	) => {
+		try {
+			// check for validation errors
+			const errors = validationResult(req);
+			if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
 
-            // Check if Event exists for this date
+			const { id } = req.params;
 
-            existingEvent.name = name;
-            existingEvent.theme = theme;
-            existingEvent.mainText = mainText;
-            existingEvent.date = date;
-            existingEvent.time = time;
-            existingEvent.allowRegistration = allowRegistration;
-            existingEvent.limitedNumberRegistration = limitedNumberRegistration;
-            existingEvent.registrationNumberLimit = registrationNumberLimit;
-            existingEvent.registrationDateLimit = registrationDateLimit;
-            existingEvent.limitedDateRegistration = limitedDateRegistration;
-            existingEvent.poster = poster;
-            existingEvent.updatedBy = userDetails.fullname;
+			// find event
 
+			const eventData = await EventsModel.findById(id);
 
-            await existingEvent.save();
+			if (!eventData) return res.status(404).json({ message: 'Event not found' });
 
-            return res.status(200).json({
-                message: "Event updated successfully",
-                devotional: existingEvent
-            });
+			await EventsModel.findByIdAndDelete(id);
 
-        } catch (error) {
-            return res.status(500).json({ message: 'Internal Server Error' });
-        }
-    }
+			return res.status(200).json({
+				message: 'Event deleted Successfully',
+			});
+		} catch (error) {
+			return res.status(500).json({ message: 'Internal Server Error' });
+		}
+	};
 
+	interface UpdateBody extends EventType {
+		id: string;
+	}
 
-    const DeleteEvent = async (req: express.Request<{ id: string }>, res: express.Response) => {
-        try {
-            // check for validation errors
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
-
-            const { id } = req.params
-
-            // find devotional
-
-            const eventData = await EventsModel.findById(id)
-
-            if (!eventData) return res.status(404).json({ message: "Event not found" })
-
-            await EventsModel.findByIdAndDelete(id)
-
-            return res.status(200).json({
-                message: "Event deleted Successfully"
-            });
-
-        } catch (error) {
-            return res.status(500).json({ message: 'Internal Server Error' });
-        }
-    };
-
-    interface UpdateBody extends EventType {
-        id: string
-    }
-
-    return {
-        GetAllEvents,
-        AddEvent,
-        ViewEvent,
-        DeleteEvent,
-        UpdateEvent
-    };
+	return {
+		GetAllEvents,
+		AddEvent,
+		ViewEvent,
+		DeleteEvent,
+		UpdateEvent,
+	};
 };
