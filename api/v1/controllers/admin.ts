@@ -107,33 +107,6 @@ export default () => {
 		}
 	};
 
-	const DeleteAdmin = async (
-		req: express.Request<{ id: string }>,
-		res: express.Response
-	) => {
-		try {
-			// check for validation errors
-			const errors = validationResult(req);
-			if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
-
-			const { id } = req.params;
-
-			// find admin
-
-			const adminData = await AdminModel.findById(id);
-
-			if (!adminData) return res.status(404).json({ message: 'Admin not found' });
-
-			await AdminModel.findByIdAndDelete(id);
-
-			return res.status(200).json({
-				message: 'Admin deleted',
-			});
-		} catch (error) {
-			return res.status(500).json({ message: 'Internal Server Error' });
-		}
-	};
-
 	interface StatusBody extends AdminType {
 		id: string;
 		status: boolean;
@@ -205,7 +178,6 @@ export default () => {
 		GetAllAdmins,
 		AddAdmin,
 		ViewAdmin,
-		DeleteAdmin,
 		ChangeAdminStatus,
 		MakeSuperAdmin,
 	};
