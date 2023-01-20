@@ -100,7 +100,7 @@ router.patch(
 			.trim()
 			.exists()
 			.notEmpty()
-			.withMessage('Nmae cannot be empty'),
+			.withMessage('Name cannot be empty'),
 		body('time', 'Time is required')
 			.trim()
 			.exists()
@@ -158,5 +158,42 @@ router.delete(
 	],
 	EventController.DeleteEvent
 );
+
+//Register event
+router.post(
+	'/:id/register',
+	[
+		header('x-api-key', 'API Access Denied')
+			.exists()
+			.bail()
+			.custom((value) => isValidAPI(value)),
+		header('authorization', 'Please specify an authorization header')
+			.exists()
+			.bail()
+			.custom((value) => isAdmin(value)),
+		param('id', 'ID is required')
+			.exists()
+			.custom((value) => isValidObjectId(value)),
+
+		body('firstName', 'firstName is required').trim()
+			.exists()
+			.notEmpty()
+			.withMessage('Name cannot be empty'),
+		body('lastName', 'lastName is required').trim()
+			.exists()
+			.notEmpty()
+			.withMessage('LastName cannot be empty'),
+		body('gender', 'gender is required').trim()
+			.exists()
+			.notEmpty()
+			.withMessage('gender cannot be empty'),
+		body('phone', 'phone is required').trim()
+			.exists()
+			.notEmpty()
+			.withMessage('phone cannot be empty'),
+
+	],
+	EventController.RegisterEvent
+)
 
 export default router;
