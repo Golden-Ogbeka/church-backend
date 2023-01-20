@@ -221,7 +221,6 @@ export default () => {
         try {
             const errors = validationResult(req);
             if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
-            const { firstName, lastName, gender, phone } = req.body;
             const { id } = req.params;
             const event = await EventsModel.findById(id);
             if (!event) return res.status(404).json({ message: 'Event not found' });
