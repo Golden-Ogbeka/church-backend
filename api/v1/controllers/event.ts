@@ -62,6 +62,7 @@ export default () => {
                 registrationNumberLimit,
                 limitedDateRegistration,
                 registrationDateLimit,
+                requiredRegistrationDetails,
                 poster,
             } = req.body;
 
@@ -77,6 +78,7 @@ export default () => {
                 gallery,
                 limitedNumberRegistration,
                 registrationNumberLimit,
+                requiredRegistrationDetails,
                 limitedDateRegistration,
                 registrationDateLimit,
                 poster,
@@ -139,6 +141,7 @@ export default () => {
                 time,
                 allowRegistration,
                 limitedNumberRegistration,
+                requiredRegistrationDetails,
                 registrationNumberLimit,
                 limitedDateRegistration,
                 registrationDateLimit,
@@ -162,6 +165,7 @@ export default () => {
             existingEvent.registrationNumberLimit = registrationNumberLimit;
             existingEvent.registrationDateLimit = registrationDateLimit;
             existingEvent.limitedDateRegistration = limitedDateRegistration;
+            existingEvent.requiredRegistrationDetails = requiredRegistrationDetails;
             existingEvent.poster = poster;
             existingEvent.updatedBy = userDetails.fullname;
 
@@ -222,11 +226,19 @@ export default () => {
             const event = await EventsModel.findById(id);
             if (!event) return res.status(404).json({ message: 'Event not found' });
             if (!eventRegistrationCheck(event).status) return res.status(404).json({ message: eventRegistrationCheck(event).message });
-            let d = new Date();
+            let regDetails: any = {};
+            let regErrors: any = [];
 
-            event.registrationEntries.push({
-                firstName, lastName, gender, phone, date: `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`
-            });
+
+            event.requiredRegistrationDetails.forEach(item => {
+                if (!(item.name in req.body)) {
+                    regErrors.push(`The ${item.name} field is required`);
+                }
+                regDetails[`${item.name}`] = req.body[item.name];
+            })
+            if (regErrors.length > 0) return res.status(404).json({ message: regErrors });
+
+            event.registrationEntries.push(regDetails);
             await event.save();
 
             return res.status(200).json({
@@ -234,11 +246,12 @@ export default () => {
                 userDetails: {
                     event: event.name,
                     date: event.date,
-                    name: `${firstName} ${lastName}`
+                    regDetails: regDetails
                 },
             });
         }
         catch (error) {
+            console.log(error)
             return res.status(500).json({ message: 'Internal Server Error' });
         }
     }

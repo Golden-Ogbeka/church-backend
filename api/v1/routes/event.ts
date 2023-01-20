@@ -174,24 +174,6 @@ router.post(
 		param('id', 'ID is required')
 			.exists()
 			.custom((value) => isValidObjectId(value)),
-
-		body('firstName', 'firstName is required').trim()
-			.exists()
-			.notEmpty()
-			.withMessage('Name cannot be empty'),
-		body('lastName', 'lastName is required').trim()
-			.exists()
-			.notEmpty()
-			.withMessage('LastName cannot be empty'),
-		body('gender', 'gender is required').trim()
-			.exists()
-			.notEmpty()
-			.withMessage('gender cannot be empty'),
-		body('phone', 'phone is required').trim()
-			.exists()
-			.notEmpty()
-			.withMessage('phone cannot be empty'),
-
 	],
 	EventController.RegisterEvent
 )
