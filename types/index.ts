@@ -31,6 +31,7 @@ export interface EventType {
   registrationNumberLimit: number;
   limitedDateRegistration: boolean;
   registrationDateLimit: Date;
+  requiredRegistrationDetails: any[];
   poster: string;
   createdBy: string;
   updatedBy: string;

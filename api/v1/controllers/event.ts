@@ -2,35 +2,48 @@ import { getUserDetails } from './../../../functions/auth';
 import { EventType } from './../../../types/index';
 import { getPaginationOptions } from './../../../utils/pagination';
 import { validationResult } from 'express-validator';
-import express from 'express'
-import EventsModel from '../../../models/event.model';
+import express from 'express';
+import EventsModel, { IEvent } from '../../../models/event.model';
 import { getDateFilters } from '../../../functions/filters';
-import { ObjectId } from 'mongodb'
+import { ObjectId } from 'mongodb';
 
 export default () => {
-    const GetAllEvents = async (req: express.Request<never, never, never, { page: number, limit: number, from: string, to: string }>, res: express.Response) => {
+    const GetAllEvents = async (
+        req: express.Request<
+            never,
+            never,
+            never,
+            { page: number; limit: number; from: string; to: string }
+        >,
+        res: express.Response
+    ) => {
         try {
             // check for validation errors
             const errors = validationResult(req);
             if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
 
-            const paginationOptions = getPaginationOptions(req, { date: -1 })
+            const paginationOptions = getPaginationOptions(req, { date: -1 });
 
-            // find all devotionals
+            // find all events
 
-            const eventsData = await EventsModel.paginate(getDateFilters(req), paginationOptions);
+            const eventsData = await EventsModel.paginate(
+                getDateFilters(req),
+                paginationOptions
+            );
 
             return res.status(200).json({
-                message: "All Events Retrieved",
-                data: eventsData
+                message: 'All Events Retrieved',
+                data: eventsData,
             });
-
         } catch (error) {
             return res.status(500).json({ message: 'Internal Server Error' });
         }
     };
 
-    const AddEvent = async (req: express.Request<never, never, EventType>, res: express.Response) => {
+    const AddEvent = async (
+        req: express.Request<never, never, EventType>,
+        res: express.Response
+    ) => {
         try {
             // check for validation errors
             const errors = validationResult(req);
@@ -49,8 +62,9 @@ export default () => {
                 registrationNumberLimit,
                 limitedDateRegistration,
                 registrationDateLimit,
+                requiredRegistrationDetails,
                 poster,
-            } = req.body
+            } = req.body;
 
             const userDetails = await getUserDetails(req as any);
             const newEvent = new EventsModel({
@@ -64,79 +78,185 @@ export default () => {
                 gallery,
                 limitedNumberRegistration,
                 registrationNumberLimit,
+                requiredRegistrationDetails,
                 limitedDateRegistration,
                 registrationDateLimit,
                 poster,
                 createdBy: userDetails.fullname,
-                updatedBy: userDetails.fullname
-            })
-
-            await newEvent.save()
-
-            return res.status(200).json({
-                message: "Event added successfully",
-                devotional: newEvent
+                updatedBy: userDetails.fullname,
             });
 
+            await newEvent.save();
+
+            return res.status(200).json({
+                message: 'Event added successfully',
+                event: newEvent,
+            });
         } catch (error) {
             console.log(error);
             return res.status(500).json({ message: 'Internal Server Error' });
         }
     };
 
-    const ViewEvent = async (req: express.Request<{ id: string }>, res: express.Response) => {
+    const ViewEvent = async (
+        req: express.Request<{ id: string }>,
+        res: express.Response
+    ) => {
         try {
             // check for validation errors
             const errors = validationResult(req);
             if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
 
-            const { id } = req.params
+            const { id } = req.params;
 
-            // find devotional
+            // find event
 
-            const eventData = await EventsModel.findById(id)
+            const eventData = await EventsModel.findById(id);
 
-
-            if (!eventData) return res.status(404).json({ message: "Event not found" })
+            if (!eventData) return res.status(404).json({ message: 'Event not found' });
 
             return res.status(200).json({
-                message: "Event retrieved successfully",
-                event: eventData
+                message: 'Event retrieved successfully',
+                event: eventData,
             });
-
         } catch (error) {
             return res.status(500).json({ message: 'Internal Server Error' });
         }
     };
 
+    const UpdateEvent = async (
+        req: express.Request<{ id: string }>,
+        res: express.Response
+    ) => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
 
-    const DeleteEvent = async (req: express.Request<{ id: string }>, res: express.Response) => {
+            const {
+                id,
+                date,
+                name,
+                theme,
+                mainText,
+                time,
+                allowRegistration,
+                limitedNumberRegistration,
+                requiredRegistrationDetails,
+                registrationNumberLimit,
+                limitedDateRegistration,
+                registrationDateLimit,
+                poster,
+            } = req.body;
+
+            const userDetails = await getUserDetails(req as any);
+
+            const existingEvent = await EventsModel.findById(id);
+            if (!existingEvent) return res.status(401).json({ message: 'Event not found' });
+
+            // Check if Event exists for this date
+
+            existingEvent.name = name;
+            existingEvent.theme = theme;
+            existingEvent.mainText = mainText;
+            existingEvent.date = date;
+            existingEvent.time = time;
+            existingEvent.allowRegistration = allowRegistration;
+            existingEvent.limitedNumberRegistration = limitedNumberRegistration;
+            existingEvent.registrationNumberLimit = registrationNumberLimit;
+            existingEvent.registrationDateLimit = registrationDateLimit;
+            existingEvent.limitedDateRegistration = limitedDateRegistration;
+            existingEvent.requiredRegistrationDetails = requiredRegistrationDetails;
+            existingEvent.poster = poster;
+            existingEvent.updatedBy = userDetails.fullname;
+
+            await existingEvent.save();
+
+            return res.status(200).json({
+                message: 'Event updated successfully',
+                event: existingEvent,
+            });
+        } catch (error) {
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+    };
+
+    const DeleteEvent = async (
+        req: express.Request<{ id: string }>,
+        res: express.Response
+    ) => {
         try {
             // check for validation errors
             const errors = validationResult(req);
             if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
 
-            const { id } = req.params
+            const { id } = req.params;
 
-            // find devotional
+            // find event
 
-            const eventData = await EventsModel.findById(id)
+            const eventData = await EventsModel.findById(id);
 
-            if (!eventData) return res.status(404).json({ message: "Event not found" })
+            if (!eventData) return res.status(404).json({ message: 'Event not found' });
 
-            await EventsModel.findByIdAndDelete(id)
+            await EventsModel.findByIdAndDelete(id);
 
             return res.status(200).json({
-                message: "Event deleted"
+                message: 'Event deleted Successfully',
             });
-
         } catch (error) {
             return res.status(500).json({ message: 'Internal Server Error' });
         }
     };
+
+    const eventRegistrationCheck = (event: IEvent) => {
+        if (!event.allowRegistration) return { status: false, message: "Event doesn't allow registration" };
+        if (event.limitedNumberRegistration && event.registrationEntries.length >= event.registrationNumberLimit) return { status: false, message: "Registration Limit reached" };
+        if (event.limitedDateRegistration && Date.now() > event.registrationDateLimit.getTime()) return { status: false, message: "Registration deadline elapsed" }
+        return { status: true };
+    }
+
+    const RegisterEvent = async (
+        req: express.Request<{ id: string }>,
+        res: express.Response
+    ) => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) return res.status(422).json({ errors: errors.array() });
+            const { id } = req.params;
+            const event = await EventsModel.findById(id);
+            if (!event) return res.status(404).json({ message: 'Event not found' });
+            if (!eventRegistrationCheck(event).status) return res.status(404).json({ message: eventRegistrationCheck(event).message });
+            let regDetails: any = {};
+            let regErrors: any = [];
+
+
+            event.requiredRegistrationDetails.forEach(item => {
+                if (!(item.name in req.body)) {
+                    regErrors.push(`The ${item.name} field is required`);
+                }
+                regDetails[`${item.name}`] = req.body[item.name];
+            })
+            if (regErrors.length > 0) return res.status(404).json({ message: regErrors });
+
+            event.registrationEntries.push(regDetails);
+            await event.save();
+
+            return res.status(200).json({
+                message: 'Registered successfully',
+                userDetails: {
+                    event: event.name,
+                    date: event.date,
+                    regDetails: regDetails
+                },
+            });
+        }
+        catch (error) {
+            console.log(error)
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+    }
 
     interface UpdateBody extends EventType {
-        id: string
+        id: string;
     }
 
     return {
@@ -144,5 +264,7 @@ export default () => {
         AddEvent,
         ViewEvent,
         DeleteEvent,
+        UpdateEvent,
+        RegisterEvent
     };
 };

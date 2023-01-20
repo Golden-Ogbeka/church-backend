@@ -15,7 +15,9 @@ export interface IEvent extends Document {
   registrationNumberLimit: number;
   limitedDateRegistration: boolean; // if the registration has a date limit
   registrationDateLimit: Date;
-  poster: string; // Event Image
+  poster: string;
+  requiredRegistrationDetails: UncertainObjectType[];
+  // Event Image
   createdBy: string;
   updatedBy: string;
 }
@@ -29,6 +31,7 @@ const eventSchema = new Schema<IEvent>({
   time: { type: String, required: true },
   allowRegistration: { type: Boolean, required: true, default: false },
   registrationEntries: { type: [], required: false },
+  requiredRegistrationDetails: { type: [], required: false },
   gallery: { type: [String], required: false },
   limitedNumberRegistration: { type: Boolean, required: true, default: false },
   registrationNumberLimit: { type: Number, required: false },
