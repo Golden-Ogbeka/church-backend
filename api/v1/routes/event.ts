@@ -3,6 +3,8 @@ import { isAdmin } from './../../../middlewares/auth';
 import { isValidAPI } from '../../../middlewares/shared';
 import { Router } from 'express';
 import { body, header, param, query } from 'express-validator';
+import { parser } from '../../../functions/cloudinary';
+
 import Controller from '../controllers/event';
 
 const router = Router();
@@ -177,5 +179,18 @@ router.post(
 	],
 	EventController.RegisterEvent
 )
+router.post('/:id/upload', [parser.array('images'), header('x-api-key', 'API Access Denied')
+	.exists()
+	.bail()
+	.custom((value) => isValidAPI(value)),
+header('authorization', 'Please specify an authorization header')
+	.exists()
+	.bail()
+	.custom((value) => isAdmin(value)),
+body('images', 'Image is required')
+	.trim()
+	.exists()
+	.withMessage('Image is required'),], EventController.UploadEventImages)
+
 
 export default router;
