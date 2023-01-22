@@ -5,6 +5,7 @@ import { validationResult } from 'express-validator';
 import express from 'express';
 import EventsModel, { IEvent } from '../../../models/event.model';
 import { getDateFilters } from '../../../functions/filters';
+import { parser } from '../../../functions/cloudinary';
 import { ObjectId } from 'mongodb';
 
 export default () => {
@@ -255,6 +256,30 @@ export default () => {
         }
     }
 
+    const UploadEventImages = async (req: express.Request<{ id: string }>,
+        res: express.Response) => {
+        try {
+            const { id } = req.params;
+            const event = await EventsModel.findById(id);
+            if (!event) return res.status(404).json({ message: 'Event not found' });
+            const fileArray: any = req.files;
+            if (!fileArray) return res.status(404).json({ message: "No file to upload" });
+            for (let i: number = 0; i < fileArray.length; i++) {
+                event.gallery.push(fileArray[i].path)
+            }
+            await event.save();
+            return res.status(200).json({
+                message: 'Event gallery created successfully',
+                event: event,
+            });
+
+        }
+        catch (error) {
+            return res.status(500).json({ message: 'Internal Server Error' });
+        }
+
+    }
+
     interface UpdateBody extends EventType {
         id: string;
     }
@@ -265,6 +290,7 @@ export default () => {
         ViewEvent,
         DeleteEvent,
         UpdateEvent,
-        RegisterEvent
+        RegisterEvent,
+        UploadEventImages
     };
 };
