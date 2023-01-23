@@ -22,8 +22,8 @@ const adminSchema = new Schema<IAdmin>(
 		password: { type: String, required: true },
 		active: { type: Boolean, required: true, default: true },
 		verificationCode: { type: String, required: false },
-		createdBy: { type: String, required: true, default: '' },
-		updatedBy: { type: String, required: true, default: '' },
+		createdBy: { type: String, required: true },
+		updatedBy: { type: String, required: true },
 	},
 	{ timestamps: true }
 );
