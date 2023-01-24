@@ -39,6 +39,12 @@ router.post(
             .notEmpty()
             .withMessage('Full Name cannot be empty'),
 
+        body('phoneNumber', 'phoneNumber is required')
+            .trim()
+            .exists()
+            .notEmpty()
+            .withMessage('Phone number cannot be empty'),
+
         body('content', 'Content is required')
             .trim()
             .exists()

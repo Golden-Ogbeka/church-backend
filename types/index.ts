@@ -39,6 +39,8 @@ export interface EventType {
 }
 
 export interface TestimonyType {
+	email: string,
+	phoneNumber: string,
 	fullName: string;
 	summary: string;
 	content: string;
