@@ -80,22 +80,25 @@ export default () => {
 
       // Check for errors in registration details and convert name of detail field
       const detailsError: any[] = []
-      requiredRegistrationDetails = requiredRegistrationDetails.map((item) => {
-        if (!item.name || !item.type) {
-          return detailsError.push(item)
-        }
-        item.name = item?.name?.replace(/ /g, '_') //change name to have underscores instead of spaces
-        item.type = item?.type?.trim()
 
-        return item
-      })
+      if (allowRegistration) {
+        requiredRegistrationDetails = requiredRegistrationDetails.map(
+          (item) => {
+            if (!item.name || !item.type) {
+              return detailsError.push(item)
+            }
+            item.name = item?.name?.replace(/ /g, '_') //change name to have underscores instead of spaces
+            item.type = item?.type?.trim()
 
-      if (detailsError.length > 0) {
-        return res
-          .status(400)
-          .json({
+            return item
+          }
+        )
+
+        if (detailsError.length > 0) {
+          return res.status(400).json({
             message: 'Name and type is required for each registration detail',
           })
+        }
       }
 
       const userDetails = await getUserDetails(req as any)
@@ -182,7 +185,6 @@ export default () => {
 
       // check for required registration fields
       if (allowRegistration && !requiredRegistrationDetails?.length) {
-        console.log(typeof allowRegistration)
         return res.status(400).json({
           message:
             'Please input the required registration details for this event',
@@ -190,22 +192,25 @@ export default () => {
       }
 
       const detailsError: any[] = []
-      requiredRegistrationDetails = requiredRegistrationDetails.map((item) => {
-        if (!item.name || !item.type) {
-          return detailsError.push(item)
-        }
-        item.name = item?.name?.replace(/ /g, '_') //change name to have underscores instead of spaces
-        item.type = item?.type?.trim()
 
-        return item
-      })
+      if (allowRegistration) {
+        requiredRegistrationDetails = requiredRegistrationDetails.map(
+          (item) => {
+            if (!item.name || !item.type) {
+              return detailsError.push(item)
+            }
+            item.name = item?.name?.replace(/ /g, '_') //change name to have underscores instead of spaces
+            item.type = item?.type?.trim()
 
-      if (detailsError.length > 0) {
-        return res
-          .status(400)
-          .json({
+            return item
+          }
+        )
+
+        if (detailsError.length > 0) {
+          return res.status(400).json({
             message: 'Name and type is required for each registration detail',
           })
+        }
       }
 
       const userDetails = await getUserDetails(req as any)

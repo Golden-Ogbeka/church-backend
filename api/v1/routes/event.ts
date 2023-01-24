@@ -58,23 +58,23 @@ router.post(
       .notEmpty()
       .withMessage('Time cannot be empty'),
     body('allowRegistration', 'Allow Registration is required')
-      .trim()
       .exists()
       .isBoolean()
-      .withMessage('Allow Registration must be boolean'),
+      .withMessage('Allow Registration must be boolean')
+      .toBoolean(),
     body('limitedNumberRegistration', 'Limited Number Registration is required')
-      .trim()
       .exists()
       .isBoolean()
-      .withMessage('Allow Limited Number of Registration must be boolean'),
+      .withMessage('Allow Limited Number of Registration must be boolean')
+      .toBoolean(),
     body('limitedDateRegistration', 'Limited Date  Registration is required')
-      .trim()
       .exists()
       .isBoolean()
-      .withMessage('Allow Limited Number of Registration must be boolean'),
+      .withMessage('Allow Limited Number of Registration must be boolean')
+      .toBoolean(),
   ],
   EventController.AddEvent
-);
+)
 
 router.patch(
   '/:id',
@@ -112,24 +112,23 @@ router.patch(
       .notEmpty()
       .withMessage('Time cannot be empty'),
     body('allowRegistration', 'Allow Registration is required')
-      .trim()
       .exists()
       .isBoolean()
       .withMessage('Allow Registration must be boolean')
       .toBoolean(),
     body('limitedNumberRegistration', 'Limited Number Registration is required')
-      .trim()
       .exists()
       .isBoolean()
-      .withMessage('Allow Limited Number of Registration must be boolean'),
+      .withMessage('Allow Limited Number of Registration must be boolean')
+      .toBoolean(),
     body('limitedDateRegistration', 'Limited Date  Registration is required')
-      .trim()
       .exists()
       .isBoolean()
-      .withMessage('Allow Limited Number of Registration must be boolean'),
+      .withMessage('Allow Limited Number of Registration must be boolean')
+      .toBoolean(),
   ],
   EventController.UpdateEvent
-);
+)
 
 // Get event by id
 router.get(
