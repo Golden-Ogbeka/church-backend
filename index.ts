@@ -8,7 +8,14 @@ import ApiVersions from './api';
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(
+	cors({
+		origin: [
+			'https://tfh-admin.netlify.app', //website
+			'http://127.0.0.1:5173', // localhost
+		],
+	})
+);
 
 
 //connect to db

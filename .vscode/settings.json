@@ -2,12 +2,8 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
-  "editor.formatOnSaveMode": "file",
-  "cSpell.words": [
-    "cloudinary",
-    "Cloudinary",
-    "CLOUDINARY",
-    "jfif",
-    "pjpeg"
-  ]
+  "editor.formatOnSaveMode": "modifications",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
