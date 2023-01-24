@@ -15,4 +15,10 @@ export const isValidObjectId = (id: string) => {
   return true
 
 }
+export const isValidSource = (source: string) => {
+  if (!(['web', 'mobile'].includes(source))) {
+    throw new Error("Source should be either web or mobile")
+  }
+  return true
+}
 

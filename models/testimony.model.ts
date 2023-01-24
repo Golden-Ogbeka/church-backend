@@ -20,7 +20,7 @@ const testimonySchema = new Schema<ITestimony>(
 			required: true,
 			default: 'pending',
 			lowercase: true,
-			enum: ['pending', 'approved', 'declined', 'archived'], //these are the allowed statuses
+			enum: ['pending', 'approved', 'declined', 'archived'] //these are the allowed statuses
 		},
 		updatedBy: { type: String, required: false },
 		source: { type: String, required: true, enum: ['web', 'mobile'], default: 'web' },

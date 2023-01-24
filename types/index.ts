@@ -38,6 +38,16 @@ export interface EventType {
 	_id: string;
 }
 
+export interface TestimonyType {
+	fullName: string;
+	summary: string;
+	content: string;
+	status: string;
+	source: string
+	updatedBy: string;
+	_id: string;
+}
+
 export interface AdminType {
 	fullname: string;
 	email: string;
