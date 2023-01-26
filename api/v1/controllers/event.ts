@@ -1,12 +1,10 @@
 import { getUserDetails } from './../../../functions/auth'
-import { EventType } from './../../../types/index'
+import { EventType, RegistrationDetailType } from './../../../types/index'
 import { getPaginationOptions } from './../../../utils/pagination'
 import { validationResult } from 'express-validator'
 import express from 'express'
 import EventsModel, { IEvent } from '../../../models/event.model'
 import { getDateFilters } from '../../../functions/filters'
-import { parser } from '../../../functions/cloudinary'
-import { ObjectId } from 'mongodb'
 
 export default () => {
   const GetAllEvents = async (
@@ -24,7 +22,7 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() })
 
-      const paginationOptions = getPaginationOptions(req, { date: -1 })
+      const paginationOptions = getPaginationOptions(req)
 
       // find all events
 
@@ -71,6 +69,14 @@ export default () => {
         requiredRegistrationDetails,
       } = req.body
 
+      if (typeof requiredRegistrationDetails !== 'string') {
+        requiredRegistrationDetails = JSON.stringify(
+          requiredRegistrationDetails
+        )
+      }
+
+      requiredRegistrationDetails = JSON.parse(requiredRegistrationDetails)
+
       // check for required registration fields
       if (allowRegistration && !requiredRegistrationDetails?.length)
         return res.status(400).json({
@@ -83,7 +89,7 @@ export default () => {
 
       if (allowRegistration) {
         requiredRegistrationDetails = requiredRegistrationDetails.map(
-          (item) => {
+          (item: RegistrationDetailType) => {
             if (!item.name || !item.type) {
               return detailsError.push(item)
             }
@@ -110,7 +116,7 @@ export default () => {
         time,
         allowRegistration,
         limitedNumberRegistration,
-        registrationNumberLimit,
+        registrationNumberLimit: Number(registrationNumberLimit),
         requiredRegistrationDetails,
         limitedDateRegistration,
         registrationDateLimit,
@@ -126,6 +132,7 @@ export default () => {
         event: newEvent,
       })
     } catch (error) {
+      console.log(error)
       return res.status(500).json({ message: 'Internal Server Error' })
     }
   }
@@ -183,6 +190,14 @@ export default () => {
 
       const { id } = req.params
 
+      if (typeof requiredRegistrationDetails !== 'string') {
+        requiredRegistrationDetails = JSON.stringify(
+          requiredRegistrationDetails
+        )
+      }
+
+      requiredRegistrationDetails = JSON.parse(requiredRegistrationDetails)
+
       // check for required registration fields
       if (allowRegistration && !requiredRegistrationDetails?.length) {
         return res.status(400).json({
@@ -195,7 +210,7 @@ export default () => {
 
       if (allowRegistration) {
         requiredRegistrationDetails = requiredRegistrationDetails.map(
-          (item) => {
+          (item: RegistrationDetailType) => {
             if (!item.name || !item.type) {
               return detailsError.push(item)
             }

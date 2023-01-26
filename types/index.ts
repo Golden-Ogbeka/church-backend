@@ -19,46 +19,53 @@ export type UncertainObjectType = {
 };
 
 export interface EventType {
-	name: string;
-	theme: string;
-	mainText: string;
-	date: string;
-	time: string;
-	allowRegistration: boolean;
-	registrationEntries: any[];
-	gallery: string[];
-	limitedNumberRegistration: boolean;
-	registrationNumberLimit: number;
-	limitedDateRegistration: boolean;
-	registrationDateLimit: Date;
-	requiredRegistrationDetails: any[];
-	poster: string;
-	createdBy: string;
-	updatedBy: string;
-	_id: string;
+  name: string
+  theme: string
+  mainText: string
+  date: string
+  time: string
+  allowRegistration: boolean
+  registrationEntries: any[]
+  gallery: string[]
+  limitedNumberRegistration: boolean
+  registrationNumberLimit: number
+  limitedDateRegistration: boolean
+  registrationDateLimit: Date
+  requiredRegistrationDetails: any
+  poster: string
+  createdBy: string
+  updatedBy: string
+  _id: string
 }
 
 export interface TestimonyType {
-	email: string,
-	phoneNumber: string,
-	fullName: string;
-	summary: string;
-	content: string;
-	status: string;
-	source: string
-	updatedBy: string;
-	_id: string;
+  email: string
+  phoneNumber: string
+  fullName: string
+  summary: string
+  content: string
+  status: string
+  source: string
+  updatedBy: string
+  _id: string
 }
 
 export interface AdminType {
-	fullname: string;
-	email: string;
-	avatar: string;
-	role: string;
-	password: string;
-	active: boolean;
-	verificationCode: string;
-	createdBy: string;
-	updatedBy: string;
-	_id: string;
+  fullname: string
+  email: string
+  avatar: string
+  role: string
+  password: string
+  active: boolean
+  verificationCode: string
+  createdBy: string
+  updatedBy: string
+  _id: string
+}
+
+export interface RegistrationDetailType {
+  id?: string
+  name: string
+  type: string
+  options?: string
 }
