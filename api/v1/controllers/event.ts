@@ -52,22 +52,54 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() })
 
-      const {
+      //   Check for poster image
+      const posterFile: any = req.file
+      if (!posterFile)
+        return res.status(404).json({ message: 'No poster uploaded' })
+
+      let {
         date,
         name,
         theme,
         mainText,
         time,
         allowRegistration,
-        registrationEntries,
-        gallery,
         limitedNumberRegistration,
         registrationNumberLimit,
         limitedDateRegistration,
         registrationDateLimit,
         requiredRegistrationDetails,
-        poster,
       } = req.body
+
+      // check for required registration fields
+      if (allowRegistration && !requiredRegistrationDetails?.length)
+        return res.status(400).json({
+          message:
+            'Please input the required registration details for this event',
+        })
+
+      // Check for errors in registration details and convert name of detail field
+      const detailsError: any[] = []
+
+      if (allowRegistration) {
+        requiredRegistrationDetails = requiredRegistrationDetails.map(
+          (item) => {
+            if (!item.name || !item.type) {
+              return detailsError.push(item)
+            }
+            item.name = item?.name?.replace(/ /g, '_') //change name to have underscores instead of spaces
+            item.type = item?.type?.trim()
+
+            return item
+          }
+        )
+
+        if (detailsError.length > 0) {
+          return res.status(400).json({
+            message: 'Name and type is required for each registration detail',
+          })
+        }
+      }
 
       const userDetails = await getUserDetails(req as any)
       const newEvent = new EventsModel({
@@ -77,14 +109,12 @@ export default () => {
         mainText,
         time,
         allowRegistration,
-        registrationEntries,
-        gallery,
         limitedNumberRegistration,
         registrationNumberLimit,
         requiredRegistrationDetails,
         limitedDateRegistration,
         registrationDateLimit,
-        poster,
+        poster: posterFile.path,
         createdBy: userDetails.fullname,
         updatedBy: userDetails.fullname,
       })
@@ -129,7 +159,7 @@ export default () => {
   }
 
   const UpdateEvent = async (
-    req: express.Request<{ id: string }>,
+    req: express.Request<{ id: string }, never, EventType>,
     res: express.Response
   ) => {
     try {
@@ -137,8 +167,7 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() })
 
-      const {
-        id,
+      let {
         date,
         name,
         theme,
@@ -146,20 +175,50 @@ export default () => {
         time,
         allowRegistration,
         limitedNumberRegistration,
-        requiredRegistrationDetails,
         registrationNumberLimit,
         limitedDateRegistration,
         registrationDateLimit,
-        poster,
+        requiredRegistrationDetails,
       } = req.body
+
+      const { id } = req.params
+
+      // check for required registration fields
+      if (allowRegistration && !requiredRegistrationDetails?.length) {
+        return res.status(400).json({
+          message:
+            'Please input the required registration details for this event',
+        })
+      }
+
+      const detailsError: any[] = []
+
+      if (allowRegistration) {
+        requiredRegistrationDetails = requiredRegistrationDetails.map(
+          (item) => {
+            if (!item.name || !item.type) {
+              return detailsError.push(item)
+            }
+            item.name = item?.name?.replace(/ /g, '_') //change name to have underscores instead of spaces
+            item.type = item?.type?.trim()
+
+            return item
+          }
+        )
+
+        if (detailsError.length > 0) {
+          return res.status(400).json({
+            message: 'Name and type is required for each registration detail',
+          })
+        }
+      }
 
       const userDetails = await getUserDetails(req as any)
 
+      // Check if Event exists for this date
       const existingEvent = await EventsModel.findById(id)
       if (!existingEvent)
-        return res.status(401).json({ message: 'Event not found' })
-
-      // Check if Event exists for this date
+        return res.status(404).json({ message: 'Event not found' })
 
       existingEvent.name = name
       existingEvent.theme = theme
@@ -172,7 +231,7 @@ export default () => {
       existingEvent.registrationDateLimit = registrationDateLimit
       existingEvent.limitedDateRegistration = limitedDateRegistration
       existingEvent.requiredRegistrationDetails = requiredRegistrationDetails
-      existingEvent.poster = poster
+      existingEvent.poster = req.file ? req.file.path : existingEvent.poster
       existingEvent.updatedBy = userDetails.fullname
 
       await existingEvent.save()
@@ -182,6 +241,7 @@ export default () => {
         event: existingEvent,
       })
     } catch (error) {
+      console.log(error)
       return res.status(500).json({ message: 'Internal Server Error' })
     }
   }
@@ -297,10 +357,6 @@ export default () => {
     } catch (error) {
       return res.status(500).json({ message: 'Internal Server Error' })
     }
-  }
-
-  interface UpdateBody extends EventType {
-    id: string
   }
 
   return {
