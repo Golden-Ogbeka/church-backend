@@ -190,13 +190,18 @@ export default () => {
 
       const { id } = req.params
 
-      if (typeof requiredRegistrationDetails !== 'string') {
+      if (
+        allowRegistration &&
+        typeof requiredRegistrationDetails !== 'string'
+      ) {
         requiredRegistrationDetails = JSON.stringify(
           requiredRegistrationDetails
         )
       }
 
-      requiredRegistrationDetails = JSON.parse(requiredRegistrationDetails)
+      if (allowRegistration) {
+        requiredRegistrationDetails = JSON.parse(requiredRegistrationDetails)
+      }
 
       // check for required registration fields
       if (allowRegistration && !requiredRegistrationDetails?.length) {
