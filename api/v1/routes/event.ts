@@ -194,9 +194,35 @@ router.post(
       .bail()
       .custom((value) => isAdmin(value)),
     parser.array('images'),
-    body('images', 'Image is required').trim().exists().withMessage('Image is required'),
+    param('id', 'Event ID is required')
+      .exists()
+      .custom((value) => isValidObjectId(value)),
+    body('images', 'Image is required')
+      .trim()
+      .exists()
+      .withMessage('Image is required'),
   ],
   EventController.UploadEventImages
-);
+)
+
+// Delete gallery image
+router.delete(
+  '/gallery/:id',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+    header('authorization', 'Please specify an authorization header')
+      .exists()
+      .bail()
+      .custom((value) => isAdmin(value)),
+    param('id', 'Event ID is required')
+      .exists()
+      .custom((value) => isValidObjectId(value)),
+    body('imageURL', 'Image URL is required').exists().trim(),
+  ],
+  EventController.DeleteGalleryImage
+)
 
 export default router;

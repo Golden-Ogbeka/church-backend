@@ -371,10 +371,42 @@ export default () => {
       }
       await event.save()
       return res.status(200).json({
-        message: 'Event gallery created successfully',
+        message: 'Event gallery updated successfully',
         event: event,
       })
     } catch (error) {
+      return res.status(500).json({ message: 'Internal Server Error' })
+    }
+  }
+
+  const DeleteGalleryImage = async (
+    req: express.Request<{ id: string }, never, { imageURL: string }>,
+    res: express.Response
+  ) => {
+    try {
+      // check for validation errors
+      const errors = validationResult(req)
+      if (!errors.isEmpty())
+        return res.status(422).json({ errors: errors.array() })
+
+      const { id } = req.params
+
+      // find event
+      const eventData = await EventsModel.findById(id)
+
+      if (!eventData)
+        return res.status(404).json({ message: 'Event not found' })
+
+      eventData.gallery = eventData.gallery.filter(
+        (image) => image !== req.body.imageURL
+      )
+      await eventData.save()
+
+      return res.status(200).json({
+        message: 'Image deleted from gallery',
+      })
+    } catch (error) {
+      console.log(error)
       return res.status(500).json({ message: 'Internal Server Error' })
     }
   }
@@ -387,5 +419,6 @@ export default () => {
     UpdateEvent,
     RegisterEvent,
     UploadEventImages,
+    DeleteGalleryImage,
   }
 }
