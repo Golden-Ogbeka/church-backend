@@ -70,6 +70,34 @@ export default () => {
       return res.status(500).json({ message: 'Internal Server Error' })
     }
   }
+  const ChangeStatus = async (
+    req: express.Request<never, never, TestimonyType>,
+    res: express.Response
+  ) => {
+    try {
+      const errors = validationResult(req)
+      if (!errors.isEmpty())
+        return res.status(422).json({ errors: errors.array() })
+
+      const { id } = req.params
+
+      const existingTestimony = await TestimonyModel.findById(id)
+      if (!existingTestimony)
+        return res.status(404).json({ message: 'Testimony not found' })
+
+      let { status } = req.body
+
+      existingTestimony.status = status
+      await existingTestimony.save()
+      return res.status(200).json({
+        message: 'Testimony status updated successfully',
+        event: existingTestimony,
+      })
+    } catch (error) {
+      console.log(error)
+      return res.status(500).json({ message: 'Internal Server Error' })
+    }
+  }
 
   interface UpdateBody extends TestimonyType {
     id: string
@@ -78,5 +106,6 @@ export default () => {
   return {
     GetAllTestimonies,
     AddTestimony,
+    ChangeStatus,
   }
 }

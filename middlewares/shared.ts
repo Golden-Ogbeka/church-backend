@@ -22,3 +22,12 @@ export const isValidSource = (source: string) => {
   return true
 }
 
+export const isValidStatus = (status: string) => {
+  if (!['pending', 'approved', 'declined', 'archived'].includes(status)) {
+    throw new Error(
+      'Status should be either pending, approved, declined, archived'
+    )
+  }
+  return true
+}
+
