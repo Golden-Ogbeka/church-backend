@@ -11,6 +11,7 @@ export interface IUser extends Document {
   dateOfBirth: string
   churchCenter: string
   member: boolean
+  registrationSource: string
 }
 
 const userSchema = new Schema<IUser>(
@@ -24,6 +25,12 @@ const userSchema = new Schema<IUser>(
     dateOfBirth: { type: String, required: true },
     churchCenter: { type: String, required: true },
     member: { type: Boolean, required: true, default: true },
+    registrationSource: {
+      type: String,
+      required: false,
+      enum: ['web', 'mobile'],
+      default: 'web',
+    },
   },
   { timestamps: true }
 )
