@@ -120,6 +120,7 @@ export default () => {
     lastName: string
     email: string
     password: string
+    phoneNumber: string
     dateOfBirth: string
     churchCenter: string
     member: boolean
@@ -143,6 +144,7 @@ export default () => {
         churchCenter,
         dateOfBirth,
         member,
+        phoneNumber,
       } = req.body
 
       // check if user exists
@@ -161,6 +163,7 @@ export default () => {
           lastName,
           churchCenter,
           dateOfBirth,
+          phoneNumber,
           member,
         })
 

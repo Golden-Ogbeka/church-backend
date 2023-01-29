@@ -74,6 +74,7 @@ export interface UserType {
   lastName: string
   email: string
   password: string
+  phoneNumber: string
   verificationCode: string
   _id: string
   dateOfBirth: string

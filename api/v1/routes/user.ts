@@ -78,6 +78,11 @@ router.post(
       .exists()
       .notEmpty()
       .withMessage('Password cannot be empty'),
+    body('phoneNumber', 'Phone number is required')
+      .trim()
+      .exists()
+      .notEmpty()
+      .withMessage('Phone number cannot be empty'),
     body('firstName', 'First name is required')
       .trim()
       .exists()
