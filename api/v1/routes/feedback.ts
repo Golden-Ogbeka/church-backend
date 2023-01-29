@@ -79,6 +79,29 @@ router.get(
   FeedbackController.ViewFeedback
 )
 
+// Get feedback by status
+router.get(
+  '/status/:status',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+    header('authorization', 'Please specify an authorization header')
+      .exists()
+      .bail()
+      .custom((value) => isAdmin(value)),
+    param('status', 'Status is required')
+      .trim()
+      .exists()
+      .notEmpty()
+      .withMessage('Status cannot be empty')
+      .isIn(['read', 'unread'])
+      .withMessage('Status is either read or unread'),
+  ],
+  FeedbackController.GetFeedbackByStatus
+)
+
 // Update feedback status
 router.patch(
   '/status:id',

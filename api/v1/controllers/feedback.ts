@@ -99,6 +99,40 @@ export default () => {
     }
   }
 
+  const GetFeedbackByStatus = async (
+    req: express.Request<
+      { status: string },
+      never,
+      never,
+      { page: number; limit: number; from: string; to: string }
+    >,
+    res: express.Response
+  ) => {
+    try {
+      // check for validation errors
+      const errors = validationResult(req)
+      if (!errors.isEmpty())
+        return res.status(422).json({ errors: errors.array() })
+
+      const { status } = req.params
+      const paginationOptions = getPaginationOptions(req as any)
+
+      // find feedback
+
+      const feedback = await FeedbackModel.paginate(
+        { status },
+        paginationOptions
+      )
+
+      return res.status(200).json({
+        message: 'Feedback retrieved successfully',
+        data: feedback,
+      })
+    } catch (error) {
+      return res.status(500).json({ message: 'Internal Server Error' })
+    }
+  }
+
   const ChangeFeedbackStatus = async (
     req: express.Request<{ id: string }, never, FeedbackType>,
     res: express.Response
@@ -137,5 +171,6 @@ export default () => {
     SendFeedback,
     ViewFeedback,
     ChangeFeedbackStatus,
+    GetFeedbackByStatus,
   }
 }
