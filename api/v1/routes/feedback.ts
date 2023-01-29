@@ -81,7 +81,7 @@ router.get(
 
 // Update feedback status
 router.patch(
-  '/:id',
+  '/status:id',
   [
     header('x-api-key', 'API Access Denied')
       .exists()
