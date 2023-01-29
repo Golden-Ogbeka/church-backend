@@ -1,17 +1,17 @@
-import bcrypt from 'bcryptjs';
-import { getUserDetails } from '../../../functions/auth';
-import { AdminType } from '../../../types/index';
-import { getPaginationOptions } from '../../../utils/pagination';
-import { validationResult } from 'express-validator';
-import express from 'express';
-import AdminModel from '../../../models/admin.model';
-import { getDateFilters } from '../../../functions/filters';
+import bcrypt from 'bcryptjs'
+import { getUserDetails } from '../../../functions/auth'
+import { UserType } from '../../../types/index'
+import { getPaginationOptions } from '../../../utils/pagination'
+import { validationResult } from 'express-validator'
+import express from 'express'
+import UserModel from '../../../models/user.model'
+import { getDateFilters } from '../../../functions/filters'
 import { sendEmail } from '../../../utils/mailer'
 import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
 
 export default () => {
-  const GetAllAdmins = async (
+  const GetAllUsers = async (
     req: express.Request<
       never,
       never,
@@ -28,65 +28,23 @@ export default () => {
 
       const paginationOptions = getPaginationOptions(req)
 
-      // find all admins
+      // find all users
 
-      const adminsData = await AdminModel.paginate(
+      const usersData = await UserModel.paginate(
         getDateFilters(req),
         paginationOptions
       )
 
       return res.status(200).json({
-        message: 'All Admins Retrieved',
-        data: adminsData,
+        message: 'All Users Retrieved',
+        data: usersData,
       })
     } catch (error) {
       return res.status(500).json({ message: 'Internal Server Error' })
     }
   }
 
-  const AddAdmin = async (
-    req: express.Request<never, never, AdminType>,
-    res: express.Response
-  ) => {
-    try {
-      // check for validation errors
-      const errors = validationResult(req)
-      if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
-
-      const { email, password, fullname } = req.body
-
-      const userDetails = await getUserDetails(req as any)
-
-      // Check if admin exists
-
-      let existingAdmin = await AdminModel.findOne({ email })
-      if (existingAdmin && Object.keys(existingAdmin).length)
-        return res.status(400).json({ message: 'Admin already exists' })
-
-      // Hash password
-      bcrypt.hash(password, 8, async function (err: any, hash: any) {
-        // Store hash in your password DB.
-        //Store new admin
-        let newAdmin = await AdminModel.create({
-          email,
-          password: hash,
-          fullname,
-          createdBy: userDetails.fullname,
-          updatedBy: userDetails.fullname,
-        })
-
-        return res.status(200).json({
-          message: 'Admin created successfully',
-          admin: newAdmin,
-        })
-      })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
-    }
-  }
-
-  const ViewAdmin = async (
+  const ViewUser = async (
     req: express.Request<{ id: string }>,
     res: express.Response
   ) => {
@@ -98,87 +56,15 @@ export default () => {
 
       const { id } = req.params
 
-      // find admin
+      // find user
 
-      const adminData = await AdminModel.findById(id)
+      const userData = await UserModel.findById(id)
 
-      if (!adminData)
-        return res.status(404).json({ message: 'Admin not found' })
-
-      return res.status(200).json({
-        message: 'Admin retrieved',
-        admin: adminData,
-      })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
-    }
-  }
-
-  interface StatusBody extends AdminType {
-    id: string
-    status: boolean
-  }
-  const ChangeAdminStatus = async (
-    req: express.Request<never, never, StatusBody>,
-    res: express.Response
-  ) => {
-    try {
-      // check for validation errors
-      const errors = validationResult(req)
-      if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
-
-      const { id, status } = req.body
-
-      const userDetails = await getUserDetails(req as any)
-
-      const existingAdmin = await AdminModel.findById(id)
-      if (!existingAdmin)
-        return res.status(404).json({ message: 'Admin not found' })
-
-      existingAdmin.active = status
-      existingAdmin.updatedBy = userDetails.fullname
-
-      await existingAdmin.save()
+      if (!userData) return res.status(404).json({ message: 'User not found' })
 
       return res.status(200).json({
-        message: 'Admin updated successfully',
-        admin: existingAdmin,
-      })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
-    }
-  }
-
-  interface BodyType extends AdminType {
-    id: string
-  }
-  const MakeSuperAdmin = async (
-    req: express.Request<never, never, BodyType>,
-    res: express.Response
-  ) => {
-    try {
-      // check for validation errors
-      const errors = validationResult(req)
-      if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
-
-      const { id } = req.body
-
-      const userDetails = await getUserDetails(req as any)
-
-      const existingAdmin = await AdminModel.findById(id)
-      if (!existingAdmin)
-        return res.status(404).json({ message: 'Admin not found' })
-
-      existingAdmin.role = 'superAdmin'
-      existingAdmin.updatedBy = userDetails.fullname
-
-      await existingAdmin.save()
-
-      return res.status(200).json({
-        message: 'Admin updated successfully',
-        admin: existingAdmin,
+        message: 'User retrieved',
+        user: userData,
       })
     } catch (error) {
       return res.status(500).json({ message: 'Internal Server Error' })
@@ -186,7 +72,8 @@ export default () => {
   }
 
   // Authentication
-  // Login an Admin into their Account
+
+  // Login an User into their Account
   const Login = async (
     req: express.Request<never, never, { email: string; password: string }>,
     res: express.Response
@@ -200,28 +87,87 @@ export default () => {
       const { email, password } = req.body
 
       // find user
-      const existingAdmin = await AdminModel.findOne({ email })
-      if (!existingAdmin)
+      const existingUser = await UserModel.findOne({ email })
+      if (!existingUser)
         return res.status(400).json({ message: 'Invalid email or password' })
 
       // compare passwords
-      bcrypt.compare(password, existingAdmin.password, function (err, matched) {
+      bcrypt.compare(password, existingUser.password, function (err, matched) {
         if (!matched)
           return res.status(400).json({ message: 'Invalid email or password' })
 
         // Generate JWT Token
         jwt.sign(
-          existingAdmin.toJSON(),
+          existingUser.toJSON(),
           process.env.JWT_SECRET || 'secret',
           { expiresIn: '2d' },
           (err, token) => {
             return res.status(200).json({
               message: 'Login successful',
-              user: existingAdmin,
+              user: existingUser,
               token,
             })
           }
         )
+      })
+    } catch (error) {
+      return res.status(500).json({ message: 'Internal Server Error' })
+    }
+  }
+
+  interface RegistrationDetails {
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+    dateOfBirth: string
+    churchCenter: string
+    member: boolean
+  }
+
+  const Register = async (
+    req: express.Request<never, never, RegistrationDetails>,
+    res: express.Response
+  ) => {
+    try {
+      // check for validation errors
+      const errors = validationResult(req)
+      if (!errors.isEmpty())
+        return res.status(422).json({ errors: errors.array() })
+
+      const {
+        email,
+        password,
+        firstName,
+        lastName,
+        churchCenter,
+        dateOfBirth,
+        member,
+      } = req.body
+
+      // check if user exists
+      let existingUser = await UserModel.findOne({ email })
+      if (existingUser && Object.keys(existingUser).length)
+        return res.status(400).json({ message: 'User already exists' })
+
+      // Hash password
+      bcrypt.hash(password, 8, async function (err, hash) {
+        // Store hash in your password DB.
+        //Store new user
+        let newUser: UserType = await UserModel.create({
+          email,
+          password: hash,
+          firstName,
+          lastName,
+          churchCenter,
+          dateOfBirth,
+          member,
+        })
+
+        return res.status(200).json({
+          message: 'User created successfully',
+          user: newUser,
+        })
       })
     } catch (error) {
       return res.status(500).json({ message: 'Internal Server Error' })
@@ -242,20 +188,20 @@ export default () => {
       const { email } = req.body
 
       // check if user exists
-      let existingAdmin = await AdminModel.findOne({ email })
-      if (!existingAdmin)
-        return res.status(404).json({ message: 'Admin not found' })
+      let existingUser = await UserModel.findOne({ email })
+      if (!existingUser)
+        return res.status(404).json({ message: 'User not found' })
 
       const verificationCode = crypto.randomUUID().substring(0, 5)
 
-      existingAdmin.verificationCode = verificationCode
+      existingUser.verificationCode = verificationCode
 
-      existingAdmin.save()
+      existingUser.save()
 
       const emailToSend = {
         body: {
           greeting: 'Dear',
-          name: existingAdmin?.fullname,
+          name: existingUser?.firstName,
           intro:
             'You have received this email because a password reset request for your account was received.',
           action: {
@@ -281,7 +227,6 @@ export default () => {
         message: 'Reset password request successful',
       })
     } catch (error) {
-      console.log(error)
       return res.status(500).json({ message: 'Internal Server Error' })
     }
   }
@@ -303,25 +248,25 @@ export default () => {
       const { email, newPassword, verificationCode } = req.body
 
       // check if user exists
-      let existingAdmin = await AdminModel.findOne({ email, verificationCode })
+      let existingUser = await UserModel.findOne({ email, verificationCode })
 
       // Hash password
       bcrypt.hash(newPassword, 8, async function (err, hash) {
-        if (!existingAdmin)
+        if (!existingUser)
           return res
             .status(400)
             .json({ message: 'Invalid email or verification code' })
 
         const verificationCode = crypto.randomUUID().substring(0, 5)
 
-        existingAdmin.password = hash
-        existingAdmin.verificationCode = verificationCode //resetting the verification code also
-        existingAdmin.save()
+        existingUser.password = hash
+        existingUser.verificationCode = verificationCode //resetting the verification code also
+        existingUser.save()
 
         const emailToSend = {
           body: {
             greeting: 'Dear',
-            name: existingAdmin?.fullname,
+            name: existingUser?.firstName,
             intro: 'You have successfully reset your password',
             signature: 'Regards',
             outro:
@@ -341,12 +286,10 @@ export default () => {
   }
 
   return {
-    GetAllAdmins,
-    AddAdmin,
-    ViewAdmin,
-    ChangeAdminStatus,
-    MakeSuperAdmin,
+    GetAllUsers,
+    ViewUser,
     Login,
+    Register,
     ResetPasswordRequest,
     ResetPasswordUpdate,
   }

@@ -69,3 +69,14 @@ export interface RegistrationDetailType {
   type: string
   options?: string
 }
+export interface UserType {
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+  verificationCode: string
+  _id: string
+  dateOfBirth: string
+  churchCenter: string
+  member: boolean
+}
