@@ -111,6 +111,11 @@ router.post(
       .isBoolean()
       .withMessage('Member status must be boolean')
       .toBoolean(),
+    body('registrationSource', 'Registration source is required')
+      .trim()
+      .exists()
+      .notEmpty()
+      .withMessage('Registration source cannot be empty'),
   ],
   UserController.Register
 )

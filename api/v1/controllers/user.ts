@@ -123,6 +123,7 @@ export default () => {
     phoneNumber: string
     dateOfBirth: string
     churchCenter: string
+    registrationSource: string
     member: boolean
   }
 
@@ -145,6 +146,7 @@ export default () => {
         dateOfBirth,
         member,
         phoneNumber,
+        registrationSource,
       } = req.body
 
       // check if user exists
@@ -165,6 +167,7 @@ export default () => {
           dateOfBirth,
           phoneNumber,
           member,
+          registrationSource,
         })
 
         return res.status(200).json({
