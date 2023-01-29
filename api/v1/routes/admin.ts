@@ -94,17 +94,79 @@ router.patch(
 
 // Get admin by id
 router.get(
-	'/view/:id',
-	[
-		header('x-api-key', 'API Access Denied')
-			.exists()
-			.bail()
-			.custom((value) => isValidAPI(value)),
-		param('id', 'ID is required')
-			.exists()
-			.custom((value) => isValidObjectId(value)),
-	],
-	AdminController.ViewAdmin
-);
+  '/view/:id',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+    header('authorization', 'Please specify an authorization header')
+      .exists()
+      .bail()
+      .custom((value) => isAdmin(value)),
+    param('id', 'ID is required')
+      .exists()
+      .custom((value) => isValidObjectId(value)),
+  ],
+  AdminController.ViewAdmin
+)
+
+router.post(
+  '/login',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+    body('email', 'Email is required')
+      .trim()
+      .exists()
+      .bail()
+      .isEmail()
+      .withMessage('Invalid Email format'),
+    body('password', 'Password is required').trim().exists(),
+  ],
+  AdminController.Login
+)
+
+router.post(
+  '/reset-password',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+    body('email', 'Email is required')
+      .trim()
+      .exists()
+      .bail()
+      .isEmail()
+      .withMessage('Invalid Email format'),
+  ],
+  AdminController.ResetPasswordRequest
+)
+
+router.post(
+  '/reset-password/update',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+    body('email', 'Email is required')
+      .trim()
+      .exists()
+      .bail()
+      .isEmail()
+      .withMessage('Invalid Email format'),
+    body('newPassword', 'New password is required')
+      .trim()
+      .exists()
+      .notEmpty()
+      .withMessage('New password cannot be empty'),
+    body('verificationCode', 'Verification code is required').trim().exists(),
+  ],
+  AdminController.ResetPasswordUpdate
+)
 
 export default router;
