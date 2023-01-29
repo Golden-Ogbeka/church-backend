@@ -1,6 +1,10 @@
 import { isValidObjectId } from './../../../middlewares/shared';
 import { isAdmin } from './../../../middlewares/auth';
-import { isValidAPI, isValidSource } from '../../../middlewares/shared';
+import {
+  isValidAPI,
+  isValidSource,
+  isValidStatus,
+} from '../../../middlewares/shared'
 import { Router } from 'express';
 import { body, header, param, query } from 'express-validator';
 import { parser } from '../../../functions/cloudinary';
@@ -58,6 +62,27 @@ router.post(
     ],
     TestimonyController.AddTestimony
 );
+router.patch(
+  '/:id/change-status',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+    header('authorization', 'Please specify an authorization header')
+      .exists()
+      .bail()
+      .custom((value) => isAdmin(value)),
+    param('id', 'ID is required')
+      .exists()
+      .custom((value) => isValidObjectId(value)),
+    body('status', 'Status is required')
+      .trim()
+      .exists()
+      .custom((value) => isValidStatus(value)),
+  ],
+  TestimonyController.ChangeStatus
+)
 
 
 
