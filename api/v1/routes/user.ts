@@ -73,9 +73,21 @@ router.post(
       .bail()
       .isEmail()
       .withMessage('Invalid Email format'),
-    body('password', 'Password is required').trim().exists(),
-    body('firstName', 'First name is required').trim().exists(),
-    body('lastName', 'Last name is required').trim().exists(),
+    body('password', 'Password is required')
+      .trim()
+      .exists()
+      .notEmpty()
+      .withMessage('Password cannot be empty'),
+    body('firstName', 'First name is required')
+      .trim()
+      .exists()
+      .notEmpty()
+      .withMessage('First name cannot be empty'),
+    body('lastName', 'Last name is required')
+      .trim()
+      .exists()
+      .notEmpty()
+      .withMessage('Last name cannot be empty'),
     body('dateOfBirth', 'Date of birth is required')
       .trim()
       .exists()
@@ -84,7 +96,11 @@ router.post(
       .isISO8601()
       .toDate()
       .withMessage('Enter a valid date'),
-    body('churchCenter', 'Church is required').trim().exists(),
+    body('churchCenter', 'Church center is required')
+      .trim()
+      .exists()
+      .notEmpty()
+      .withMessage('Church center cannot be empty'),
     body('member', 'Member status is required')
       .exists()
       .isBoolean()
