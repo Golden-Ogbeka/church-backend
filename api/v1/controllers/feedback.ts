@@ -11,7 +11,7 @@ export default () => {
     req: express.Request<
       never,
       never,
-      never,
+      { status?: string },
       { page: number; limit: number; from: string; to: string }
     >,
     res: express.Response
@@ -22,14 +22,21 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() })
 
-      const paginationOptions = getPaginationOptions(req)
+      const paginationOptions = getPaginationOptions(req as any)
 
-      // find all feedback
+      const { status } = req.body
 
-      const feedbackData = await FeedbackModel.paginate(
-        getDateFilters(req),
-        paginationOptions
-      )
+      // find all feedback and filter by status if included
+
+      const feedbackData = status
+        ? await FeedbackModel.paginate(
+            { ...getDateFilters(req as any), status },
+            paginationOptions
+          )
+        : await FeedbackModel.paginate(
+            getDateFilters(req as any),
+            paginationOptions
+          )
 
       return res.status(200).json({
         message: 'Feedback Retrieved',
