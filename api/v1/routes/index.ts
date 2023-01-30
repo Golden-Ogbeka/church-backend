@@ -6,6 +6,7 @@ import AdminRoutes from './admin';
 import TestimonyRoutes from './testimony';
 import FeedbackRoutes from './feedback'
 import UserRoutes from './user'
+import AnnouncementRoutes from './announcement'
 
 const router = express.Router()
 
@@ -15,5 +16,6 @@ router.use('/admin', AdminRoutes)
 router.use('/testimony', TestimonyRoutes)
 router.use('/feedback', FeedbackRoutes)
 router.use('/user', UserRoutes)
+router.use('/announcement', AnnouncementRoutes)
 
 export default router
