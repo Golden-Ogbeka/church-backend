@@ -48,11 +48,7 @@ router.post(
       .notEmpty()
       .withMessage('Priority cannot be empty')
       .toInt(),
-    body('details')
-      .trim()
-      .optional()
-      .notEmpty()
-      .withMessage('Details cannot be empty'),
+    body('details').trim().optional(),
   ],
   AnnouncementController.AddAnnouncement
 )
@@ -87,8 +83,7 @@ router.patch(
     body('details')
       .trim()
       .optional()
-      .notEmpty()
-      .withMessage('Details cannot be empty'),
+
   ],
   AnnouncementController.UpdateAnnouncement
 )

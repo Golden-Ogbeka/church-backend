@@ -23,8 +23,6 @@ router.post(
     body('status', 'Status is required')
       .trim()
       .optional()
-      .notEmpty()
-      .withMessage('Status cannot be empty')
       .isIn(['read', 'unread'])
       .withMessage('Status is either read or unread'),
   ],
