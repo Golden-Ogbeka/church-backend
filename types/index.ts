@@ -69,6 +69,18 @@ export interface RegistrationDetailType {
   type: string
   options?: string
 }
+
+
+export interface FeedbackType {
+  fullName: string
+  email: string
+  phoneNumber: string
+  content: string
+  status: string
+  updatedBy: string
+  source: string  
+}
+
 export interface UserType {
   firstName: string
   lastName: string
