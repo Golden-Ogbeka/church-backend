@@ -9,7 +9,7 @@ import Controller from '../controllers/feedback'
 const router = Router()
 const FeedbackController = Controller()
 
-router.get(
+router.post(
   '/',
   [
     header('x-api-key', 'API Access Denied')
@@ -23,8 +23,6 @@ router.get(
     body('status', 'Status is required')
       .trim()
       .optional()
-      .notEmpty()
-      .withMessage('Status cannot be empty')
       .isIn(['read', 'unread'])
       .withMessage('Status is either read or unread'),
   ],
@@ -32,7 +30,7 @@ router.get(
 )
 
 router.post(
-  '/',
+  '/new',
   [
     header('x-api-key', 'API Access Denied')
       .exists()

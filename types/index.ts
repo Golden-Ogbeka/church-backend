@@ -93,3 +93,13 @@ export interface UserType {
   churchCenter: string
   member: boolean
 }
+
+export interface AnnouncementType {
+  title: string
+  details: string
+  image: string
+  createdBy: string
+  priority: number
+  updatedBy: string
+  _id: string
+}
