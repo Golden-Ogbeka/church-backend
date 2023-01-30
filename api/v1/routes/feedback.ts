@@ -9,7 +9,7 @@ import Controller from '../controllers/feedback'
 const router = Router()
 const FeedbackController = Controller()
 
-router.get(
+router.post(
   '/',
   [
     header('x-api-key', 'API Access Denied')
@@ -32,7 +32,7 @@ router.get(
 )
 
 router.post(
-  '/',
+  '/new',
   [
     header('x-api-key', 'API Access Denied')
       .exists()
