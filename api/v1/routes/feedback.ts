@@ -20,7 +20,7 @@ router.post(
       .exists()
       .bail()
       .custom((value) => isAdmin(value)),
-    body('status', 'Status is required')
+    body('status')
       .trim()
       .optional()
       .isIn(['read', 'unread'])
