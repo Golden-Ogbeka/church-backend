@@ -7,6 +7,7 @@ import TestimonyRoutes from './testimony';
 import FeedbackRoutes from './feedback'
 import UserRoutes from './user'
 import AnnouncementRoutes from './announcement'
+import StatisticsRoutes from './statistics'
 
 const router = express.Router()
 
@@ -17,5 +18,6 @@ router.use('/testimony', TestimonyRoutes)
 router.use('/feedback', FeedbackRoutes)
 router.use('/user', UserRoutes)
 router.use('/announcement', AnnouncementRoutes)
+router.use('/statistics', StatisticsRoutes)
 
 export default router
