@@ -22,7 +22,7 @@ export interface EventType {
   name: string
   theme: string
   mainText: string
-  date: string
+  date: Date
   time: string
   allowRegistration: boolean
   registrationEntries: any[]

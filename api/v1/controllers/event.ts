@@ -69,7 +69,8 @@ export default () => {
         requiredRegistrationDetails,
       } = req.body
 
-     
+      // return console.log(date)
+
       if (
         allowRegistration &&
         typeof requiredRegistrationDetails !== 'string'
@@ -82,7 +83,7 @@ export default () => {
       if (allowRegistration) {
         requiredRegistrationDetails = JSON.parse(requiredRegistrationDetails)
       }
-      
+
       // check for required registration fields
       if (allowRegistration && !requiredRegistrationDetails?.length)
         return res.status(400).json({
@@ -115,7 +116,7 @@ export default () => {
 
       const userDetails = await getUserDetails(req as any)
       const newEvent = new EventsModel({
-        date,
+        date: new Date(date),
         name,
         theme,
         mainText,
@@ -249,7 +250,7 @@ export default () => {
       existingEvent.name = name
       existingEvent.theme = theme
       existingEvent.mainText = mainText
-      existingEvent.date = date
+      existingEvent.date = new Date(date)
       existingEvent.time = time
       existingEvent.allowRegistration = allowRegistration
       existingEvent.limitedNumberRegistration = limitedNumberRegistration
