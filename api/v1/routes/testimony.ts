@@ -28,8 +28,10 @@ router.post(
     body('status')
       .trim()
       .optional()
-      .isIn(['read', 'unread'])
-      .withMessage('Status is either read or unread'),
+      .isIn(['pending', 'approved', 'declined', 'archived'])
+      .withMessage(
+        'Status must be one of pending, approved, declined and archived'
+      ),
   ],
   TestimonyController.GetAllTestimonies
 )
