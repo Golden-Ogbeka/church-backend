@@ -11,7 +11,7 @@ export default () => {
     req: express.Request<
       never,
       never,
-      never,
+      { status?: string },
       { page: number; limit: number; from: string; to: string }
     >,
     res: express.Response
@@ -22,14 +22,21 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() })
 
-      const paginationOptions = getPaginationOptions(req, { date: -1 })
+      const paginationOptions = getPaginationOptions(req as any, { date: -1 })
 
-      // find all events
+      const { status } = req.body
 
-      const testimoniesData = await TestimonyModel.paginate(
-        getDateFilters(req),
-        paginationOptions
-      )
+      // find all testimonies
+
+      const testimoniesData = status
+        ? await TestimonyModel.paginate(
+            { ...getDateFilters(req as any), status },
+            paginationOptions
+          )
+        : await TestimonyModel.paginate(
+            getDateFilters(req as any),
+            paginationOptions
+          )
 
       return res.status(200).json({
         message: 'All Testimonies Retrieved',
@@ -40,42 +47,42 @@ export default () => {
     }
   }
 
-  const GetTestimonyByStatus = async (
-    req: express.Request<
-      never,
-      never,
-      never,
-      { page: number; limit: number; from: string; to: string; status: string }
-    >,
-    res: express.Response
-  ) => {
-    try {
-      // check for validation errors
-      const errors = validationResult(req)
-      if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+  // const GetTestimonyByStatus = async (
+  //   req: express.Request<
+  //     never,
+  //     never,
+  //     never,
+  //     { page: number; limit: number; from: string; to: string; status: string }
+  //   >,
+  //   res: express.Response
+  // ) => {
+  //   try {
+  //     // check for validation errors
+  //     const errors = validationResult(req)
+  //     if (!errors.isEmpty())
+  //       return res.status(422).json({ errors: errors.array() })
 
-      const { page = 1, limit = 10, status } = req.query
+  //     const { page = 1, limit = 10, status } = req.query
 
-      const testimonies = await TestimonyModel.find({
-        status,
-      })
-        .limit(limit * 1)
-        .skip((page - 1) * limit)
-        .exec()
+  //     const testimonies = await TestimonyModel.find({
+  //       status,
+  //     })
+  //       .limit(limit * 1)
+  //       .skip((page - 1) * limit)
+  //       .exec()
 
-      const count = await TestimonyModel.find({ status }).count()
+  //     const count = await TestimonyModel.find({ status }).count()
 
-      return res.status(200).json({
-        message: `All ${status} testimonies retrieved`,
-        data: testimonies,
-        totalPages: Math.ceil(count / limit),
-        curentPage: page,
-      })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
-    }
-  }
+  //     return res.status(200).json({
+  //       message: `All ${status} testimonies retrieved`,
+  //       data: testimonies,
+  //       totalPages: Math.ceil(count / limit),
+  //       curentPage: page,
+  //     })
+  //   } catch (error) {
+  //     return res.status(500).json({ message: 'Internal Server Error' })
+  //   }
+  // }
 
   const ViewTestimony = async (
     req: express.Request<{ id: string }>,
@@ -129,7 +136,7 @@ export default () => {
 
       return res.status(200).json({
         message: 'Testimony added successfully',
-        event: testimonyData,
+        testimony: testimonyData,
       })
     } catch (error) {
       return res.status(500).json({ message: 'Internal Server Error' })
@@ -156,7 +163,7 @@ export default () => {
       await existingTestimony.save()
       return res.status(200).json({
         message: 'Testimony status updated successfully',
-        event: existingTestimony,
+        testimony: existingTestimony,
       })
     } catch (error) {
       console.log(error)
@@ -164,15 +171,10 @@ export default () => {
     }
   }
 
-  interface UpdateBody extends TestimonyType {
-    id: string
-  }
-
   return {
     GetAllTestimonies,
     AddTestimony,
     ChangeStatus,
-    GetTestimonyByStatus,
     ViewTestimony,
   }
 }

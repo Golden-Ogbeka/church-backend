@@ -14,7 +14,7 @@ import Controller from '../controllers/testimony'
 const router = Router()
 const TestimonyController = Controller()
 
-router.get(
+router.post(
   '/',
   [
     header('x-api-key', 'API Access Denied')
@@ -25,24 +25,13 @@ router.get(
       .exists()
       .bail()
       .custom((value) => isAdmin(value)),
+    body('status')
+      .trim()
+      .optional()
+      .isIn(['read', 'unread'])
+      .withMessage('Status is either read or unread'),
   ],
   TestimonyController.GetAllTestimonies
-)
-
-router.get(
-  '/testimony-by-status',
-  [
-    header('x-api-key', 'API Access Denied')
-      .exists()
-      .bail()
-      .custom((value) => isValidAPI(value)),
-
-    query('status', 'status is required')
-      .trim()
-      .exists()
-      .custom((value) => isValidStatus(value)),
-  ],
-  TestimonyController.GetTestimonyByStatus
 )
 
 router.post(
