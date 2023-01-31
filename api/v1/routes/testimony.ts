@@ -30,7 +30,7 @@ router.post(
       .optional()
       .isIn(['pending', 'approved', 'declined', 'archived'])
       .withMessage(
-        'Status must be one of pending, approved, declined and archived'
+        'Status must be one of pending, approved, declined or archived'
       ),
   ],
   TestimonyController.GetAllTestimonies
