@@ -5,8 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon",
-    "dev": "npx nodemon"
+    "start": "ts-node ./index.ts",
+    "dev": "nodemon index.ts"
   },
   "repository": {
     "type": "git",
