@@ -112,9 +112,13 @@ export default () => {
 
       const { id } = req.params
 
+      //increase view
       // find devotional
-
-      const devotionalData = await DevotionalModel.findById(id)
+      const devotionalData = await DevotionalModel.findOneAndUpdate(
+        { _id: id },
+        { $inc: { views: 1 } },
+        { new: true }
+      )
 
       if (!devotionalData)
         return res.status(404).json({ message: 'Devotional not found' })
@@ -143,12 +147,16 @@ export default () => {
 
       // find devotional
 
-      const devotionalData = await DevotionalModel.findOne({
-        date: {
-          $gte: todaysDate,
-          $lte: todaysDate,
+      const devotionalData = await DevotionalModel.findOneAndUpdate(
+        {
+          date: {
+            $gte: todaysDate,
+            $lte: todaysDate,
+          },
         },
-      })
+        { $inc: { views: 1 } },
+        { new: true }
+      )
 
       if (!devotionalData)
         return res.status(404).json({ message: 'Devotional not found' })
