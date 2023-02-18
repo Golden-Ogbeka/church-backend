@@ -1,4 +1,4 @@
-import { isValidObjectId } from './../../../middlewares/shared';
+import { isValidEventType, isValidObjectId } from './../../../middlewares/shared';
 import { isAdmin } from './../../../middlewares/auth';
 import { isValidAPI } from '../../../middlewares/shared';
 import { Router } from 'express';
@@ -126,6 +126,11 @@ router.patch(
       .isBoolean()
       .withMessage('Allow Limited Number of Registration must be boolean')
       .toBoolean(),
+
+      body('eventType', 'eventType is required')
+      .trim()
+      .exists()
+      .custom((value) => isValidEventType(value)),
   ],
   EventController.UpdateEvent
 )

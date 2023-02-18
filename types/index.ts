@@ -33,6 +33,8 @@ export interface EventType {
   registrationDateLimit: Date
   requiredRegistrationDetails: any
   poster: string
+  eventType: string
+  location: string
   createdBy: string
   updatedBy: string
   _id: string
