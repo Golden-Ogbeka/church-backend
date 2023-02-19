@@ -101,11 +101,7 @@ router.post(
       .isISO8601()
       .toDate()
       .withMessage('Enter a valid date'),
-    body('churchCenter', 'Church center is required')
-      .trim()
-      .exists()
-      .notEmpty()
-      .withMessage('Church center cannot be empty'),
+    body('churchCenter', 'Church center is required').trim().optional(),
     body('member', 'Member status is required')
       .exists()
       .isBoolean()
