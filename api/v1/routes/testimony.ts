@@ -104,4 +104,15 @@ router.get(
   TestimonyController.ViewTestimony
 )
 
+router.post(
+  '/approved',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+  ],
+  TestimonyController.GetApprovedTestimonies
+)
+
 export default router
