@@ -135,7 +135,7 @@ export default () => {
       await testimonyData.save()
 
       return res.status(200).json({
-        message: 'Testimony added successfully',
+        message: 'Testimony sent',
         testimony: testimonyData,
       })
     } catch (error) {
