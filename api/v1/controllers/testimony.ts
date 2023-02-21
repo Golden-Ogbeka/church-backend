@@ -22,7 +22,7 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() })
 
-      const paginationOptions = getPaginationOptions(req as any, { date: -1 })
+      const paginationOptions = getPaginationOptions(req as any)
 
       const { status } = req.body
 
@@ -186,7 +186,7 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() })
 
-      const paginationOptions = getPaginationOptions(req as any, { date: -1 })
+      const paginationOptions = getPaginationOptions(req as any)
 
       // find all approved testimonies
 
