@@ -17,6 +17,8 @@ export interface IEvent extends Document {
   registrationDateLimit: Date
   poster: string
   requiredRegistrationDetails: UncertainObjectType[]
+  eventType: string
+  location: string
   // Event Image
   createdBy: string
   updatedBy: string
@@ -44,6 +46,8 @@ const eventSchema = new Schema<IEvent>(
     registrationNumberLimit: { type: Number, required: false },
     limitedDateRegistration: { type: Boolean, required: true, default: false },
     registrationDateLimit: { type: Date, required: false },
+    eventType: {type: String, required: true, default: "offline"},
+    location: {type: String, required: false},
     poster: { type: String, required: false },
     createdBy: { type: String, required: true },
     updatedBy: { type: String, required: true },
