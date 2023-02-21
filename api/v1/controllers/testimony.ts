@@ -171,10 +171,43 @@ export default () => {
     }
   }
 
+  const GetApprovedTestimonies = async (
+    req: express.Request<
+      never,
+      never,
+      { status?: string },
+      { page: number; limit: number; from: string; to: string }
+    >,
+    res: express.Response
+  ) => {
+    try {
+      // check for validation errors
+      const errors = validationResult(req)
+      if (!errors.isEmpty())
+        return res.status(422).json({ errors: errors.array() })
+
+      const paginationOptions = getPaginationOptions(req as any, { date: -1 })
+
+      // find all approved testimonies
+
+      const testimoniesData = await TestimonyModel.paginate(
+        { ...getDateFilters(req as any), status: 'approved' },
+        paginationOptions
+      )
+      return res.status(200).json({
+        message: 'Testimonies Retrieved',
+        data: testimoniesData,
+      })
+    } catch (error) {
+      return res.status(500).json({ message: 'Internal Server Error' })
+    }
+  }
+
   return {
     GetAllTestimonies,
     AddTestimony,
     ChangeStatus,
     ViewTestimony,
+    GetApprovedTestimonies,
   }
 }
