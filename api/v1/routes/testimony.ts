@@ -37,7 +37,7 @@ router.post(
 )
 
 router.post(
-  '/',
+  '/new',
   [
     header('x-api-key', 'API Access Denied')
       .exists()
