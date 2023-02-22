@@ -173,16 +173,16 @@ router.post(
       .exists()
       .bail()
       .custom((value) => isValidAPI(value)),
-    header('authorization', 'Please specify an authorization header')
-      .exists()
-      .bail()
-      .custom((value) => isAdmin(value)),
+    // header('authorization', 'Please specify an authorization header')
+    //   .exists()
+    //   .bail()
+    //   .custom((value) => isAdmin(value)),
     param('id', 'ID is required')
       .exists()
       .custom((value) => isValidObjectId(value)),
   ],
   EventController.RegisterEvent
-);
+)
 router.post(
   '/:id/upload',
   [
