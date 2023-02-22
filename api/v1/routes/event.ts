@@ -17,13 +17,9 @@ router.get(
       .exists()
       .bail()
       .custom((value) => isValidAPI(value)),
-    header('authorization', 'Please specify an authorization header')
-      .exists()
-      .bail()
-      .custom((value) => isAdmin(value)),
   ],
   EventController.GetAllEvents
-);
+)
 
 router.post(
   '/',
