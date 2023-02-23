@@ -67,6 +67,8 @@ export default () => {
         limitedDateRegistration,
         registrationDateLimit,
         requiredRegistrationDetails,
+        eventType,
+        location
       } = req.body
 
       // return console.log(date)
@@ -128,6 +130,8 @@ export default () => {
         limitedDateRegistration,
         registrationDateLimit,
         poster: posterFile.path,
+        eventType,
+        location,
         createdBy: userDetails.fullname,
         updatedBy: userDetails.fullname,
       })
@@ -193,6 +197,8 @@ export default () => {
         limitedDateRegistration,
         registrationDateLimit,
         requiredRegistrationDetails,
+        eventType,
+        location
       } = req.body
 
       const { id } = req.params
@@ -259,6 +265,8 @@ export default () => {
       existingEvent.limitedDateRegistration = limitedDateRegistration
       existingEvent.requiredRegistrationDetails = requiredRegistrationDetails
       existingEvent.poster = req.file ? req.file.path : existingEvent.poster
+      existingEvent.eventType = eventType
+      existingEvent.location = location
       existingEvent.updatedBy = userDetails.fullname
 
       await existingEvent.save()

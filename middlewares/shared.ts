@@ -21,6 +21,12 @@ export const isValidSource = (source: string) => {
   }
   return true
 }
+export const isValidEventType = (type: string) => {
+  if (!(['offline', 'online'].includes(type))) {
+    throw new Error("Event Type should be either offlline or online")
+  }
+  return true
+}
 
 export const isValidStatus = (status: string) => {
   if (!['pending', 'approved', 'declined', 'archived'].includes(status)) {
