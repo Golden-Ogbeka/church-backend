@@ -22,7 +22,7 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() })
 
-      const paginationOptions = getPaginationOptions(req)
+      const paginationOptions = getPaginationOptions(req, { date: -1 })
 
       // find all events
 

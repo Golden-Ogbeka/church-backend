@@ -1,14 +1,17 @@
-import { isValidEventType, isValidObjectId } from './../../../middlewares/shared';
-import { isAdmin } from './../../../middlewares/auth';
-import { isValidAPI } from '../../../middlewares/shared';
-import { Router } from 'express';
-import { body, header, param, query } from 'express-validator';
-import { parser } from '../../../functions/cloudinary';
+import {
+  isValidEventType,
+  isValidObjectId,
+} from './../../../middlewares/shared'
+import { isAdmin } from './../../../middlewares/auth'
+import { isValidAPI } from '../../../middlewares/shared'
+import { Router } from 'express'
+import { body, header, param, query } from 'express-validator'
+import { parser } from '../../../functions/cloudinary'
 
-import Controller from '../controllers/event';
+import Controller from '../controllers/event'
 
-const router = Router();
-const EventController = Controller();
+const router = Router()
+const EventController = Controller()
 
 router.get(
   '/',
@@ -68,6 +71,10 @@ router.post(
       .isBoolean()
       .withMessage('Allow Limited Number of Registration must be boolean')
       .toBoolean(),
+    body('eventType', 'eventType is required')
+      .trim()
+      .exists()
+      .custom((value) => isValidEventType(value)),
   ],
   EventController.AddEvent
 )
@@ -123,7 +130,7 @@ router.patch(
       .withMessage('Allow Limited Number of Registration must be boolean')
       .toBoolean(),
 
-      body('eventType', 'eventType is required')
+    body('eventType', 'eventType is required')
       .trim()
       .exists()
       .custom((value) => isValidEventType(value)),
@@ -144,7 +151,7 @@ router.get(
       .custom((value) => isValidObjectId(value)),
   ],
   EventController.ViewEvent
-);
+)
 
 // Delete event by id
 router.delete(
@@ -163,7 +170,7 @@ router.delete(
       .custom((value) => isValidObjectId(value)),
   ],
   EventController.DeleteEvent
-);
+)
 
 //Register for event
 router.post(
@@ -226,4 +233,4 @@ router.delete(
   EventController.DeleteGalleryImage
 )
 
-export default router;
+export default router
