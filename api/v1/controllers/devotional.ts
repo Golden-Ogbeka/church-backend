@@ -41,6 +41,34 @@ export default () => {
     }
   }
 
+  // Get devotionals for user: Limited to the last 10 devotionals
+  const GetDevotionalsForUser = async (
+    req: express.Request,
+    res: express.Response
+  ) => {
+    try {
+      // check for validation errors
+      const errors = validationResult(req)
+      if (!errors.isEmpty())
+        return res.status(422).json({ errors: errors.array() })
+
+      const limit = 10
+
+      const devotionalsData = await DevotionalModel.find({
+        date: { $lte: new Date() },
+      })
+        .sort({ date: -1 })
+        .limit(limit)
+
+      return res.status(200).json({
+        message: 'Devotionals Retrieved',
+        data: devotionalsData,
+      })
+    } catch (error) {
+      return res.status(500).json({ message: 'Internal Server Error' })
+    }
+  }
+
   const AddDevotional = async (
     req: express.Request<never, never, DevotionalType>,
     res: express.Response
@@ -273,5 +301,6 @@ export default () => {
     GetDayDevotional,
     DeleteDevotional,
     UpdateDevotional,
+    GetDevotionalsForUser,
   }
 }

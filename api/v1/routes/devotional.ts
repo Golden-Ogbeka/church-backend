@@ -23,6 +23,17 @@ router.get(
   DevotionalController.GetAllDevotionals
 );
 
+router.get(
+  '/user',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+  ],
+  DevotionalController.GetDevotionalsForUser
+)
+
 router.post(
   '/',
   [
