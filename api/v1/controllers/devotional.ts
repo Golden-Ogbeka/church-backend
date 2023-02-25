@@ -41,7 +41,6 @@ export default () => {
     }
   }
 
-  // Get devotionals for user: Limited to the last 10 devotionals
   const GetDevotionalsForUser = async (
     req: express.Request,
     res: express.Response
@@ -52,13 +51,13 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() })
 
-      const limit = 10
+      // Get devotionals for user: Limited to the last 10 devotionals
+      // const limit = 10
 
       const devotionalsData = await DevotionalModel.find({
         date: { $lte: new Date() },
-      })
-        .sort({ date: -1 })
-        .limit(limit)
+      }).sort({ date: -1 })
+      // .limit(limit)
 
       return res.status(200).json({
         message: 'Devotionals Retrieved',
