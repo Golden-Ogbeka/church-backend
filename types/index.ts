@@ -101,6 +101,7 @@ export interface AnnouncementType {
   details: string
   image: string
   createdBy: string
+  description: string
   priority: number
   updatedBy: string
   _id: string
