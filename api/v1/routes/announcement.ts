@@ -77,7 +77,7 @@ router.patch(
       .notEmpty()
       .withMessage('Priority cannot be empty')
       .toInt(),
-    body('details').trim().optional(),
+    body('details').trim(),
     body('description').trim().optional(),
   ],
   AnnouncementController.UpdateAnnouncement
