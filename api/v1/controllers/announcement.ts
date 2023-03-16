@@ -1,8 +1,5 @@
 import { getUserDetails } from './../../../functions/auth'
-import {
-  AnnouncementType,
-  RegistrationDetailType,
-} from './../../../types/index'
+import { AnnouncementType } from './../../../types/index'
 import { getPaginationOptions } from './../../../utils/pagination'
 import { validationResult } from 'express-validator'
 import express from 'express'
@@ -60,13 +57,14 @@ export default () => {
       if (!imageFile)
         return res.status(404).json({ message: 'No image uploaded' })
 
-      let { details, priority, title } = req.body
+      let { details, priority, title, description } = req.body
 
       const userDetails = await getUserDetails(req as any)
       const newAnnouncement: IAnnouncement = new AnnouncementsModel({
         details,
         priority,
         title,
+        description,
         image: imageFile.path,
         createdBy: userDetails.fullname,
         updatedBy: userDetails.fullname,
@@ -121,7 +119,7 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() })
 
-      let { details, priority, title } = req.body
+      let { details, priority, title, description } = req.body
 
       const { id } = req.params
 
@@ -143,6 +141,7 @@ export default () => {
         ? req.file.path
         : existingAnnouncement.image
       existingAnnouncement.updatedBy = userDetails.fullname
+      existingAnnouncement.description = description
 
       await existingAnnouncement.save()
 
