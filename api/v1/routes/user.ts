@@ -54,6 +54,7 @@ router.post(
       .exists()
       .bail()
       .isEmail()
+      .normalizeEmail({ all_lowercase: true })
       .withMessage('Invalid Email format'),
     body('password', 'Password is required').trim().exists(),
   ],
@@ -72,6 +73,7 @@ router.post(
       .exists()
       .bail()
       .isEmail()
+      .normalizeEmail({ all_lowercase: true })
       .withMessage('Invalid Email format'),
     body('password', 'Password is required')
       .trim()
@@ -128,6 +130,7 @@ router.post(
       .exists()
       .bail()
       .isEmail()
+      .normalizeEmail({ all_lowercase: true })
       .withMessage('Invalid Email format'),
   ],
   UserController.ResetPasswordRequest
@@ -145,6 +148,7 @@ router.post(
       .exists()
       .bail()
       .isEmail()
+      .normalizeEmail({ all_lowercase: true })
       .withMessage('Invalid Email format'),
     body('newPassword', 'New password is required')
       .trim()
