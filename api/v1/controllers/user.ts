@@ -85,8 +85,6 @@ export default () => {
         return res.status(422).json({ errors: errors.array() })
 
       const { email, password } = req.body
-      console.log(email)
-
 
       // find user
       const existingUser = await UserModel.findOne({ email })
