@@ -8,6 +8,8 @@ import FeedbackRoutes from './feedback'
 import UserRoutes from './user'
 import AnnouncementRoutes from './announcement'
 import StatisticsRoutes from './statistics'
+import TFCCRoutes from './tfcc'
+import TFCCZoneRoutes from './tfccZone'
 
 const router = express.Router()
 
@@ -19,5 +21,7 @@ router.use('/feedback', FeedbackRoutes)
 router.use('/user', UserRoutes)
 router.use('/announcement', AnnouncementRoutes)
 router.use('/statistics', StatisticsRoutes)
+router.use('/tfcc', TFCCRoutes)
+router.use('/tfcc/zone', TFCCZoneRoutes)
 
 export default router

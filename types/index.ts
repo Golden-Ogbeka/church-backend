@@ -1,22 +1,22 @@
 export interface DevotionalType {
-	date: any;
-	title: string;
-	text: string;
-	mainText: string;
-	content: string;
-	confession: string;
-	furtherReading: string[];
-	oneYearBibleReading: string[];
-	twoYearsBibleReading: string[];
-	createdBy: string;
-	updatedBy: string;
-	views: number;
-	_id: string;
+  date: any
+  title: string
+  text: string
+  mainText: string
+  content: string
+  confession: string
+  furtherReading: string[]
+  oneYearBibleReading: string[]
+  twoYearsBibleReading: string[]
+  createdBy: string
+  updatedBy: string
+  views: number
+  _id: string
 }
 
 export type UncertainObjectType = {
-	[key: string]: any;
-};
+  [key: string]: any
+}
 
 export interface EventType {
   name: string
@@ -72,7 +72,6 @@ export interface RegistrationDetailType {
   options?: string
 }
 
-
 export interface FeedbackType {
   fullName: string
   email: string
@@ -80,7 +79,7 @@ export interface FeedbackType {
   content: string
   status: string
   updatedBy: string
-  source: string  
+  source: string
 }
 
 export interface UserType {
@@ -105,4 +104,20 @@ export interface AnnouncementType {
   priority: number
   updatedBy: string
   _id: string
+}
+
+export interface TFCCType {
+  address: string
+  cellLeader: string
+  phoneNumber: string
+  zone: string
+  createdBy: string
+  _id: string
+  updatedBy: string
+}
+export interface TFCCZoneType {
+  name: string
+  createdBy: string
+  _id: string
+  updatedBy: string
 }
