@@ -2,7 +2,7 @@ import {
   isValidEventType,
   isValidObjectId,
 } from './../../../middlewares/shared'
-import { isAdmin } from './../../../middlewares/auth'
+import { isAdmin, isSuperAdmin } from './../../../middlewares/auth'
 import { isValidAPI } from '../../../middlewares/shared'
 import { Router } from 'express'
 import { body, header, param, query } from 'express-validator'
@@ -164,7 +164,7 @@ router.delete(
     header('authorization', 'Please specify an authorization header')
       .exists()
       .bail()
-      .custom((value) => isAdmin(value)),
+      .custom((value) => isSuperAdmin(value)),
     param('id', 'ID is required')
       .exists()
       .custom((value) => isValidObjectId(value)),
@@ -224,7 +224,7 @@ router.delete(
     header('authorization', 'Please specify an authorization header')
       .exists()
       .bail()
-      .custom((value) => isAdmin(value)),
+      .custom((value) => isSuperAdmin(value)),
     param('id', 'Event ID is required')
       .exists()
       .custom((value) => isValidObjectId(value)),

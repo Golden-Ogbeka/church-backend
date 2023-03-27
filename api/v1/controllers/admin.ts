@@ -1,11 +1,11 @@
-import bcrypt from 'bcryptjs';
-import { getUserDetails } from '../../../functions/auth';
-import { AdminType } from '../../../types/index';
-import { getPaginationOptions } from '../../../utils/pagination';
-import { validationResult } from 'express-validator';
-import express from 'express';
-import AdminModel from '../../../models/admin.model';
-import { getDateFilters } from '../../../functions/filters';
+import bcrypt from 'bcryptjs'
+import { getUserDetails } from '../../../functions/auth'
+import { AdminType } from '../../../types/index'
+import { getPaginationOptions } from '../../../utils/pagination'
+import { validationResult } from 'express-validator'
+import express from 'express'
+import AdminModel from '../../../models/admin.model'
+import { getDateFilters } from '../../../functions/filters'
 import { sendEmail } from '../../../utils/mailer'
 import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
@@ -203,6 +203,13 @@ export default () => {
       const existingAdmin = await AdminModel.findOne({ email })
       if (!existingAdmin)
         return res.status(400).json({ message: 'Invalid email or password' })
+
+      // Check if admin is activated
+      if (!existingAdmin.active) {
+        return res
+          .status(400)
+          .json({ message: 'Access Denied. Contact TFH Admin' })
+      }
 
       // compare passwords
       bcrypt.compare(password, existingAdmin.password, function (err, matched) {
