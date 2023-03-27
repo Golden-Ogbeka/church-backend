@@ -1,5 +1,5 @@
 import { isValidObjectId } from '../../../middlewares/shared'
-import { isAdmin } from '../../../middlewares/auth'
+import { isAdmin, isSuperAdmin } from '../../../middlewares/auth'
 import { isValidAPI } from '../../../middlewares/shared'
 import { Router } from 'express'
 import { body, header, param, query } from 'express-validator'
@@ -18,7 +18,7 @@ router.get(
     header('authorization', 'Please specify an authorization header')
       .exists()
       .bail()
-      .custom((value) => isAdmin(value)),
+      .custom((value) => isSuperAdmin(value)),
   ],
   UserController.GetAllUsers
 )
@@ -37,7 +37,7 @@ router.get(
     header('authorization', 'Please specify an authorization header')
       .exists()
       .bail()
-      .custom((value) => isAdmin(value)),
+      .custom((value) => isSuperAdmin(value)),
   ],
   UserController.ViewUser
 )

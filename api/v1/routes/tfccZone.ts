@@ -1,11 +1,11 @@
 import { isValidObjectId } from './../../../middlewares/shared'
-import { isAdmin } from './../../../middlewares/auth'
+import { isAdmin, isSuperAdmin } from './../../../middlewares/auth'
 import { isValidAPI } from '../../../middlewares/shared'
 import { Router } from 'express'
 import { body, header, param } from 'express-validator'
 
 import Controller from '../controllers/tfccZone'
-import { doesZoneExist, isValidZone } from '../../../middlewares/tfcc'
+import { doesZoneExist } from '../../../middlewares/tfcc'
 
 const router = Router()
 const ZoneController = Controller()
@@ -54,7 +54,7 @@ router.post(
   ZoneController.AddZone
 )
 
-// Update center
+// Update zone
 router.patch(
   '/:id',
   [
@@ -78,7 +78,7 @@ router.patch(
   ZoneController.UpdateZone
 )
 
-// Delete center by id
+// Delete zone by id
 router.delete(
   '/:id',
   [
@@ -89,7 +89,7 @@ router.delete(
     header('authorization', 'Please specify an authorization header')
       .exists()
       .bail()
-      .custom((value) => isAdmin(value)),
+      .custom((value) => isSuperAdmin(value)),
     param('id', 'ID is required')
       .exists()
       .custom((value) => isValidObjectId(value)),

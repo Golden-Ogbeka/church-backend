@@ -1,27 +1,27 @@
 import { isValidObjectId } from '../../../middlewares/shared';
-import { isAdmin } from '../../../middlewares/auth';
-import { isValidAPI } from '../../../middlewares/shared';
-import { Router } from 'express';
-import { body, header, param, query } from 'express-validator';
-import Controller from '../controllers/admin';
+import { isAdmin, isSuperAdmin } from '../../../middlewares/auth'
+import { isValidAPI } from '../../../middlewares/shared'
+import { Router } from 'express'
+import { body, header, param, query } from 'express-validator'
+import Controller from '../controllers/admin'
 
-const router = Router();
-const AdminController = Controller();
+const router = Router()
+const AdminController = Controller()
 
 router.get(
-	'/',
-	[
-		header('x-api-key', 'API Access Denied')
-			.exists()
-			.bail()
-			.custom((value) => isValidAPI(value)),
-		header('authorization', 'Please specify an authorization header')
-			.exists()
-			.bail()
-			.custom((value) => isAdmin(value)),
-	],
-	AdminController.GetAllAdmins
-);
+  '/',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+    header('authorization', 'Please specify an authorization header')
+      .exists()
+      .bail()
+      .custom((value) => isSuperAdmin(value)),
+  ],
+  AdminController.GetAllAdmins
+)
 
 router.post(
   '/',
@@ -58,7 +58,7 @@ router.patch(
     header('authorization', 'Please specify an authorization header')
       .exists()
       .bail()
-      .custom((value) => isAdmin(value)),
+      .custom((value) => isSuperAdmin(value)),
     body('id', 'ID is required')
       .exists()
       .notEmpty()
@@ -83,7 +83,7 @@ router.patch(
     header('authorization', 'Please specify an authorization header')
       .exists()
       .bail()
-      .custom((value) => isAdmin(value)),
+      .custom((value) => isSuperAdmin(value)),
     body('id', 'ID is required')
       .exists()
       .notEmpty()
@@ -104,7 +104,7 @@ router.get(
     header('authorization', 'Please specify an authorization header')
       .exists()
       .bail()
-      .custom((value) => isAdmin(value)),
+      .custom((value) => isSuperAdmin(value)),
     param('id', 'ID is required')
       .exists()
       .custom((value) => isValidObjectId(value)),
