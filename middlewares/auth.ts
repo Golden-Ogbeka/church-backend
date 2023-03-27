@@ -8,11 +8,13 @@ export const isAdmin = async (value: string) => {
 
     if (!tokenData) throw new Error('Login to continue!')
 
+    // Check if admin exists and is activated
     const isAdmin = await AdminModel.findOne({
       email: tokenData?.email,
+      active: true,
     })
 
-    if (!isAdmin) throw new Error('Unauthorized!')
+    if (!isAdmin) throw new Error('Unauthorized! Contact TFH Admin')
 
     return true
   } catch (error) {
