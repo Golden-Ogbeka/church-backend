@@ -35,6 +35,7 @@ export interface EventType {
   poster: string
   eventType: string
   location: string
+  description: string
   createdBy: string
   updatedBy: string
   _id: string
@@ -100,7 +101,6 @@ export interface AnnouncementType {
   details: string
   image: string
   createdBy: string
-  description: string
   priority: number
   updatedBy: string
   _id: string
