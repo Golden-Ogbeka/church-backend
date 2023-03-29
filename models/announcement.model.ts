@@ -7,7 +7,6 @@ export interface IAnnouncement extends Document {
   details: string
   priority: number
   image: string
-  description: string
   createdBy: string
   updatedBy: string
 }
@@ -18,7 +17,6 @@ const announcementSchema = new Schema<IAnnouncement>(
     priority: { type: Number, required: true, default: 0 },
     details: { type: String, required: false },
     image: { type: String, required: true },
-    description: { type: String, required: false },
     createdBy: { type: String, required: true },
     updatedBy: { type: String, required: true },
   },

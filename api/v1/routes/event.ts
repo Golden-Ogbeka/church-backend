@@ -75,6 +75,7 @@ router.post(
       .trim()
       .exists()
       .custom((value) => isValidEventType(value)),
+    body('description').trim().optional(),
   ],
   EventController.AddEvent
 )
@@ -134,6 +135,7 @@ router.patch(
       .trim()
       .exists()
       .custom((value) => isValidEventType(value)),
+    body('description').trim().optional(),
   ],
   EventController.UpdateEvent
 )
