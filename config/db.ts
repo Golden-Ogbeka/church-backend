@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import mysql from 'mysql';
 
+
+// Mongo DB
 mongoose.set('strictQuery', false);
 
 export const connectDB = async () => {
@@ -13,6 +15,7 @@ export const connectDB = async () => {
   }
 };
 
+// MySQL
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
