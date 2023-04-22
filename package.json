@@ -37,8 +37,9 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
-    "mysql": "^2.18.1",
-    "nodemailer": "^6.8.0"
+    "mysql2": "^3.2.3",
+    "nodemailer": "^6.8.0",
+    "sequelize": "^6.31.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -50,9 +51,9 @@
     "@types/mongoose": "^5.11.97",
     "@types/morgan": "^1.9.4",
     "@types/multer": "^1.4.7",
-    "@types/mysql": "^2.15.21",
     "@types/node": "^18.11.18",
     "@types/nodemailer": "^6.4.7",
+    "@types/sequelize": "^4.28.14",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4"

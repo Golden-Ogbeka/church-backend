@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-import mysql from 'mysql';
-
+import { Sequelize } from 'sequelize';
 
 // Mongo DB
 mongoose.set('strictQuery', false);
@@ -16,19 +15,12 @@ export const connectDB = async () => {
 };
 
 // MySQL
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'tfhwebma_shine',
-});
+const sequelize = new Sequelize(process.env.MYSQL_URI!);
 
 export const connectMySqlDB = async () => {
   try {
-    connection.connect((error) => {
-      if (error) throw error;
-      console.log('Connected to MySQL database!');
-    });
+    await sequelize.authenticate();
+    console.log('Connected to MySQL database!');
   } catch (error) {
     console.log(error);
     console.log("Couldn't connect to MySQL DB");
