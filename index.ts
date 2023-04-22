@@ -2,24 +2,26 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 import express from "express";
 import cors from "cors";
-import { connectDB } from "./config/db";
+import { connectDB, connectMySqlDB } from './config/db';
 import ApiVersions from './api';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(
-	cors({
-		origin: [
-			'https://tfh-admin.netlify.app', //website
-			'http://127.0.0.1:5173', // localhost
-		],
-	})
+  cors({
+    origin: [
+      'https://tfh-admin.netlify.app', //website
+      'http://127.0.0.1:5173', // localhost
+    ],
+  })
 );
 
+//connect to mongo db
+connectDB();
 
-//connect to db
-connectDB()
+// connect to mysql db
+connectMySqlDB();
 
 // Add middlewares for parsing JSON and urlencoded data and populating `req.body`
 app.use(express.urlencoded({ extended: false }));
