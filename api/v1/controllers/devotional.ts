@@ -4,7 +4,7 @@ import { DevotionalType } from './../../../types/index'
 import { getPaginationOptions } from './../../../utils/pagination'
 import { validationResult } from 'express-validator'
 import express from 'express'
-import DevotionalModel from '../../../models/devotional.model'
+import DevotionalModel from '../models/devotional.model';
 import { getDateFilters } from '../../../functions/filters'
 
 export default () => {

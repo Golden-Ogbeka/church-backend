@@ -3,7 +3,7 @@ import { TestimonyType } from './../../../types/index'
 import { getPaginationOptions } from './../../../utils/pagination'
 import { validationResult } from 'express-validator'
 import express from 'express'
-import TestimonyModel, { ITestimony } from '../../../models/testimony.model'
+import TestimonyModel, { ITestimony } from '../../v1/models/testimony.model';
 import { getDateFilters } from '../../../functions/filters'
 
 export default () => {

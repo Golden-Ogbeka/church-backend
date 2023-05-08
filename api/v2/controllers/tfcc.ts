@@ -3,8 +3,8 @@ import { TFCCType } from './../../../types/index'
 import { getPaginationOptions } from './../../../utils/pagination'
 import { validationResult } from 'express-validator'
 import express from 'express'
-import TFCCModel from '../../../models/tfcc.model'
-import { TFFDocumentType } from '../../../models/tfcc.model'
+import TFCCModel from '../../v1/models/tfcc.model';
+import { TFFDocumentType } from '../../v1/models/tfcc.model';
 import { getDateFilters } from '../../../functions/filters'
 
 export default () => {

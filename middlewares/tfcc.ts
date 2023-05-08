@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import TFCCZoneModel from '../models/tfccZone.model'
+import TFCCZoneModel from '../api/v1/models/tfccZone.model';
 
 export const isValidZone = async (zone: string) => {
   if (!zone) throw new Error('Invalid Zone!')

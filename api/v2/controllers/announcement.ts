@@ -5,7 +5,7 @@ import { validationResult } from 'express-validator'
 import express from 'express'
 import AnnouncementsModel, {
   IAnnouncement,
-} from '../../../models/announcement.model'
+} from '../../v1/models/announcement.model';
 import { getDateFilters } from '../../../functions/filters'
 
 export default () => {

@@ -3,7 +3,7 @@ import { EventType, RegistrationDetailType } from './../../../types/index'
 import { getPaginationOptions } from './../../../utils/pagination'
 import { validationResult } from 'express-validator'
 import express from 'express'
-import EventsModel, { IEvent } from '../../../models/event.model'
+import EventsModel, { IEvent } from '../models/event.model';
 import { getDateFilters } from '../../../functions/filters'
 
 export default () => {

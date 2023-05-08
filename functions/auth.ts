@@ -1,6 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import AdminModel from '../models/admin.model';
+import AdminModel from '../api/v1/models/admin.model';
 
 
 
