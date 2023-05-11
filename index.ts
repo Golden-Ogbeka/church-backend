@@ -1,9 +1,10 @@
-import * as dotenv from 'dotenv'
-dotenv.config()
-import express from "express";
-import cors from "cors";
-import { connectDB, connectMySqlDB } from './config/db';
+import * as dotenv from 'dotenv';
+dotenv.config();
+import express from 'express';
+import cors from 'cors';
+import { connectMongoDB } from './config/db';
 import ApiVersions from './api';
+import sequelizeDB from './api/v2/models';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -18,10 +19,10 @@ app.use(
 );
 
 //connect to mongo db
-connectDB();
+// connectMongoDB();
 
 // connect to mysql db
-connectMySqlDB();
+// connectMySqlDB();
 
 // Add middlewares for parsing JSON and urlencoded data and populating `req.body`
 app.use(express.urlencoded({ extended: false }));
@@ -42,8 +43,15 @@ app.use((req, res) => {
   res.status(404).json({ message: 'API route not found.' });
 });
 
-app.listen(
-  PORT, () => {
-    console.log(`Server is running on port ${PORT}`)
+app.listen(PORT, async () => {
+  console.log(`Server is running on port ${PORT}`);
+
+  // Connect to SQL DB
+  try {
+    await sequelizeDB.sequelize.sync({ alter: true });
+    console.log('MySQL Database connected');
+  } catch (error) {
+    console.log(error);
+    console.log("Couldn't connect to MySQL DB");
   }
-)
+});
