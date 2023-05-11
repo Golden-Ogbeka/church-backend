@@ -3,7 +3,7 @@ import { FeedbackType, RegistrationDetailType } from './../../../types/index'
 import { getPaginationOptions } from './../../../utils/pagination'
 import { validationResult } from 'express-validator'
 import express from 'express'
-import FeedbackModel, { IFeedback } from '../models/feedback.model';
+import FeedbackModel, { IFeedback } from '../../v1/models/feedback.model';
 import { getDateFilters } from '../../../functions/filters'
 
 export default () => {

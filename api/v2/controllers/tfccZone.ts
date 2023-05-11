@@ -2,8 +2,8 @@ import { getUserDetails } from './../../../functions/auth'
 import { TFCCZoneType } from './../../../types/index'
 import { validationResult } from 'express-validator'
 import express from 'express'
-import TFCCZoneModel from '../models/tfccZone.model';
-import { TFCCZoneDocumentType } from '../models/tfccZone.model';
+import TFCCZoneModel from '../../v1/models/tfccZone.model';
+import { TFCCZoneDocumentType } from '../../v1/models/tfccZone.model';
 
 export default () => {
   const GetAllZones = async (

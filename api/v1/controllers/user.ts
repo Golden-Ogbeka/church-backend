@@ -4,7 +4,7 @@ import { UserType } from '../../../types/index'
 import { getPaginationOptions } from '../../../utils/pagination'
 import { validationResult } from 'express-validator'
 import express from 'express'
-import UserModel from '../../../models/user.model'
+import UserModel from '../models/user.model';
 import { getDateFilters } from '../../../functions/filters'
 import { sendEmail } from '../../../utils/mailer'
 import jwt from 'jsonwebtoken'

@@ -1,14 +1,14 @@
-import { UncertainObjectType } from './../types/index'
-import { Schema, model, Document, PaginateModel } from 'mongoose'
-import mongoosePaginate from 'mongoose-paginate-v2'
+import { UncertainObjectType } from '../../../types/index';
+import { Schema, model, Document, PaginateModel } from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 export interface IAnnouncement extends Document {
-  title: string
-  details: string
-  priority: number
-  image: string
-  createdBy: string
-  updatedBy: string
+  title: string;
+  details: string;
+  priority: number;
+  image: string;
+  createdBy: string;
+  updatedBy: string;
 }
 
 const announcementSchema = new Schema<IAnnouncement>(
@@ -21,13 +21,13 @@ const announcementSchema = new Schema<IAnnouncement>(
     updatedBy: { type: String, required: true },
   },
   { timestamps: true }
-)
+);
 
-announcementSchema.plugin(mongoosePaginate)
+announcementSchema.plugin(mongoosePaginate);
 
 const AnnouncementModel = model<IAnnouncement, PaginateModel<IAnnouncement>>(
   'Announcement',
   announcementSchema
-)
+);
 
-export default AnnouncementModel
+export default AnnouncementModel;
