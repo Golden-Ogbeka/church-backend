@@ -1,14 +1,14 @@
-import { isValidObjectId } from './../../../middlewares/shared'
-import { isAdmin } from './../../../middlewares/auth'
-import { isValidAPI } from '../../../middlewares/shared'
-import { Router } from 'express'
-import { body, header, param, query } from 'express-validator'
-import { parser } from '../../../functions/cloudinary'
+import { isValidObjectId } from '../middlewares/shared';
+import { isAdmin } from '../middlewares/auth';
+import { isValidAPI } from '../middlewares/shared';
+import { Router } from 'express';
+import { body, header, param, query } from 'express-validator';
+import { parser } from '../../../functions/cloudinary';
 
-import Controller from '../controllers/announcement'
+import Controller from '../controllers/announcement';
 
-const router = Router()
-const AnnouncementController = Controller()
+const router = Router();
+const AnnouncementController = Controller();
 
 router.get(
   '/',
@@ -19,7 +19,7 @@ router.get(
       .custom((value) => isValidAPI(value)),
   ],
   AnnouncementController.GetAllAnnouncements
-)
+);
 
 router.post(
   '/',
@@ -47,7 +47,7 @@ router.post(
     body('details').trim().optional(),
   ],
   AnnouncementController.AddAnnouncement
-)
+);
 
 router.patch(
   '/:id',
@@ -79,7 +79,7 @@ router.patch(
     body('details').trim(),
   ],
   AnnouncementController.UpdateAnnouncement
-)
+);
 
 // Get announcement by id
 router.get(
@@ -94,7 +94,7 @@ router.get(
       .custom((value) => isValidObjectId(value)),
   ],
   AnnouncementController.ViewAnnouncement
-)
+);
 
 // Delete announcement by id
 router.delete(
@@ -113,6 +113,6 @@ router.delete(
       .custom((value) => isValidObjectId(value)),
   ],
   AnnouncementController.DeleteAnnouncement
-)
+);
 
-export default router
+export default router;

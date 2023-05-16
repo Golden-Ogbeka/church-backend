@@ -1,9 +1,6 @@
-import {
-  isValidEventType,
-  isValidObjectId,
-} from './../../../middlewares/shared'
-import { isAdmin, isSuperAdmin } from './../../../middlewares/auth'
-import { isValidAPI } from '../../../middlewares/shared'
+import { isValidEventType, isValidObjectId } from '../middlewares/shared';
+import { isAdmin, isSuperAdmin } from '../middlewares/auth';
+import { isValidAPI } from '../middlewares/shared';
 import { Router } from 'express'
 import { body, header, param, query } from 'express-validator'
 import { parser } from '../../../functions/cloudinary'

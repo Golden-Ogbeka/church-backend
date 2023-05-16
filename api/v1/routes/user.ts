@@ -1,12 +1,12 @@
-import { isValidObjectId } from '../../../middlewares/shared'
-import { isAdmin, isSuperAdmin } from '../../../middlewares/auth'
-import { isValidAPI } from '../../../middlewares/shared'
-import { Router } from 'express'
-import { body, header, param, query } from 'express-validator'
-import Controller from '../controllers/user'
+import { isValidObjectId } from '../middlewares/shared';
+import { isAdmin, isSuperAdmin } from '../middlewares/auth';
+import { isValidAPI } from '../middlewares/shared';
+import { Router } from 'express';
+import { body, header, param, query } from 'express-validator';
+import Controller from '../controllers/user';
 
-const router = Router()
-const UserController = Controller()
+const router = Router();
+const UserController = Controller();
 
 router.get(
   '/',
@@ -21,7 +21,7 @@ router.get(
       .custom((value) => isSuperAdmin(value)),
   ],
   UserController.GetAllUsers
-)
+);
 
 // Get user by id
 router.get(
@@ -40,7 +40,7 @@ router.get(
       .custom((value) => isSuperAdmin(value)),
   ],
   UserController.ViewUser
-)
+);
 
 router.post(
   '/login',
@@ -59,7 +59,7 @@ router.post(
     body('password', 'Password is required').trim().exists(),
   ],
   UserController.Login
-)
+);
 
 router.post(
   '/register',
@@ -116,7 +116,7 @@ router.post(
       .withMessage('Registration source cannot be empty'),
   ],
   UserController.Register
-)
+);
 
 router.post(
   '/reset-password',
@@ -134,7 +134,7 @@ router.post(
       .withMessage('Invalid Email format'),
   ],
   UserController.ResetPasswordRequest
-)
+);
 
 router.post(
   '/reset-password/update',
@@ -158,6 +158,6 @@ router.post(
     body('verificationCode', 'Verification code is required').trim().exists(),
   ],
   UserController.ResetPasswordUpdate
-)
+);
 
-export default router
+export default router;

@@ -1,12 +1,12 @@
-import { isValidObjectId } from './../../../middlewares/shared'
-import { isAdmin, isSuperAdmin } from './../../../middlewares/auth'
-import { isValidAPI } from '../../../middlewares/shared'
-import { Router } from 'express'
-import { body, header, param, query } from 'express-validator'
-import Controller from '../controllers/devotional'
+import { isValidObjectId } from '../../v1/middlewares/shared';
+import { isAdmin, isSuperAdmin } from '../../v1/middlewares/auth';
+import { isValidAPI } from '../../v1/middlewares/shared';
+import { Router } from 'express';
+import { body, header, param, query } from 'express-validator';
+import Controller from '../controllers/devotional';
 
-const router = Router()
-const DevotionalController = Controller()
+const router = Router();
+const DevotionalController = Controller();
 
 router.get(
   '/',
@@ -21,7 +21,7 @@ router.get(
       .custom((value) => isAdmin(value)),
   ],
   DevotionalController.GetAllDevotionals
-)
+);
 
 router.get(
   '/user',
@@ -32,7 +32,7 @@ router.get(
       .custom((value) => isValidAPI(value)),
   ],
   DevotionalController.GetDevotionalsForUser
-)
+);
 
 router.post(
   '/',
@@ -92,7 +92,7 @@ router.post(
       .withMessage('Two years bible reading must have at least one scripture'),
   ],
   DevotionalController.AddDevotional
-)
+);
 
 // Update devotional
 router.patch(
@@ -158,7 +158,7 @@ router.patch(
       .withMessage('Two years bible reading must have at least one scripture'),
   ],
   DevotionalController.UpdateDevotional
-)
+);
 
 // Get devotional by id
 router.get(
@@ -173,7 +173,7 @@ router.get(
       .custom((value) => isValidObjectId(value)),
   ],
   DevotionalController.ViewDevotional
-)
+);
 
 // Get today's devotional
 router.get(
@@ -185,7 +185,7 @@ router.get(
       .custom((value) => isValidAPI(value)),
   ],
   DevotionalController.GetDayDevotional
-)
+);
 
 // Delete devotional by id
 router.delete(
@@ -204,6 +204,6 @@ router.delete(
       .custom((value) => isValidObjectId(value)),
   ],
   DevotionalController.DeleteDevotional
-)
+);
 
-export default router
+export default router;

@@ -1,21 +1,21 @@
-import { isValidObjectId } from './../../../middlewares/shared'
-import { isAdmin, isSuperAdmin } from './../../../middlewares/auth'
-import { isValidAPI } from '../../../middlewares/shared'
-import { Router } from 'express'
-import { body, header, param } from 'express-validator'
+import { isValidObjectId } from '../../v1/middlewares/shared';
+import { isAdmin, isSuperAdmin } from '../../v1/middlewares/auth';
+import { isValidAPI } from '../../v1/middlewares/shared';
+import { Router } from 'express';
+import { body, header, param } from 'express-validator';
 
-import Controller from '../controllers/tfccZone'
-import { doesZoneExist } from '../../../middlewares/tfcc'
+import Controller from '../controllers/tfccZone';
+import { doesZoneExist } from '../../v1/middlewares/tfcc';
 
-const router = Router()
-const ZoneController = Controller()
+const router = Router();
+const ZoneController = Controller();
 
 // Get all zones
 router.get(
   '/',
   [header('x-api-key', 'API Access Denied').exists().bail()],
   ZoneController.GetAllZones
-)
+);
 
 // Get specific zone
 router.get(
@@ -30,7 +30,7 @@ router.get(
       .custom((value) => isValidObjectId(value)),
   ],
   ZoneController.ViewZone
-)
+);
 
 // Add Zone
 router.post(
@@ -52,7 +52,7 @@ router.post(
       .custom((value) => doesZoneExist(value)),
   ],
   ZoneController.AddZone
-)
+);
 
 // Update zone
 router.patch(
@@ -76,7 +76,7 @@ router.patch(
       .withMessage('Name cannot be empty'),
   ],
   ZoneController.UpdateZone
-)
+);
 
 // Delete zone by id
 router.delete(
@@ -95,6 +95,6 @@ router.delete(
       .custom((value) => isValidObjectId(value)),
   ],
   ZoneController.DeleteZone
-)
+);
 
-export default router
+export default router;

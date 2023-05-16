@@ -1,21 +1,21 @@
-import { isValidObjectId } from './../../../middlewares/shared'
-import { isAdmin, isSuperAdmin } from './../../../middlewares/auth'
-import { isValidAPI, isValidSource } from '../../../middlewares/shared'
-import { Router } from 'express'
-import { body, header, param } from 'express-validator'
+import { isValidObjectId } from '../../v1/middlewares/shared';
+import { isAdmin, isSuperAdmin } from '../../v1/middlewares/auth';
+import { isValidAPI, isValidSource } from '../../v1/middlewares/shared';
+import { Router } from 'express';
+import { body, header, param } from 'express-validator';
 
-import Controller from '../controllers/tfcc'
-import { isValidZone } from '../../../middlewares/tfcc'
+import Controller from '../controllers/tfcc';
+import { isValidZone } from '../../v1/middlewares/tfcc';
 
-const router = Router()
-const CenterController = Controller()
+const router = Router();
+const CenterController = Controller();
 
 // Get all TFCC centers
 router.get(
   '/centers',
   [header('x-api-key', 'API Access Denied').exists().bail()],
   CenterController.GetAllCenters
-)
+);
 
 // Get specific center
 router.get(
@@ -30,7 +30,7 @@ router.get(
       .custom((value) => isValidObjectId(value)),
   ],
   CenterController.ViewCenter
-)
+);
 
 // Add center
 router.post(
@@ -67,7 +67,7 @@ router.post(
       .custom((value) => isValidZone(value)),
   ],
   CenterController.AddCenter
-)
+);
 
 // Update center
 router.patch(
@@ -107,7 +107,7 @@ router.patch(
       .custom((value) => isValidZone(value)),
   ],
   CenterController.UpdateCenter
-)
+);
 
 // Delete center by id
 router.delete(
@@ -126,6 +126,6 @@ router.delete(
       .custom((value) => isValidObjectId(value)),
   ],
   CenterController.DeleteCenter
-)
+);
 
-export default router
+export default router;

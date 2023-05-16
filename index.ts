@@ -19,10 +19,7 @@ app.use(
 );
 
 //connect to mongo db
-// connectMongoDB();
-
-// connect to mysql db
-// connectMySqlDB();
+connectMongoDB();
 
 // Add middlewares for parsing JSON and urlencoded data and populating `req.body`
 app.use(express.urlencoded({ extended: false }));

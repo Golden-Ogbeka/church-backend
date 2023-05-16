@@ -1,18 +1,18 @@
-import { isValidObjectId } from './../../../middlewares/shared'
-import { isAdmin, isSuperAdmin } from './../../../middlewares/auth'
+import { isValidObjectId } from '../../v1/middlewares/shared';
+import { isAdmin, isSuperAdmin } from '../../v1/middlewares/auth';
 import {
   isValidAPI,
   isValidSource,
   isValidStatus,
-} from '../../../middlewares/shared'
-import { Router } from 'express'
-import { body, header, param, query } from 'express-validator'
-import { parser } from '../../../functions/cloudinary'
+} from '../../v1/middlewares/shared';
+import { Router } from 'express';
+import { body, header, param, query } from 'express-validator';
+import { parser } from '../../../functions/cloudinary';
 
-import Controller from '../controllers/testimony'
+import Controller from '../controllers/testimony';
 
-const router = Router()
-const TestimonyController = Controller()
+const router = Router();
+const TestimonyController = Controller();
 
 router.post(
   '/',
@@ -34,7 +34,7 @@ router.post(
       ),
   ],
   TestimonyController.GetAllTestimonies
-)
+);
 
 router.post(
   '/new',
@@ -67,7 +67,7 @@ router.post(
       .custom((value) => isValidSource(value)),
   ],
   TestimonyController.AddTestimony
-)
+);
 router.patch(
   '/:id/change-status',
   [
@@ -88,7 +88,7 @@ router.patch(
       .custom((value) => isValidStatus(value)),
   ],
   TestimonyController.ChangeStatus
-)
+);
 
 router.get(
   '/:id',
@@ -102,7 +102,7 @@ router.get(
       .custom((value) => isValidObjectId(value)),
   ],
   TestimonyController.ViewTestimony
-)
+);
 
 router.post(
   '/approved',
@@ -113,6 +113,6 @@ router.post(
       .custom((value) => isValidAPI(value)),
   ],
   TestimonyController.GetApprovedTestimonies
-)
+);
 
-export default router
+export default router;
