@@ -1,6 +1,7 @@
+import { UnitModel } from './unit';
 import { DataTypes, Sequelize } from 'sequelize';
 import { sequelizeInstance } from '../../../config/db';
-// import { sequelizeInstance } from '.';
+import { DepartmentModel } from './department';
 
 export const UserModel = sequelizeInstance.define(
   'user',
@@ -120,3 +121,11 @@ export const UserModel = sequelizeInstance.define(
     paranoid: true, //for soft delete
   }
 );
+
+UserModel.belongsTo(DepartmentModel, {
+  foreignKey: 'dept',
+});
+
+UserModel.belongsTo(UnitModel, {
+  foreignKey: 'd_unit',
+});
