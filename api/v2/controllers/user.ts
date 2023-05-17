@@ -1,10 +1,17 @@
+import {
+  getPages,
+  getResponseVariables,
+} from './../../../functions/pagination';
 import bcrypt from 'bcryptjs';
 import { getUserDetails } from '../../../functions/auth';
 import { UserType } from '../../../types/index';
 import { getPaginationOptions } from '../../../utils/pagination';
 import { validationResult } from 'express-validator';
 import express from 'express';
-import { getDateFilters } from '../../../functions/filters';
+import {
+  getDateFilters,
+  getSequelizeDateFilters,
+} from '../../../functions/filters';
 import { sendEmail } from '../../../utils/mailer';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
@@ -12,6 +19,7 @@ import { UserModel as SqlUserModel } from '../models/user';
 import { DepartmentModel } from '../models/department';
 import { UnitModel } from '../models/unit';
 import UserModel from '../../v1/models/user.model';
+import { paginate } from '../../../functions/pagination';
 
 export default () => {
   const GetAllUsers = async (
@@ -29,17 +37,19 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() });
 
-      // const paginationOptions = getPaginationOptions(req)
+      const { from, to, limit, page } = req.query;
 
       // find all users
-
-      const usersData = await SqlUserModel.findAll({
+      const usersData = await SqlUserModel.findAndCountAll({
         include: [DepartmentModel, UnitModel],
+        order: [['id', 'ASC']],
+        ...getSequelizeDateFilters({ from, to }),
+        ...paginate({ limit, page }),
       });
 
       return res.status(200).json({
         message: 'All Users Retrieved',
-        data: usersData,
+        data: getResponseVariables(usersData, limit),
       });
     } catch (error) {
       return res.status(500).json({ message: 'Internal Server Error' });
