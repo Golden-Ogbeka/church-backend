@@ -1,13 +1,13 @@
-import { isValidObjectId, isValidSource } from './../../../middlewares/shared'
-import { isAdmin } from './../../../middlewares/auth'
-import { isValidAPI } from '../../../middlewares/shared'
-import { Router } from 'express'
-import { body, header, param } from 'express-validator'
+import { isValidObjectId, isValidSource } from '../../v1/middlewares/shared';
+import { isAdmin } from '../../v1/middlewares/auth';
+import { isValidAPI } from '../../v1/middlewares/shared';
+import { Router } from 'express';
+import { body, header, param } from 'express-validator';
 
-import Controller from '../controllers/feedback'
+import Controller from '../controllers/feedback';
 
-const router = Router()
-const FeedbackController = Controller()
+const router = Router();
+const FeedbackController = Controller();
 
 router.post(
   '/',
@@ -27,7 +27,7 @@ router.post(
       .withMessage('Status is either read or unread'),
   ],
   FeedbackController.GetAllFeedback
-)
+);
 
 router.post(
   '/new',
@@ -63,7 +63,7 @@ router.post(
       .custom((value) => isValidSource(value)),
   ],
   FeedbackController.SendFeedback
-)
+);
 
 // Get feedback by id
 router.get(
@@ -82,7 +82,7 @@ router.get(
       .custom((value) => isValidObjectId(value)),
   ],
   FeedbackController.ViewFeedback
-)
+);
 
 // Update feedback status
 router.patch(
@@ -109,6 +109,6 @@ router.patch(
       .withMessage('Status is either read or unread'),
   ],
   FeedbackController.ChangeFeedbackStatus
-)
+);
 
-export default router
+export default router;

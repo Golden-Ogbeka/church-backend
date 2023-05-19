@@ -1,11 +1,11 @@
-import { isAdmin } from '../../../middlewares/auth'
-import { isValidAPI } from '../../../middlewares/shared'
-import { Router } from 'express'
-import { header } from 'express-validator'
-import Controller from '../controllers/statistics'
+import { isAdmin } from '../middlewares/auth';
+import { isValidAPI } from '../middlewares/shared';
+import { Router } from 'express';
+import { header } from 'express-validator';
+import Controller from '../controllers/statistics';
 
-const router = Router()
-const StatisticController = Controller()
+const router = Router();
+const StatisticController = Controller();
 
 router.get(
   '/',
@@ -20,7 +20,7 @@ router.get(
       .custom((value) => isAdmin(value)),
   ],
   StatisticController.GetSummary
-)
+);
 
 router.get(
   '/user',
@@ -35,7 +35,7 @@ router.get(
       .custom((value) => isAdmin(value)),
   ],
   StatisticController.GetUserSummary
-)
+);
 
 router.get(
   '/feedback',
@@ -50,7 +50,7 @@ router.get(
       .custom((value) => isAdmin(value)),
   ],
   StatisticController.GetFeedbackSummary
-)
+);
 
 router.get(
   '/testimony',
@@ -65,6 +65,6 @@ router.get(
       .custom((value) => isAdmin(value)),
   ],
   StatisticController.GetTestimonySummary
-)
+);
 
-export default router
+export default router;
