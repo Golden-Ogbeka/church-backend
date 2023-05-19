@@ -15,7 +15,7 @@ import {
 import { sendEmail } from '../../../utils/mailer';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
-import { UserModel as SqlUserModel } from '../models/user';
+import { UserModel as SqlUserModel, UserModelAttributes } from '../models/user';
 import { DepartmentModel } from '../models/department';
 import { UnitModel } from '../models/unit';
 import UserModel from '../../v1/models/user.model';
@@ -70,7 +70,8 @@ export default () => {
 
       // find user
 
-      const userData = await UserModel.findById(id);
+      // const userData = await UserModel.findById(id);
+      const userData = await SqlUserModel.findByPk(id);
 
       if (!userData) return res.status(404).json({ message: 'User not found' });
 
@@ -99,48 +100,50 @@ export default () => {
       const { email, password } = req.body;
 
       // find user
-      const existingUser = await UserModel.findOne({ email });
+      const existingUser = await SqlUserModel.findOne({
+        where: { email },
+        attributes: {
+          include: ['password'],
+        },
+      });
       if (!existingUser)
         return res.status(400).json({ message: 'Invalid email or password' });
 
       // compare passwords
-      bcrypt.compare(password, existingUser.password, function (err, matched) {
-        if (!matched)
-          return res.status(400).json({ message: 'Invalid email or password' });
+      bcrypt.compare(
+        password,
+        existingUser.toJSON().password,
+        function (err, matched) {
+          if (!matched)
+            return res
+              .status(400)
+              .json({ message: 'Invalid email or password' });
 
-        // Generate JWT Token
-        jwt.sign(
-          existingUser.toJSON(),
-          process.env.JWT_SECRET || 'secret',
-          { expiresIn: '2d' },
-          (err, token) => {
-            return res.status(200).json({
-              message: 'Login successful',
-              user: existingUser,
-              token,
-            });
-          }
-        );
-      });
+          // Generate JWT Token
+          jwt.sign(
+            existingUser.toJSON(),
+            process.env.JWT_SECRET || 'secret',
+            { expiresIn: '2d' },
+            (err, token) => {
+              return res.status(200).json({
+                message: 'Login successful',
+                user: {
+                  ...existingUser.toJSON(),
+                  password: undefined,
+                },
+                token,
+              });
+            }
+          );
+        }
+      );
     } catch (error) {
       return res.status(500).json({ message: 'Internal Server Error' });
     }
   };
 
-  interface RegistrationDetails {
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    phoneNumber: string;
-    dateOfBirth: string;
-    churchCenter: string;
-    registrationSource: string;
-    member: boolean;
-  }
-
   const Register = async (
-    req: express.Request<never, never, RegistrationDetails>,
+    req: express.Request<never, never, UserModelAttributes>,
     res: express.Response
   ) => {
     try {
@@ -152,34 +155,43 @@ export default () => {
       const {
         email,
         password,
-        firstName,
-        lastName,
+        fname,
+        lname,
         churchCenter,
-        dateOfBirth,
+        dob,
         member,
-        phoneNumber,
+        phone,
         registrationSource,
+        titles,
+        address,
+        gender,
+        marital,
       } = req.body;
 
       // check if user exists
-      let existingUser = await UserModel.findOne({ email });
-      if (existingUser && Object.keys(existingUser).length)
+      let existingUser = await SqlUserModel.findOne({ where: { email } });
+      if (existingUser && Object.keys(existingUser.toJSON()).length)
         return res.status(400).json({ message: 'User already exists' });
 
       // Hash password
       bcrypt.hash(password, 8, async function (err, hash) {
         // Store hash in your password DB.
         //Store new user
-        let newUser: UserType = await UserModel.create({
+        let newUser = await SqlUserModel.create({
           email,
           password: hash,
-          firstName,
-          lastName,
+          names: fname + ' ' + lname,
+          fname,
+          lname,
           churchCenter,
-          dateOfBirth,
-          phoneNumber,
+          dob,
+          phone,
           member,
           registrationSource,
+          titles,
+          address,
+          gender,
+          marital,
         });
 
         return res.status(200).json({
@@ -206,7 +218,7 @@ export default () => {
       const { email } = req.body;
 
       // check if user exists
-      let existingUser = await UserModel.findOne({ email });
+      let existingUser = await SqlUserModel.findOne({ where: { email } });
       if (!existingUser)
         return res.status(404).json({ message: 'User not found' });
 
@@ -219,7 +231,7 @@ export default () => {
       const emailToSend = {
         body: {
           greeting: 'Dear',
-          name: existingUser?.firstName,
+          name: existingUser?.fname,
           intro:
             'You have received this email because a password reset request for your account was received.',
           action: {
@@ -266,7 +278,12 @@ export default () => {
       const { email, newPassword, verificationCode } = req.body;
 
       // check if user exists
-      let existingUser = await UserModel.findOne({ email, verificationCode });
+      let existingUser = await SqlUserModel.findOne({
+        where: {
+          email,
+          verificationCode,
+        },
+      });
 
       // Hash password
       bcrypt.hash(newPassword, 8, async function (err, hash) {
@@ -284,7 +301,7 @@ export default () => {
         const emailToSend = {
           body: {
             greeting: 'Dear',
-            name: existingUser?.firstName,
+            name: existingUser?.fname,
             intro: 'You have successfully reset your password',
             signature: 'Regards',
             outro:
