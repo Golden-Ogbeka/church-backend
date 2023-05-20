@@ -1,14 +1,14 @@
-import { isValidEventType, isValidObjectId } from '../../v1/middlewares/shared';
+import { isValidEventType, isValidID } from '../middlewares/shared';
 import { isAdmin, isSuperAdmin } from '../../v1/middlewares/auth';
 import { isValidAPI } from '../../v1/middlewares/shared';
-import { Router } from 'express'
-import { body, header, param, query } from 'express-validator'
-import { parser } from '../../../functions/cloudinary'
+import { Router } from 'express';
+import { body, header, param, query } from 'express-validator';
+import { parser } from '../../../functions/cloudinary';
 
-import Controller from '../controllers/event'
+import Controller from '../controllers/event';
 
-const router = Router()
-const EventController = Controller()
+const router = Router();
+const EventController = Controller();
 
 router.get(
   '/',
@@ -19,7 +19,7 @@ router.get(
       .custom((value) => isValidAPI(value)),
   ],
   EventController.GetAllEvents
-)
+);
 
 router.post(
   '/',
@@ -75,7 +75,7 @@ router.post(
     body('description').trim().optional(),
   ],
   EventController.AddEvent
-)
+);
 
 router.patch(
   '/:id',
@@ -92,7 +92,7 @@ router.patch(
 
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
     body('date', 'Date is required')
       .trim()
       .exists()
@@ -135,7 +135,7 @@ router.patch(
     body('description').trim().optional(),
   ],
   EventController.UpdateEvent
-)
+);
 
 // Get event by id
 router.get(
@@ -147,10 +147,10 @@ router.get(
       .custom((value) => isValidAPI(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
   ],
   EventController.ViewEvent
-)
+);
 
 // Delete event by id
 router.delete(
@@ -166,10 +166,10 @@ router.delete(
       .custom((value) => isSuperAdmin(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
   ],
   EventController.DeleteEvent
-)
+);
 
 //Register for event
 router.post(
@@ -185,10 +185,10 @@ router.post(
     //   .custom((value) => isAdmin(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
   ],
   EventController.RegisterEvent
-)
+);
 router.post(
   '/:id/upload',
   [
@@ -203,14 +203,14 @@ router.post(
     parser.array('images'),
     param('id', 'Event ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
     body('images', 'Image is required')
       .trim()
       .exists()
       .withMessage('Image is required'),
   ],
   EventController.UploadEventImages
-)
+);
 
 // Delete gallery image
 router.delete(
@@ -226,10 +226,10 @@ router.delete(
       .custom((value) => isSuperAdmin(value)),
     param('id', 'Event ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
     body('imageURL', 'Image URL is required').exists().trim(),
   ],
   EventController.DeleteGalleryImage
-)
+);
 
-export default router
+export default router;

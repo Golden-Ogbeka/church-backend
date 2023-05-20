@@ -1,4 +1,4 @@
-import { isValidObjectId } from '../../v1/middlewares/shared';
+import { isValidID } from '../middlewares/shared';
 import { isAdmin } from '../../v1/middlewares/auth';
 import { isValidAPI } from '../../v1/middlewares/shared';
 import { Router } from 'express';
@@ -64,7 +64,7 @@ router.patch(
 
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
     body('title', 'Title is required')
       .trim()
       .exists()
@@ -91,7 +91,7 @@ router.get(
       .custom((value) => isValidAPI(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
   ],
   AnnouncementController.ViewAnnouncement
 );
@@ -110,7 +110,7 @@ router.delete(
       .custom((value) => isAdmin(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
   ],
   AnnouncementController.DeleteAnnouncement
 );

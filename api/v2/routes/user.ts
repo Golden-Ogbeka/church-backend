@@ -2,11 +2,7 @@ import { isAdmin, isSuperAdmin } from '../../v1/middlewares/auth';
 import { Router } from 'express';
 import { body, header, param, query } from 'express-validator';
 import Controller from '../controllers/user';
-import {
-  isValidAPI,
-  isValidObjectId,
-  isValidSource,
-} from '../middlewares/shared';
+import { isValidAPI, isValidID, isValidSource } from '../middlewares/shared';
 
 const router = Router();
 const UserController = Controller();
@@ -36,7 +32,7 @@ router.get(
       .custom((value) => isValidAPI(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
     header('authorization', 'Please specify an authorization header')
       .exists()
       .bail()

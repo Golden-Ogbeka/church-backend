@@ -1,4 +1,4 @@
-import { isValidObjectId } from '../../v1/middlewares/shared';
+import { isValidID } from '../middlewares/shared';
 import { isAdmin, isSuperAdmin } from '../../v1/middlewares/auth';
 import { isValidAPI } from '../../v1/middlewares/shared';
 import { Router } from 'express';
@@ -63,7 +63,7 @@ router.patch(
       .exists()
       .notEmpty()
       .withMessage('ID cannot be empty')
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
     body('status', 'Status is required')
       .exists()
       .isBoolean()
@@ -88,7 +88,7 @@ router.patch(
       .exists()
       .notEmpty()
       .withMessage('ID cannot be empty')
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
   ],
   AdminController.MakeSuperAdmin
 );
@@ -107,7 +107,7 @@ router.get(
       .custom((value) => isSuperAdmin(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
   ],
   AdminController.ViewAdmin
 );
