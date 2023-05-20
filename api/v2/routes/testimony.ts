@@ -1,4 +1,4 @@
-import { isValidObjectId } from '../../v1/middlewares/shared';
+import { isValidID } from '../middlewares/shared';
 import { isAdmin, isSuperAdmin } from '../../v1/middlewares/auth';
 import {
   isValidAPI,
@@ -81,7 +81,7 @@ router.patch(
       .custom((value) => isSuperAdmin(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
     body('status', 'Status is required')
       .trim()
       .exists()
@@ -99,7 +99,7 @@ router.get(
       .custom((value) => isValidAPI(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
   ],
   TestimonyController.ViewTestimony
 );

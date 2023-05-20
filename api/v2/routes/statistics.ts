@@ -1,5 +1,5 @@
 import { isAdmin } from '../../v1/middlewares/auth';
-import { isValidAPI } from '../../v1/middlewares/shared';
+import { isValidAPI } from '../middlewares/shared';
 import { Router } from 'express';
 import { header } from 'express-validator';
 import Controller from '../controllers/statistics';

@@ -1,4 +1,4 @@
-import { isValidObjectId } from '../../v1/middlewares/shared';
+import { isValidID } from '../middlewares/shared';
 import { isAdmin, isSuperAdmin } from '../../v1/middlewares/auth';
 import { isValidAPI, isValidSource } from '../../v1/middlewares/shared';
 import { Router } from 'express';
@@ -27,7 +27,7 @@ router.get(
       .custom((value) => isValidAPI(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
   ],
   CenterController.ViewCenter
 );
@@ -83,7 +83,7 @@ router.patch(
       .custom((value) => isAdmin(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
     body('cellLeader', 'Cell leader is required')
       .trim()
       .exists()
@@ -123,7 +123,7 @@ router.delete(
       .custom((value) => isSuperAdmin(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
   ],
   CenterController.DeleteCenter
 );
