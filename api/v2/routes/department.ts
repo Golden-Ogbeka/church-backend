@@ -1,11 +1,11 @@
 import { isAdmin } from '../../v1/middlewares/auth';
 import { Router } from 'express';
 import { body, header, param } from 'express-validator';
-import Controller from '../controllers/unit';
+import Controller from '../controllers/department';
 import { isValidAPI, isValidID } from '../middlewares/shared';
 
 const router = Router();
-const UnitController = Controller();
+const DepartmentController = Controller();
 
 router.get(
   '/',
@@ -19,10 +19,10 @@ router.get(
       .bail()
       .custom((value) => isAdmin(value)),
   ],
-  UnitController.GetAllUnits
+  DepartmentController.GetAllDepartments
 );
 
-// Get unit by id
+// Get department by id
 router.get(
   '/view/:id',
   [
@@ -38,7 +38,7 @@ router.get(
       .bail()
       .custom((value) => isAdmin(value)),
   ],
-  UnitController.ViewUnit
+  DepartmentController.ViewDepartment
 );
 
 router.post(
@@ -48,18 +48,13 @@ router.post(
       .exists()
       .bail()
       .custom((value) => isValidAPI(value)),
-    body('u_names', 'Unit name is required')
+    body('names', 'Department name is required')
       .trim()
       .exists()
       .notEmpty()
-      .withMessage('Unit name cannot be empty'),
-    body('dept_id', 'Department ID is required')
-      .trim()
-      .exists()
-      .notEmpty()
-      .withMessage('Department ID cannot be empty'),
+      .withMessage('Department name cannot be empty'),
   ],
-  UnitController.AddUnit
+  DepartmentController.AddDepartment
 );
 
 router.put(
@@ -72,10 +67,9 @@ router.put(
     param('id', 'ID is required')
       .exists()
       .custom((value) => isValidID(value)),
-    body('u_names', 'Unit name is required').optional().trim(),
-    body('dept_id').optional().trim(),
+    body('names', 'Department name is required').optional().trim(),
   ],
-  UnitController.UpdateUnit
+  DepartmentController.UpdateDepartment
 );
 
 router.delete(
@@ -89,7 +83,7 @@ router.delete(
       .exists()
       .custom((value) => isValidID(value)),
   ],
-  UnitController.DeleteUnit
+  DepartmentController.DeleteDepartment
 );
 
 export default router;

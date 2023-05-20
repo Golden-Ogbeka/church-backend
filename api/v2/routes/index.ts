@@ -11,6 +11,7 @@ import StatisticsRoutes from './statistics'
 import TFCCRoutes from './tfcc'
 import TFCCZoneRoutes from './tfccZone'
 import UnitRoutes from './unit';
+import DepartmentRoutes from './department';
 
 const router = express.Router();
 
@@ -25,5 +26,6 @@ router.use('/statistics', StatisticsRoutes);
 router.use('/tfcc', TFCCRoutes);
 router.use('/tfcc/zone', TFCCZoneRoutes);
 router.use('/unit', UnitRoutes);
+router.use('/department', DepartmentRoutes);
 
 export default router
