@@ -33,7 +33,7 @@ router.get(
       .custom((value) => isValidAPI(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
     header('authorization', 'Please specify an authorization header')
       .exists()
       .bail()

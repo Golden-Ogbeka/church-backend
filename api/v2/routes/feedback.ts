@@ -1,4 +1,4 @@
-import { isValidObjectId, isValidSource } from '../../v1/middlewares/shared';
+import { isValidID, isValidSource } from '../middlewares/shared';
 import { isAdmin } from '../../v1/middlewares/auth';
 import { isValidAPI } from '../../v1/middlewares/shared';
 import { Router } from 'express';
@@ -79,7 +79,7 @@ router.get(
       .custom((value) => isAdmin(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
   ],
   FeedbackController.ViewFeedback
 );
@@ -98,7 +98,7 @@ router.patch(
       .custom((value) => isAdmin(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
 
     body('status', 'Status is required')
       .trim()

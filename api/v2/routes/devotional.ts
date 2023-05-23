@@ -1,4 +1,4 @@
-import { isValidObjectId } from '../../v1/middlewares/shared';
+import { isValidID } from '../middlewares/shared';
 import { isAdmin, isSuperAdmin } from '../../v1/middlewares/auth';
 import { isValidAPI } from '../../v1/middlewares/shared';
 import { Router } from 'express';
@@ -110,7 +110,7 @@ router.patch(
       .exists()
       .notEmpty()
       .withMessage('ID cannot be empty')
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
     body('date', 'Date is required')
       .trim()
       .exists()
@@ -170,7 +170,7 @@ router.get(
       .custom((value) => isValidAPI(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
   ],
   DevotionalController.ViewDevotional
 );
@@ -201,7 +201,7 @@ router.delete(
       .custom((value) => isSuperAdmin(value)),
     param('id', 'ID is required')
       .exists()
-      .custom((value) => isValidObjectId(value)),
+      .custom((value) => isValidID(value)),
   ],
   DevotionalController.DeleteDevotional
 );

@@ -1,21 +1,11 @@
-import {
-  getPages,
-  getResponseVariables,
-} from './../../../functions/pagination';
 import bcrypt from 'bcryptjs';
-import { getUserDetails } from '../../../functions/auth';
-import { UserType } from '../../../types/index';
-import { getPaginationOptions } from '../../../utils/pagination';
 import { validationResult } from 'express-validator';
-import express from 'express';
-import {
-  getDateFilters,
-  getSequelizeDateFilters,
-} from '../../../functions/filters';
-import { sendEmail } from '../../../utils/mailer';
 import jwt from 'jsonwebtoken';
+import express from 'express';
 import crypto from 'crypto';
-import { UserModel as SqlUserModel, UserModelAttributes } from '../models/user';
+import { getSequelizeDateFilters } from '../../../functions/filters';
+import { sendEmail } from '../../../utils/mailer';
+import { UserModel, UserModelAttributes } from '../models/user';
 import { DepartmentModel } from '../models/department';
 import { UnitModel } from '../models/unit';
 import { getResponseVariables, paginate } from '../../../functions/pagination';
@@ -40,7 +30,7 @@ export default () => {
       const { from, to, limit, page } = req.query;
 
       // find all users
-      const usersData = await SqlUserModel.findAndCountAll({
+      const usersData = await UserModel.findAndCountAll({
         include: [DepartmentModel, UnitModel],
         order: [['id', 'ASC']],
         ...getSequelizeDateFilters({ from, to }),
@@ -69,9 +59,7 @@ export default () => {
       const { id } = req.params;
 
       // find user
-
-      // const userData = await UserModel.findById(id);
-      const userData = await SqlUserModel.findByPk(id);
+      const userData = await UserModel.findByPk(id);
 
       if (!userData) return res.status(404).json({ message: 'User not found' });
 
@@ -100,7 +88,7 @@ export default () => {
       const { email, password } = req.body;
 
       // find user
-      const existingUser = await SqlUserModel.findOne({
+      const existingUser = await UserModel.findOne({
         where: { email },
         attributes: {
           include: ['password'],
@@ -169,7 +157,7 @@ export default () => {
       } = req.body;
 
       // check if user exists
-      let existingUser = await SqlUserModel.findOne({ where: { email } });
+      let existingUser = await UserModel.findOne({ where: { email } });
       if (existingUser && Object.keys(existingUser.toJSON()).length)
         return res.status(400).json({ message: 'User already exists' });
 
@@ -177,7 +165,7 @@ export default () => {
       bcrypt.hash(password, 8, async function (err, hash) {
         // Store hash in your password DB.
         //Store new user
-        let newUser = await SqlUserModel.create({
+        let newUser = await UserModel.create({
           email,
           password: hash,
           names: fname + ' ' + lname,
@@ -218,7 +206,7 @@ export default () => {
       const { email } = req.body;
 
       // check if user exists
-      let existingUser = await SqlUserModel.findOne({ where: { email } });
+      let existingUser = await UserModel.findOne({ where: { email } });
       if (!existingUser)
         return res.status(404).json({ message: 'User not found' });
 
@@ -278,7 +266,7 @@ export default () => {
       const { email, newPassword, verificationCode } = req.body;
 
       // check if user exists
-      let existingUser = await SqlUserModel.findOne({
+      let existingUser = await UserModel.findOne({
         where: {
           email,
           verificationCode,

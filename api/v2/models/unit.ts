@@ -1,8 +1,28 @@
-import { DataTypes, Sequelize } from 'sequelize';
+import {
+  CreationOptional,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+  Sequelize,
+} from 'sequelize';
 import { sequelizeInstance } from '../../../config/db';
 import { DepartmentModel } from './department';
 
-export const UnitModel = sequelizeInstance.define(
+export interface UnitModelAttributes
+  extends Model<
+    InferAttributes<UnitModelAttributes>,
+    InferCreationAttributes<UnitModelAttributes>
+  > {
+  // Some fields are optional when calling UserModel.create() or UserModel.build()
+  id: CreationOptional<number>;
+  dept_id: string;
+  u_names: string;
+  createdAt: CreationOptional<string>;
+  updatedAt: CreationOptional<string>;
+}
+
+export const UnitModel = sequelizeInstance.define<UnitModelAttributes>(
   'unit',
   {
     id: {
