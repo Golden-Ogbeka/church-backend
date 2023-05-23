@@ -20,32 +20,32 @@ export interface DepartmentModelAttributes
   updatedAt: CreationOptional<string>;
 }
 
-export const DepartmentModel =
-  sequelizeInstance.define<DepartmentModelAttributes>(
-    'department',
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      names: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      createdAt: {
-        type: DataTypes.DATE,
-        defaultValue: Sequelize.fn('NOW'),
-      },
-      updatedAt: {
-        type: DataTypes.DATE,
-        defaultValue: Sequelize.fn('NOW'),
-      },
+export const DepartmentModel = sequelizeInstance.define<DepartmentModelAttributes>(
+  'department',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
-    {
-      tableName: 'tbl_dept', // to be changed to departments
-    }
-  );
+    names: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: Sequelize.fn('NOW'),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: Sequelize.fn('NOW'),
+    },
+  },
+  {
+    tableName: 'tbl_dept', // to be changed to departments
+  }
+);
 
 // DepartmentModel.hasMany(UserModel, {
 //   foreignKey: 'dept',
