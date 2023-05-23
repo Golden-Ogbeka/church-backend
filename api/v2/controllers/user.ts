@@ -9,6 +9,7 @@ import { UserModel, UserModelAttributes } from '../models/user';
 import { DepartmentModel } from '../models/department';
 import { UnitModel } from '../models/unit';
 import { getResponseVariables, paginate } from '../../../functions/pagination';
+import { getTokenData } from '../../../functions/auth';
 
 export default () => {
   const GetAllUsers = async (
@@ -307,6 +308,174 @@ export default () => {
     }
   };
 
+  const GetUserProfile = async (
+    req: express.Request,
+    res: express.Response
+  ) => {
+    try {
+      // check for validation errors
+      const errors = validationResult(req);
+      if (!errors.isEmpty())
+        return res.status(422).json({ errors: errors.array() });
+
+      const tokenData = getTokenData(req);
+
+      const email = tokenData?.email;
+
+      // find user
+      const userData = await UserModel.findOne({
+        where: {
+          email,
+        },
+      });
+
+      if (!userData) return res.status(404).json({ message: 'User not found' });
+
+      return res.status(200).json({
+        message: 'User profile retrieved',
+        user: userData,
+      });
+    } catch (error) {
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
+
+  const ChangeUserPassword = async (
+    req: express.Request<
+      never,
+      never,
+      {
+        oldPassword: string;
+        newPassword: string;
+      }
+    >,
+    res: express.Response
+  ) => {
+    try {
+      // check for validation errors
+      const errors = validationResult(req);
+      if (!errors.isEmpty())
+        return res.status(422).json({ errors: errors.array() });
+
+      const tokenData = getTokenData(req as any);
+      const email = tokenData?.email;
+
+      const { newPassword, oldPassword } = req.body;
+
+      // Check if the passwords are the same
+      if (oldPassword === newPassword)
+        return res.status(400).json({
+          message: 'New password must be different from old password',
+        });
+
+      // check if user exists
+      let existingUser = await UserModel.findOne({
+        where: {
+          email,
+        },
+        attributes: {
+          include: ['password'],
+        },
+      });
+
+      if (!existingUser)
+        return res.status(404).json({ message: 'User not found' });
+
+      // compare passwords
+      bcrypt.compare(
+        oldPassword,
+        existingUser.toJSON().password,
+        function (err, matched) {
+          if (!matched)
+            return res
+              .status(400)
+              .json({ message: 'Old password is incorrect' });
+
+          // Hash password
+          bcrypt.hash(newPassword, 8, async function (err, hash) {
+            existingUser!.password = hash;
+            existingUser!.save();
+
+            const emailToSend = {
+              body: {
+                greeting: 'Dear',
+                name: existingUser?.fname,
+                intro: 'You have successfully changed your password',
+                signature: 'Regards',
+                outro:
+                  'If you did not change your password recently, please contact TFH Admin.',
+              },
+            };
+
+            sendEmail(email, 'Password Updated', emailToSend);
+
+            return res.status(200).json({
+              message: 'Password updated successfully',
+            });
+          });
+        }
+      );
+    } catch (error) {
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
+
+  const EditUserProfile = async (
+    req: express.Request<never, never, UserModelAttributes>,
+    res: express.Response
+  ) => {
+    try {
+      // check for validation errors
+      const errors = validationResult(req);
+      if (!errors.isEmpty())
+        return res.status(422).json({ errors: errors.array() });
+
+      const tokenData = getTokenData(req as any);
+      const email = tokenData?.email;
+
+      const {
+        fname,
+        lname,
+        churchCenter,
+        dob,
+        member,
+        phone,
+        titles,
+        address,
+        gender,
+        marital,
+      } = req.body;
+
+      // check if user exists
+      let existingUser = await UserModel.findOne({ where: { email } });
+      if (!existingUser)
+        return res.status(400).json({ message: 'User not found' });
+
+      existingUser.fname = fname || existingUser.fname;
+      existingUser.lname = lname || existingUser.lname;
+      existingUser.names =
+        (fname || existingUser.fname) + ' ' + (lname || existingUser.lname);
+      existingUser.churchCenter = churchCenter || existingUser.churchCenter;
+      existingUser.dob = dob || existingUser.dob;
+      existingUser.member = member || existingUser.member;
+      existingUser.phone = phone || existingUser.phone;
+      existingUser.titles = titles || existingUser.titles;
+      existingUser.address = address || existingUser.address;
+      existingUser.gender = gender || existingUser.gender;
+      existingUser.marital = marital || existingUser.marital;
+
+      await existingUser.save();
+
+      return res.status(200).json({
+        message: 'Profile updated',
+        user: existingUser,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: 'Internal Server Error' });
+    }
+  };
+
   return {
     GetAllUsers,
     ViewUser,
@@ -314,5 +483,8 @@ export default () => {
     Register,
     ResetPasswordRequest,
     ResetPasswordUpdate,
+    GetUserProfile,
+    ChangeUserPassword,
+    EditUserProfile,
   };
 };

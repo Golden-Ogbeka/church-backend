@@ -37,6 +37,7 @@ export const UnitModel = sequelizeInstance.define<UnitModelAttributes>(
     u_names: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true
     },
     createdAt: {
       type: DataTypes.DATE,

@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { body, header, param, query } from 'express-validator';
 import Controller from '../controllers/user';
 import { isValidAPI, isValidID, isValidSource } from '../middlewares/shared';
+import { isValidUser } from '../middlewares/access';
 
 const router = Router();
 const UserController = Controller();
@@ -97,7 +98,11 @@ router.post(
       .exists()
       .notEmpty()
       .withMessage('New password cannot be empty'),
-    body('verificationCode', 'Verification code is required').trim().exists(),
+    body('verificationCode', 'Verification code is required')
+      .trim()
+      .exists()
+      .notEmpty()
+      .withMessage('Verification code cannot be empty'),
   ],
   UserController.ResetPasswordUpdate
 );
@@ -182,6 +187,90 @@ router.post(
       .withMessage('Gender is either Married, Single, Widowed or Divorced'),
   ],
   UserController.Register
+);
+
+// Get user profile by user
+router.get(
+  '/profile',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+    header('authorization', 'Please specify an authorization header')
+      .exists()
+      .bail()
+      .custom((value) => isValidUser(value)),
+  ],
+  UserController.GetUserProfile
+);
+
+// Change password by user
+router.put(
+  '/change-password',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+    header('authorization', 'Please specify an authorization header')
+      .exists()
+      .bail()
+      .custom((value) => isValidUser(value)),
+    body('oldPassword', 'Old password is required')
+      .trim()
+      .exists()
+      .notEmpty()
+      .withMessage('Old password cannot be empty'),
+    body('newPassword', 'New password is required')
+      .trim()
+      .exists()
+      .notEmpty()
+      .withMessage('New password cannot be empty'),
+  ],
+  UserController.ChangeUserPassword
+);
+
+router.put(
+  '/profile',
+  [
+    header('x-api-key', 'API Access Denied')
+      .exists()
+      .bail()
+      .custom((value) => isValidAPI(value)),
+    header('authorization', 'Please specify an authorization header')
+      .exists()
+      .bail()
+      .custom((value) => isValidUser(value)),
+    body('phone').trim().optional(),
+    body('fname').trim().optional(),
+    body('lname', 'Last name is required').trim().optional(),
+    body('dob', 'Date of birth is required')
+      .trim()
+      .optional()
+      .isISO8601()
+      .toDate()
+      .withMessage('Enter a valid date'),
+    body('churchCenter', 'Church center is required').trim().optional(),
+    body('member', 'Member status is required')
+      .optional()
+      .isBoolean()
+      .withMessage('Member status must be boolean')
+      .toBoolean(),
+    body('titles', 'Title is required').trim().optional(),
+    body('address', 'Address is required').trim().optional(),
+    body('gender', 'Gender is required')
+      .trim()
+      .optional()
+      .isIn(['Male', 'Female'])
+      .withMessage('Gender is either Male or Female'),
+    body('marital', 'Marital status is required')
+      .trim()
+      .optional()
+      .isIn(['Married', 'Single', 'Widowed', 'Divorced'])
+      .withMessage('Gender is either Married, Single, Widowed or Divorced'),
+  ],
+  UserController.EditUserProfile
 );
 
 export default router;
