@@ -79,6 +79,7 @@ export const UserModel = sequelizeInstance.define<UserModelAttributes>(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     status: {
       type: DataTypes.STRING,
