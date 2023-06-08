@@ -1,9 +1,8 @@
-import { isValidID } from '../middlewares/shared';
-import { isAdmin, isSuperAdmin } from '../../v1/middlewares/auth';
-import { isValidAPI } from '../../v1/middlewares/shared';
+import { isValidAPI, isValidID } from '../middlewares/shared';
 import { Router } from 'express';
 import { body, header, param, query } from 'express-validator';
 import Controller from '../controllers/devotional';
+import { isAdmin, isSuperAdmin } from '../middlewares/access';
 
 const router = Router();
 const DevotionalController = Controller();

@@ -41,8 +41,10 @@ export default () => {
         message: 'All Users Retrieved',
         data: getResponseVariables(usersData, limit),
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 
@@ -67,8 +69,10 @@ export default () => {
         message: 'User retrieved',
         user: userData,
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 
@@ -125,8 +129,10 @@ export default () => {
           );
         }
       );
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 
@@ -165,7 +171,7 @@ export default () => {
       bcrypt.hash(password, 8, async function (err, hash) {
         // Store hash in your password DB.
         //Store new user
-        let newUser = await UserModel.create({
+        let newUser: UserModelAttributes = await UserModel.create({
           email,
           password: hash,
           names: fname + ' ' + lname,
@@ -184,11 +190,17 @@ export default () => {
 
         return res.status(200).json({
           message: 'Registration successful',
-          user: newUser,
+          user: {
+            ...newUser.toJSON(),
+            password: undefined,
+            verificationCode: undefined,
+          },
         });
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 
@@ -244,8 +256,10 @@ export default () => {
       return res.status(200).json({
         message: 'Reset password request successful',
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 
@@ -303,8 +317,10 @@ export default () => {
           message: 'Password updated successfully',
         });
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 
@@ -335,8 +351,10 @@ export default () => {
         message: 'User profile retrieved',
         user: userData,
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 
@@ -415,8 +433,10 @@ export default () => {
           });
         }
       );
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 

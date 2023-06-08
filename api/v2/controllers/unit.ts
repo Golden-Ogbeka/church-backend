@@ -24,8 +24,10 @@ export default () => {
         message: 'All Units Retrieved',
         data: unitsData,
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 
@@ -50,8 +52,10 @@ export default () => {
         message: 'Unit retrieved',
         unit: unitData,
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 
@@ -86,8 +90,10 @@ export default () => {
         message: 'Unit Added',
         unit: newUnit,
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 
@@ -139,8 +145,10 @@ export default () => {
         message: 'Unit Updated',
         unit: existingUnit,
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 
@@ -166,8 +174,10 @@ export default () => {
       return res.status(200).json({
         message: 'Unit Deleted',
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 

@@ -20,27 +20,29 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      const paginationOptions = getPaginationOptions(req, { priority: -1 }) //sort by priority
+      const paginationOptions = getPaginationOptions(req, { priority: -1 }); //sort by priority
 
       // find all announcements
 
       const announcementsData = await AnnouncementsModel.paginate(
         getDateFilters(req),
         paginationOptions
-      )
+      );
 
       return res.status(200).json({
         message: 'All Announcements Retrieved',
         data: announcementsData,
-      })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+      });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
 
   const AddAnnouncement = async (
     req: express.Request<never, never, AnnouncementType>,
@@ -48,18 +50,18 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
       //   Check for image image
-      const imageFile: any = req.file
+      const imageFile: any = req.file;
       if (!imageFile)
-        return res.status(404).json({ message: 'No image uploaded' })
+        return res.status(404).json({ message: 'No image uploaded' });
 
-      let { details, priority, title } = req.body
+      let { details, priority, title } = req.body;
 
-      const userDetails = await getUserDetails(req as any)
+      const userDetails = await getUserDetails(req as any);
       const newAnnouncement: IAnnouncement = new AnnouncementsModel({
         details,
         priority,
@@ -67,19 +69,19 @@ export default () => {
         image: imageFile.path,
         createdBy: userDetails.fullname,
         updatedBy: userDetails.fullname,
-      })
+      });
 
-      await newAnnouncement.save()
+      await newAnnouncement.save();
 
       return res.status(200).json({
         message: 'Announcement added successfully',
         announcement: newAnnouncement,
-      })
+      });
     } catch (error) {
-      console.log(error)
-      return res.status(500).json({ message: 'Internal Server Error' })
+      console.log(error);
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
-  }
+  };
 
   const ViewAnnouncement = async (
     req: express.Request<{ id: string }>,
@@ -87,27 +89,29 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      const { id } = req.params
+      const { id } = req.params;
 
       // find announcement
 
-      const announcementData = await AnnouncementsModel.findById(id)
+      const announcementData = await AnnouncementsModel.findById(id);
 
       if (!announcementData)
-        return res.status(404).json({ message: 'Announcement not found' })
+        return res.status(404).json({ message: 'Announcement not found' });
 
       return res.status(200).json({
         message: 'Announcement retrieved successfully',
         announcement: announcementData,
-      })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+      });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
 
   const UpdateAnnouncement = async (
     req: express.Request<{ id: string }, never, AnnouncementType>,
@@ -177,8 +181,10 @@ export default () => {
       return res.status(200).json({
         message: 'Announcement deleted Successfully',
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 

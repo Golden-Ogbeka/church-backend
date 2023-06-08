@@ -18,13 +18,13 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      const paginationOptions = getPaginationOptions(req as any)
+      const paginationOptions = getPaginationOptions(req as any);
 
-      const { status } = req.body
+      const { status } = req.body;
 
       // find all feedback and filter by status if included
 
@@ -36,16 +36,18 @@ export default () => {
         : await FeedbackModel.paginate(
             getDateFilters(req as any),
             paginationOptions
-          )
+          );
 
       return res.status(200).json({
         message: 'Feedback Retrieved',
         data: feedbackData,
-      })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+      });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
 
   const SendFeedback = async (
     req: express.Request<never, never, FeedbackType>,
@@ -53,11 +55,11 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      let { content, email, fullName, phoneNumber, source } = req.body
+      let { content, email, fullName, phoneNumber, source } = req.body;
 
       const newFeedback = new FeedbackModel({
         content,
@@ -65,18 +67,20 @@ export default () => {
         fullName,
         phoneNumber,
         source,
-      })
+      });
 
-      await newFeedback.save()
+      await newFeedback.save();
 
       return res.status(200).json({
         message: 'Feedback sent successfully',
         feedback: newFeedback,
-      })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+      });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
 
   const ViewFeedback = async (
     req: express.Request<{ id: string }>,
@@ -84,27 +88,29 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      const { id } = req.params
+      const { id } = req.params;
 
       // find feedback
 
-      const feedbackData = await FeedbackModel.findById(id)
+      const feedbackData = await FeedbackModel.findById(id);
 
       if (!feedbackData)
-        return res.status(404).json({ message: 'Feedback not found' })
+        return res.status(404).json({ message: 'Feedback not found' });
 
       return res.status(200).json({
         message: 'Feedback retrieved successfully',
         feedback: feedbackData,
-      })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+      });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
 
   const GetFeedbackByStatus = async (
     req: express.Request<
@@ -117,28 +123,30 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      const { status } = req.params
-      const paginationOptions = getPaginationOptions(req as any)
+      const { status } = req.params;
+      const paginationOptions = getPaginationOptions(req as any);
 
       // find feedback
 
       const feedback = await FeedbackModel.paginate(
         { status },
         paginationOptions
-      )
+      );
 
       return res.status(200).json({
         message: 'Feedback retrieved successfully',
         data: feedback,
-      })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+      });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
 
   const ChangeFeedbackStatus = async (
     req: express.Request<{ id: string }, never, FeedbackType>,
@@ -169,8 +177,10 @@ export default () => {
         message: 'Feedback updated successfully',
         feedback: existingFeedback,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
   return {

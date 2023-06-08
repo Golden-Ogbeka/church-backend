@@ -1,7 +1,7 @@
-import { isAdmin } from '../../v1/middlewares/auth';
 import { Router } from 'express';
 import { body, header, param } from 'express-validator';
 import Controller from '../controllers/department';
+import { isAdmin } from '../middlewares/access';
 import { isValidAPI, isValidID } from '../middlewares/shared';
 
 const router = Router();

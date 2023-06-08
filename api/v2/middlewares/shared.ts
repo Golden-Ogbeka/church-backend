@@ -1,3 +1,5 @@
+import TFCCZoneModel from '../../v1/models/tfccZone.model';
+
 export const isValidAPI = async (value: string) => {
   const API_KEY = process.env.API_KEY;
   if (API_KEY !== value) {
@@ -23,7 +25,7 @@ export const isValidSource = (source: string) => {
 
 export const isValidEventType = (type: string) => {
   if (!['offline', 'online'].includes(type)) {
-    throw new Error('Event Type should be either offlline or online');
+    throw new Error('Event Type should be either offline or online');
   }
   return true;
 };
@@ -34,5 +36,33 @@ export const isValidStatus = (status: string) => {
       'Status should be either pending, approved, declined, archived'
     );
   }
+  return true;
+};
+
+export const isValidAdminRole = (source: string) => {
+  if (!['admin', 'superAdmin'].includes(source)) {
+    throw new Error('Admin Role should be either admin or superAdmin');
+  }
+  return true;
+};
+
+export const isValidZone = async (zone: string) => {
+  if (!zone) throw new Error('Invalid Zone!');
+
+  const isValidZone = await TFCCZoneModel.findOne({
+    name: zone,
+  });
+
+  if (!isValidZone) throw new Error('Invalid Zone!');
+
+  return true;
+};
+export const doesZoneExist = async (zone: string) => {
+  const isValidZone = await TFCCZoneModel.findOne({
+    name: zone,
+  });
+
+  if (isValidZone) throw new Error('Zone already exists!');
+
   return true;
 };

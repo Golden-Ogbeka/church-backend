@@ -36,8 +36,10 @@ export default () => {
         message: 'All Devotionals Retrieved',
         data: devotionalsData,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -64,8 +66,10 @@ export default () => {
         message: 'Devotionals Retrieved',
         data: devotionalsData,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -123,8 +127,10 @@ export default () => {
         message: 'Devotional added successfully',
         devotional: newDevotional,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -155,8 +161,10 @@ export default () => {
         message: 'Devotional retrieved',
         devotional: devotionalData,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -193,8 +201,10 @@ export default () => {
         message: 'Devotional retrieved',
         devotional: devotionalData,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -222,8 +232,10 @@ export default () => {
       return res.status(200).json({
         message: 'Devotional deleted',
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -289,8 +301,10 @@ export default () => {
         message: 'Devotional updated successfully',
         devotional: existingDevotional,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 

@@ -35,8 +35,10 @@ export default () => {
         message: 'All Events Retrieved',
         data: eventsData,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -173,8 +175,10 @@ export default () => {
         message: 'Event retrieved successfully',
         event: eventData,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -310,8 +314,10 @@ export default () => {
       return res.status(200).json({
         message: 'Event deleted Successfully',
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -394,8 +400,10 @@ export default () => {
         message: 'Event gallery updated successfully',
         event: event,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 

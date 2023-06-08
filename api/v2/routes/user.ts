@@ -1,4 +1,4 @@
-import { isAdmin, isSuperAdmin } from '../../v1/middlewares/auth';
+import { isAdmin, isSuperAdmin } from '../middlewares/access';
 import { Router } from 'express';
 import { body, header, param, query } from 'express-validator';
 import Controller from '../controllers/user';
