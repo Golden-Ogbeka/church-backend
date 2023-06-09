@@ -1,11 +1,10 @@
-import { isValidID } from '../middlewares/shared';
-import { isAdmin } from '../../v1/middlewares/auth';
-import { isValidAPI } from '../../v1/middlewares/shared';
+import { isValidAPI, isValidID } from '../middlewares/shared';
 import { Router } from 'express';
 import { body, header, param, query } from 'express-validator';
 import { parser } from '../../../functions/cloudinary';
 
 import Controller from '../controllers/announcement';
+import { isAdmin } from '../middlewares/access';
 
 const router = Router();
 const AnnouncementController = Controller();

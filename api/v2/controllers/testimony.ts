@@ -18,13 +18,13 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      const paginationOptions = getPaginationOptions(req as any)
+      const paginationOptions = getPaginationOptions(req as any);
 
-      const { status } = req.body
+      const { status } = req.body;
 
       // find all testimonies
 
@@ -36,16 +36,18 @@ export default () => {
         : await TestimonyModel.paginate(
             getDateFilters(req as any),
             paginationOptions
-          )
+          );
 
       return res.status(200).json({
         message: 'All Testimonies Retrieved',
         data: testimoniesData,
-      })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+      });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
 
   // const GetTestimonyByStatus = async (
   //   req: express.Request<
@@ -90,39 +92,41 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      const { id } = req.params
+      const { id } = req.params;
 
       // find testimony
 
-      const testimonyData = await TestimonyModel.findById(id)
+      const testimonyData = await TestimonyModel.findById(id);
 
       if (!testimonyData)
-        return res.status(404).json({ message: 'Testimony not found' })
+        return res.status(404).json({ message: 'Testimony not found' });
 
       return res.status(200).json({
         message: 'Testimony retrieved successfully',
         testimony: testimonyData,
-      })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+      });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
 
   const AddTestimony = async (
     req: express.Request<never, never, TestimonyType>,
     res: express.Response
   ) => {
     try {
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
       const { email, content, fullName, summary, source, phoneNumber } =
-        req.body
+        req.body;
 
       const testimonyData = new TestimonyModel({
         fullName,
@@ -131,45 +135,47 @@ export default () => {
         source,
         email,
         phoneNumber,
-      })
-      await testimonyData.save()
+      });
+      await testimonyData.save();
 
       return res.status(200).json({
         message: 'Testimony sent',
         testimony: testimonyData,
-      })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+      });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
   const ChangeStatus = async (
     req: express.Request<never, never, TestimonyType>,
     res: express.Response
   ) => {
     try {
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      const { id } = req.params
+      const { id } = req.params;
 
-      const existingTestimony = await TestimonyModel.findById(id)
+      const existingTestimony = await TestimonyModel.findById(id);
       if (!existingTestimony)
-        return res.status(404).json({ message: 'Testimony not found' })
+        return res.status(404).json({ message: 'Testimony not found' });
 
-      let { status } = req.body
+      let { status } = req.body;
 
-      existingTestimony.status = status
-      await existingTestimony.save()
+      existingTestimony.status = status;
+      await existingTestimony.save();
       return res.status(200).json({
         message: 'Testimony status updated successfully',
         testimony: existingTestimony,
-      })
+      });
     } catch (error) {
-      console.log(error)
-      return res.status(500).json({ message: 'Internal Server Error' })
+      console.log(error);
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
-  }
+  };
 
   const GetApprovedTestimonies = async (
     req: express.Request<
@@ -182,26 +188,28 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      const paginationOptions = getPaginationOptions(req as any)
+      const paginationOptions = getPaginationOptions(req as any);
 
       // find all approved testimonies
 
       const testimoniesData = await TestimonyModel.paginate(
         { ...getDateFilters(req as any), status: 'approved' },
         paginationOptions
-      )
+      );
       return res.status(200).json({
         message: 'Testimonies Retrieved',
         data: testimoniesData,
-      })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+      });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
 
   return {
     GetAllTestimonies,

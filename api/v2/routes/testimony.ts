@@ -1,10 +1,10 @@
 import { isValidID } from '../middlewares/shared';
-import { isAdmin, isSuperAdmin } from '../../v1/middlewares/auth';
+import { isAdmin, isSuperAdmin } from '../middlewares/access';
 import {
   isValidAPI,
   isValidSource,
   isValidStatus,
-} from '../../v1/middlewares/shared';
+} from '../middlewares/shared';
 import { Router } from 'express';
 import { body, header, param, query } from 'express-validator';
 import { parser } from '../../../functions/cloudinary';

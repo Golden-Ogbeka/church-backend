@@ -29,8 +29,10 @@ export default () => {
         message: 'All Zones Retrieved',
         data: zonesData,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -56,8 +58,10 @@ export default () => {
         message: 'Zone retrieved successfully',
         zone: zoneData,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -81,8 +85,10 @@ export default () => {
         message: 'TFCC Zone added',
         zone: zoneData,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -117,8 +123,10 @@ export default () => {
         message: 'Zone updated successfully',
         zone: existingZone,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -128,25 +136,27 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      const { id } = req.params
+      const { id } = req.params;
 
       // find zone
 
-      const zoneData = await TFCCZoneModel.findById(id)
+      const zoneData = await TFCCZoneModel.findById(id);
 
-      if (!zoneData) return res.status(404).json({ message: 'Zone not found' })
+      if (!zoneData) return res.status(404).json({ message: 'Zone not found' });
 
-      await TFCCZoneModel.findByIdAndDelete(id)
+      await TFCCZoneModel.findByIdAndDelete(id);
 
       return res.status(200).json({
         message: 'Zone deleted Successfully',
-      })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+      });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 

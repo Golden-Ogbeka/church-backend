@@ -39,8 +39,10 @@ export default () => {
         message: 'All Centers Retrieved',
         data: centersData,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -67,8 +69,10 @@ export default () => {
         message: 'Center retrieved successfully',
         center: centerData,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -95,8 +99,10 @@ export default () => {
         message: 'TFCC Center added',
         center: centerData,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -136,8 +142,10 @@ export default () => {
         message: 'Center updated successfully',
         center: existingCenter,
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 
@@ -165,8 +173,10 @@ export default () => {
       return res.status(200).json({
         message: 'Center deleted Successfully',
       })
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' })
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   }
 

@@ -1,11 +1,10 @@
-import { isValidID } from '../middlewares/shared';
-import { isAdmin, isSuperAdmin } from '../../v1/middlewares/auth';
-import { isValidAPI, isValidSource } from '../../v1/middlewares/shared';
+import { isValidID, isValidZone } from '../middlewares/shared';
+import { isAdmin, isSuperAdmin } from '../middlewares/access';
+import { isValidAPI, isValidSource } from '../middlewares/shared';
 import { Router } from 'express';
 import { body, header, param } from 'express-validator';
 
 import Controller from '../controllers/tfcc';
-import { isValidZone } from '../../v1/middlewares/tfcc';
 
 const router = Router();
 const CenterController = Controller();

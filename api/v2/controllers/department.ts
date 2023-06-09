@@ -25,8 +25,10 @@ export default () => {
         message: 'All Departments Retrieved',
         data: departmentsData,
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 
@@ -52,8 +54,10 @@ export default () => {
         message: 'Department retrieved',
         department: departmentData,
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 
@@ -84,8 +88,10 @@ export default () => {
         message: 'Department Added',
         department: newDepartment,
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 
@@ -129,8 +135,10 @@ export default () => {
         message: 'Department Updated',
         department: existingDepartment,
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 
@@ -156,8 +164,10 @@ export default () => {
       return res.status(200).json({
         message: 'Department Deleted',
       });
-    } catch (error) {
-      return res.status(500).json({ message: 'Internal Server Error' });
+    } catch (error: any) {
+      return res
+        .status(500)
+        .json({ message: error?.message || 'Internal Server Error' });
     }
   };
 

@@ -1,9 +1,8 @@
-import { isValidID } from '../middlewares/shared';
-import { isAdmin, isSuperAdmin } from '../../v1/middlewares/auth';
-import { isValidAPI } from '../../v1/middlewares/shared';
+import { isValidAdminRole, isValidAPI, isValidID } from '../middlewares/shared';
 import { Router } from 'express';
 import { body, header, param, query } from 'express-validator';
 import Controller from '../controllers/admin';
+import { isAdmin, isSuperAdmin } from '../middlewares/access';
 
 const router = Router();
 const AdminController = Controller();
@@ -43,6 +42,10 @@ router.post(
       .withMessage('Invalid Email format'),
     body('password', 'Password is required').trim().exists(),
     body('fullname', 'Full name is required').trim().exists(),
+    body('role', 'Role is required')
+      .trim()
+      .exists()
+      .custom((value) => isValidAdminRole(value)),
   ],
   AdminController.AddAdmin
 );

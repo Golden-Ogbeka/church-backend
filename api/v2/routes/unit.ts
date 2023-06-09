@@ -1,4 +1,4 @@
-import { isAdmin } from '../../v1/middlewares/auth';
+import { isAdmin } from '../middlewares/access';
 import { Router } from 'express';
 import { body, header, param } from 'express-validator';
 import Controller from '../controllers/unit';

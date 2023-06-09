@@ -46,7 +46,7 @@ app.listen(PORT, async () => {
   // Connect to SQL DB
   try {
     await sequelizeDB.sequelize.sync({
-      // alter: true,
+      alter: true,
     });
     console.log('MySQL Database connected');
   } catch (error) {

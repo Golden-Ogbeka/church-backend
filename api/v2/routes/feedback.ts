@@ -1,10 +1,9 @@
-import { isValidID, isValidSource } from '../middlewares/shared';
-import { isAdmin } from '../../v1/middlewares/auth';
-import { isValidAPI } from '../../v1/middlewares/shared';
+import { isValidAPI, isValidID, isValidSource } from '../middlewares/shared';
 import { Router } from 'express';
 import { body, header, param } from 'express-validator';
 
 import Controller from '../controllers/feedback';
+import { isAdmin } from '../middlewares/access';
 
 const router = Router();
 const FeedbackController = Controller();
