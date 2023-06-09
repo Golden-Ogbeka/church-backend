@@ -1,11 +1,17 @@
-import { getTodaysDate } from './../../../functions/date'
-import { getUserDetails } from './../../../functions/auth'
-import { DevotionalType } from './../../../types/index'
-import { getPaginationOptions } from './../../../utils/pagination'
-import { validationResult } from 'express-validator'
-import express from 'express'
-import DevotionalModel from '../../v1/models/devotional.model';
-import { getDateFilters } from '../../../functions/filters'
+import { DevotionalModelAttributes } from './../models/devotional';
+import { getTodaysDate } from './../../../functions/date';
+import { getSQLUserDetails, getUserDetails } from './../../../functions/auth';
+import { DevotionalType } from './../../../types/index';
+import { getPaginationOptions } from './../../../utils/pagination';
+import { validationResult } from 'express-validator';
+import express from 'express';
+import {
+  getDateFilters,
+  getSequelizeDateFilters,
+} from '../../../functions/filters';
+import { DevotionalModel } from '../models/devotional';
+import { getResponseVariables, paginate } from '../../../functions/pagination';
+import { Op } from 'sequelize';
 
 export default () => {
   const GetAllDevotionals = async (
@@ -19,29 +25,30 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      const paginationOptions = getPaginationOptions(req, { date: -1 })
+      const { from, to, limit, page } = req.query;
 
       // find all devotionals
 
-      const devotionalsData = await DevotionalModel.paginate(
-        getDateFilters(req),
-        paginationOptions
-      )
+      const devotionalsData = await DevotionalModel.findAndCountAll({
+        order: [['ditto', 'DESC']],
+        ...getSequelizeDateFilters({ from, to }),
+        ...paginate({ limit, page }),
+      });
 
       return res.status(200).json({
         message: 'All Devotionals Retrieved',
-        data: devotionalsData,
-      })
+        data: getResponseVariables(devotionalsData, limit),
+      });
     } catch (error: any) {
       return res
         .status(500)
         .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
 
   const GetDevotionalsForUser = async (
     req: express.Request,
@@ -49,90 +56,85 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
       // Get devotionals for user: Limited to the last 10 devotionals
-      const limit = 31
+      const limit = 31;
 
-      const devotionalsData = await DevotionalModel.find({
-        date: { $lte: new Date() },
-      })
-        .sort({ date: -1 })
-        .limit(limit)
+      const devotionalsData = await DevotionalModel.findAndCountAll({
+        order: [['ditto', 'DESC']],
+        where: { ditto: { [Op.lte]: new Date() } },
+      });
 
       return res.status(200).json({
         message: 'Devotionals Retrieved',
-        data: devotionalsData,
-      })
+        data: getResponseVariables(devotionalsData, limit),
+      });
     } catch (error: any) {
       return res
         .status(500)
         .json({ message: error?.message || 'Internal Server Error' });
     }
+  };
+
+  interface DevotionalBodyType {
+    date: any;
+    title: string;
+    text: string;
+    textReference: string;
+    mainText: string;
+    content: string;
   }
 
   const AddDevotional = async (
-    req: express.Request<never, never, DevotionalType>,
+    req: express.Request<never, never, DevotionalBodyType>,
     res: express.Response
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      const {
-        date,
-        title,
-        text,
-        mainText,
-        content,
-        confession,
-        furtherReading,
-        oneYearBibleReading,
-        twoYearsBibleReading,
-      } = req.body
+      const { date, title, text, mainText, content, textReference } = req.body;
 
-      const userDetails = await getUserDetails(req as any)
+      const userDetails = await getSQLUserDetails(req as any);
 
       // Check if devotional exists for this date
 
       const existingDevotional = await DevotionalModel.findOne({
-        date: new Date(date),
-      })
+        where: { ditto: new Date(date) },
+      });
       if (existingDevotional)
         return res
           .status(400)
-          .json({ message: 'Devotional for this date already exists' })
+          .json({ message: 'Devotional for this date already exists' });
 
-      const newDevotional = new DevotionalModel({
-        date: new Date(date),
-        title,
-        text,
-        mainText,
-        content,
-        confession,
-        furtherReading,
-        oneYearBibleReading,
-        twoYearsBibleReading,
-        createdBy: userDetails.fullname,
-        updatedBy: userDetails.fullname,
-      })
+      const newDevotional: DevotionalModelAttributes =
+        await DevotionalModel.create({
+          ditto: new Date(date),
+          titles: title,
+          scripture1: text,
+          scripture2: textReference,
+          main_text: mainText,
+          contents: content,
+          createdBy: userDetails.fullname,
+        });
 
-      await newDevotional.save()
+      await newDevotional.save();
 
       return res.status(200).json({
         message: 'Devotional added successfully',
         devotional: newDevotional,
-      })
+      });
     } catch (error: any) {
       return res
         .status(500)
         .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
 
   const ViewDevotional = async (
     req: express.Request<{ id: string }>,
@@ -140,33 +142,33 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      const { id } = req.params
+      const { id } = req.params;
 
-      //increase view
       // find devotional
-      const devotionalData = await DevotionalModel.findOneAndUpdate(
-        { _id: id },
-        { $inc: { views: 1 } },
-        { new: true }
-      )
+      const devotionalData = await DevotionalModel.findOne({
+        where: { dish_id: id },
+      });
 
       if (!devotionalData)
-        return res.status(404).json({ message: 'Devotional not found' })
+        return res.status(404).json({ message: 'Devotional not found' });
+
+      //increase views
+      devotionalData.increment('views');
 
       return res.status(200).json({
         message: 'Devotional retrieved',
         devotional: devotionalData,
-      })
+      });
     } catch (error: any) {
       return res
         .status(500)
         .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
 
   const GetDayDevotional = async (
     req: express.Request,
@@ -174,39 +176,40 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
       // Get today's date
-      const todaysDate = getTodaysDate()
+      const todaysDate = getTodaysDate();
 
       // find devotional
 
-      const devotionalData = await DevotionalModel.findOneAndUpdate(
-        {
-          date: {
-            $gte: todaysDate,
-            $lte: todaysDate,
+      const devotionalData = await DevotionalModel.findOne({
+        where: {
+          ditto: {
+            [Op.gte]: new Date(todaysDate),
+            [Op.lte]: new Date(todaysDate),
           },
         },
-        { $inc: { views: 1 } },
-        { new: true }
-      )
+      });
 
       if (!devotionalData)
-        return res.status(404).json({ message: 'Devotional not found' })
+        return res.status(404).json({ message: 'Devotional not found' });
+
+      //increase views
+      devotionalData.increment('views');
 
       return res.status(200).json({
         message: 'Devotional retrieved',
         devotional: devotionalData,
-      })
+      });
     } catch (error: any) {
       return res
         .status(500)
         .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
 
   const DeleteDevotional = async (
     req: express.Request<{ id: string }>,
@@ -214,99 +217,85 @@ export default () => {
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      const { id } = req.params
+      const { id } = req.params;
 
       // find devotional
 
-      const devotionalData = await DevotionalModel.findById(id)
+      const devotionalData = await DevotionalModel.findByPk(id);
 
       if (!devotionalData)
-        return res.status(404).json({ message: 'Devotional not found' })
+        return res.status(404).json({ message: 'Devotional not found' });
 
-      await DevotionalModel.findByIdAndDelete(id)
+      await DevotionalModel.destroy({ where: { dish_id: id } });
 
       return res.status(200).json({
         message: 'Devotional deleted',
-      })
+      });
     } catch (error: any) {
       return res
         .status(500)
         .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
 
-  interface UpdateBody extends DevotionalType {
-    id: string
-  }
   const UpdateDevotional = async (
-    req: express.Request<never, never, UpdateBody>,
+    req: express.Request<never, never, DevotionalBodyType & { id: string }>,
     res: express.Response
   ) => {
     try {
       // check for validation errors
-      const errors = validationResult(req)
+      const errors = validationResult(req);
       if (!errors.isEmpty())
-        return res.status(422).json({ errors: errors.array() })
+        return res.status(422).json({ errors: errors.array() });
 
-      const {
-        id,
-        date,
-        title,
-        text,
-        mainText,
-        content,
-        confession,
-        furtherReading,
-        oneYearBibleReading,
-        twoYearsBibleReading,
-      } = req.body
+      const { id, date, title, text, mainText, content, textReference } =
+        req.body;
 
-      const userDetails = await getUserDetails(req as any)
+      const userDetails = await getSQLUserDetails(req as any);
 
-      const existingDevotional = await DevotionalModel.findById(id)
+      const existingDevotional = await DevotionalModel.findByPk(id);
       if (!existingDevotional)
-        return res.status(404).json({ message: 'Devotional not found' })
+        return res.status(404).json({ message: 'Devotional not found' });
 
       // Check if devotional exists for this date
       const existingDevotionalWithDate = await DevotionalModel.findOne({
-        date: new Date(date),
-      })
+        where: {
+          ditto: new Date(date),
+        },
+      });
       if (
         existingDevotionalWithDate &&
-        JSON.stringify(existingDevotionalWithDate) !==
-          JSON.stringify(existingDevotional)
+        JSON.stringify(existingDevotionalWithDate.toJSON()) !==
+          JSON.stringify(existingDevotional.toJSON())
       )
         return res
           .status(400)
-          .json({ message: 'Devotional for this date already exists' })
+          .json({ message: 'Devotional for this date already exists' });
 
-      existingDevotional.date = new Date(date)
-      existingDevotional.title = title
-      existingDevotional.text = text
-      existingDevotional.mainText = mainText
-      existingDevotional.content = content
-      existingDevotional.confession = confession
-      existingDevotional.furtherReading = furtherReading
-      existingDevotional.oneYearBibleReading = oneYearBibleReading
-      existingDevotional.twoYearsBibleReading = twoYearsBibleReading
-      existingDevotional.updatedBy = userDetails.fullname
+      existingDevotional.ditto = new Date(date);
+      existingDevotional.titles = title;
+      existingDevotional.scripture1 = text;
+      existingDevotional.scripture2 = textReference;
+      existingDevotional.main_text = mainText;
+      existingDevotional.contents = content;
+      existingDevotional.updatedBy = userDetails.fullname;
 
-      await existingDevotional.save()
+      await existingDevotional.save();
 
       return res.status(200).json({
         message: 'Devotional updated successfully',
         devotional: existingDevotional,
-      })
+      });
     } catch (error: any) {
       return res
         .status(500)
         .json({ message: error?.message || 'Internal Server Error' });
     }
-  }
+  };
 
   return {
     GetAllDevotionals,
@@ -316,5 +305,5 @@ export default () => {
     DeleteDevotional,
     UpdateDevotional,
     GetDevotionalsForUser,
-  }
-}
+  };
+};

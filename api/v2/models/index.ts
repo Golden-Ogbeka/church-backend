@@ -4,6 +4,7 @@ import { sequelizeInstance } from '../../../config/db';
 import { DepartmentModel } from './department';
 import { UnitModel } from './unit';
 import { AdminModel } from './admin';
+import { DevotionalModel } from './devotional';
 
 const sequelizeDB: any = {};
 
@@ -29,6 +30,7 @@ sequelizeDB.UserModel = UserModel;
 sequelizeDB.DepartmentModel = DepartmentModel;
 sequelizeDB.UnitModel = UnitModel;
 sequelizeDB.AdminModel = AdminModel;
+sequelizeDB.DevotionalModel = DevotionalModel;
 
 // Associations
 Object.keys(sequelizeDB).forEach((modelName) => {

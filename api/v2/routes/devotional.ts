@@ -44,14 +44,6 @@ router.post(
       .exists()
       .bail()
       .custom((value) => isAdmin(value)),
-    body('date', 'Date is required')
-      .trim()
-      .exists()
-      .notEmpty()
-      .withMessage('Date cannot be empty')
-      .isISO8601()
-      .toDate()
-      .withMessage('Enter a valid date'),
     body('title', 'Title is required')
       .trim()
       .exists()
@@ -62,6 +54,11 @@ router.post(
       .exists()
       .notEmpty()
       .withMessage('Text cannot be empty'),
+    body('textReference', 'Text reference is required')
+      .trim()
+      .exists()
+      .notEmpty()
+      .withMessage('Text reference cannot be empty'),
     body('mainText', 'Main Text is required')
       .trim()
       .exists()
@@ -72,23 +69,14 @@ router.post(
       .exists()
       .notEmpty()
       .withMessage('Content cannot be empty'),
-    body('confession', 'Confession is required')
+    body('date', 'Date is required')
       .trim()
       .exists()
       .notEmpty()
-      .withMessage('Confession cannot be empty'),
-    body('furtherReading', 'Further reading is required')
-      .exists()
-      .isArray({ min: 1 })
-      .withMessage('Further reading must have at least one scripture'),
-    body('oneYearBibleReading', 'One year bible reading is required')
-      .exists()
-      .isArray({ min: 1 })
-      .withMessage('One year bible reading must have at least one scripture'),
-    body('twoYearsBibleReading', 'Two years bible reading is required')
-      .exists()
-      .isArray({ min: 1 })
-      .withMessage('Two years bible reading must have at least one scripture'),
+      .withMessage('Date cannot be empty')
+      .isISO8601()
+      .toDate()
+      .withMessage('Enter a valid date'),
   ],
   DevotionalController.AddDevotional
 );
@@ -128,6 +116,11 @@ router.patch(
       .exists()
       .notEmpty()
       .withMessage('Text cannot be empty'),
+    body('textReference', 'Text reference is required')
+      .trim()
+      .exists()
+      .notEmpty()
+      .withMessage('Text reference cannot be empty'),
     body('mainText', 'Main Text is required')
       .trim()
       .exists()
@@ -138,23 +131,6 @@ router.patch(
       .exists()
       .notEmpty()
       .withMessage('Content cannot be empty'),
-    body('confession', 'Confession is required')
-      .trim()
-      .exists()
-      .notEmpty()
-      .withMessage('Confession cannot be empty'),
-    body('furtherReading', 'Further reading is required')
-      .exists()
-      .isArray({ min: 1 })
-      .withMessage('Further reading must have at least one scripture'),
-    body('oneYearBibleReading', 'One year bible reading is required')
-      .exists()
-      .isArray({ min: 1 })
-      .withMessage('One year bible reading must have at least one scripture'),
-    body('twoYearsBibleReading', 'Two years bible reading is required')
-      .exists()
-      .isArray({ min: 1 })
-      .withMessage('Two years bible reading must have at least one scripture'),
   ],
   DevotionalController.UpdateDevotional
 );
