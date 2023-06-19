@@ -1,9 +1,14 @@
 import { validationResult } from 'express-validator';
 import express from 'express';
-import { TFCCZoneModel, TFCCZoneModelAttributes } from '../models/tfccZone';
+import {
+  TFCCLeaderModel,
+  TFCCLeaderModelAttributes,
+} from '../models/tfccLeader';
+import { getSequelizeDateFilters } from '../../../functions/filters';
+import { getResponseVariables, paginate } from '../../../functions/pagination';
 
 export default () => {
-  const GetAllZones = async (
+  const GetAllLeaders = async (
     req: express.Request<
       never,
       never,
@@ -18,15 +23,18 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() });
 
-      // find all zones
+      const { from, to, limit, page } = req.query;
 
-      const zonesData = await TFCCZoneModel.findAll({
-        order: [['zonal', 'ASC']],
+      // find all leaders
+      const leadersData = await TFCCLeaderModel.findAndCountAll({
+        order: [['id', 'ASC']],
+        ...getSequelizeDateFilters({ from, to }),
+        ...paginate({ limit, page }),
       });
 
       return res.status(200).json({
-        message: 'All Zones Retrieved',
-        data: zonesData,
+        message: 'All TFCC leaders retrieved',
+        data: getResponseVariables(leadersData, limit),
       });
     } catch (error: any) {
       return res
@@ -35,7 +43,7 @@ export default () => {
     }
   };
 
-  const ViewZone = async (
+  const ViewLeader = async (
     req: express.Request<{ id: string }>,
     res: express.Response
   ) => {
@@ -47,15 +55,16 @@ export default () => {
 
       const { id } = req.params;
 
-      // find zone
+      // find leader
 
-      const zoneData = await TFCCZoneModel.findByPk(id);
+      const leaderData = await TFCCLeaderModel.findByPk(id);
 
-      if (!zoneData) return res.status(404).json({ message: 'Zone not found' });
+      if (!leaderData)
+        return res.status(404).json({ message: 'Leader not found' });
 
       return res.status(200).json({
-        message: 'Zone retrieved successfully',
-        zone: zoneData,
+        message: 'TFCC leader retrieved successfully',
+        leader: leaderData,
       });
     } catch (error: any) {
       return res
@@ -64,8 +73,8 @@ export default () => {
     }
   };
 
-  const AddZone = async (
-    req: express.Request<never, never, { name: string; church_id: string }>,
+  const AddLeader = async (
+    req: express.Request<never, never, TFCCLeaderModelAttributes>,
     res: express.Response
   ) => {
     try {
@@ -73,16 +82,19 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() });
 
-      const { name, church_id } = req.body;
+      const { firstname, lastname, mobile, email, role } = req.body;
 
-      const zoneData = await TFCCZoneModel.create({
-        zonal: name,
-        church_id,
+      const leaderData = await TFCCLeaderModel.create({
+        firstname,
+        lastname,
+        mobile,
+        email,
+        role,
       });
 
       return res.status(200).json({
-        message: 'TFCC Zone added',
-        zone: zoneData,
+        message: 'TFCC leader added',
+        leader: leaderData,
       });
     } catch (error: any) {
       return res
@@ -91,12 +103,8 @@ export default () => {
     }
   };
 
-  const UpdateZone = async (
-    req: express.Request<
-      { id: string },
-      never,
-      { name: string; church_id: string }
-    >,
+  const UpdateLeader = async (
+    req: express.Request<{ id: string }, never, TFCCLeaderModelAttributes>,
     res: express.Response
   ) => {
     try {
@@ -104,25 +112,28 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() });
 
-      let { name, church_id } = req.body;
+      let { firstname, lastname, mobile, email, role } = req.body;
 
       const { id } = req.params;
 
-      // Check if Zone exists
-      const existingZone: TFCCZoneModelAttributes | null =
-        await TFCCZoneModel.findByPk(id);
+      // Check if Leader exists
+      const existingLeader: TFCCLeaderModelAttributes | null =
+        await TFCCLeaderModel.findByPk(id);
 
-      if (!existingZone)
-        return res.status(404).json({ message: 'Zone not found' });
+      if (!existingLeader)
+        return res.status(404).json({ message: 'Leader not found' });
 
-      existingZone.zonal = name;
-      existingZone.church_id = church_id;
+      existingLeader.firstname = firstname;
+      existingLeader.lastname = lastname;
+      existingLeader.mobile = mobile;
+      existingLeader.email = email;
+      existingLeader.role = role;
 
-      await existingZone.save();
+      await existingLeader.save();
 
       return res.status(200).json({
-        message: 'Zone updated successfully',
-        zone: existingZone,
+        message: 'TFCC leader updated successfully',
+        leader: existingLeader,
       });
     } catch (error: any) {
       return res
@@ -131,7 +142,7 @@ export default () => {
     }
   };
 
-  const DeleteZone = async (
+  const DeleteLeader = async (
     req: express.Request<{ id: string }>,
     res: express.Response
   ) => {
@@ -143,16 +154,17 @@ export default () => {
 
       const { id } = req.params;
 
-      // find zone
+      // find leader
 
-      const zoneData = await TFCCZoneModel.findByPk(id);
+      const leaderData = await TFCCLeaderModel.findByPk(id);
 
-      if (!zoneData) return res.status(404).json({ message: 'Zone not found' });
+      if (!leaderData)
+        return res.status(404).json({ message: 'Leader not found' });
 
-      await TFCCZoneModel.destroy({ where: { zone_id: id } });
+      await TFCCLeaderModel.destroy({ where: { id } });
 
       return res.status(200).json({
-        message: 'Zone deleted Successfully',
+        message: 'TFCC leader deleted successfully',
       });
     } catch (error: any) {
       return res
@@ -162,10 +174,10 @@ export default () => {
   };
 
   return {
-    GetAllZones,
-    AddZone,
-    ViewZone,
-    UpdateZone,
-    DeleteZone,
+    GetAllLeaders,
+    AddLeader,
+    ViewLeader,
+    UpdateLeader,
+    DeleteLeader,
   };
 };

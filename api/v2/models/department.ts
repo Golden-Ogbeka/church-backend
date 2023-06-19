@@ -31,7 +31,6 @@ export const DepartmentModel = sequelizeInstance.define<DepartmentModelAttribute
     names: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     createdAt: {
       type: DataTypes.DATE,

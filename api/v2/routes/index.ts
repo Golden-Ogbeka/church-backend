@@ -1,17 +1,21 @@
-
 import express from 'express';
 import DevotionalRoutes from './devotional';
 import EventRoutes from './event';
 import AdminRoutes from './admin';
 import TestimonyRoutes from './testimony';
-import FeedbackRoutes from './feedback'
-import UserRoutes from './user'
-import AnnouncementRoutes from './announcement'
-import StatisticsRoutes from './statistics'
-import TFCCRoutes from './tfcc'
-import TFCCZoneRoutes from './tfccZone'
+import FeedbackRoutes from './feedback';
+import UserRoutes from './user';
+import AnnouncementRoutes from './announcement';
+import StatisticsRoutes from './statistics';
+import TFCCCellRoutes from './tfccCell';
+import TFCCZoneRoutes from './tfccZone';
 import UnitRoutes from './unit';
 import DepartmentRoutes from './department';
+import ChurchRoutes from './churches';
+import TFCCLeaderRoutes from './tfccLeader';
+import VisitorRoutes from './visitor';
+import AssignedFirstTImerRoutes from './assignedFirstTimer';
+import AssignedSecondTImerRoutes from './assignedSecondTimer';
 
 const router = express.Router();
 
@@ -23,9 +27,14 @@ router.use('/feedback', FeedbackRoutes);
 router.use('/user', UserRoutes);
 router.use('/announcement', AnnouncementRoutes);
 router.use('/statistics', StatisticsRoutes);
-router.use('/tfcc', TFCCRoutes);
+router.use('/tfcc', TFCCCellRoutes);
 router.use('/tfcc/zone', TFCCZoneRoutes);
+router.use('/tfcc/leader', TFCCLeaderRoutes);
 router.use('/unit', UnitRoutes);
 router.use('/department', DepartmentRoutes);
+router.use('/church', ChurchRoutes);
+router.use('/visitor', VisitorRoutes);
+router.use('/assigned-first-timer', AssignedFirstTImerRoutes);
+router.use('/assigned-second-timer', AssignedSecondTImerRoutes);
 
-export default router
+export default router;

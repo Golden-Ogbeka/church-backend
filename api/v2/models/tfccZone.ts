@@ -7,37 +7,38 @@ import {
   Sequelize,
 } from 'sequelize';
 import { sequelizeInstance } from '../../../config/db';
-import { DepartmentModel } from './department';
+import { ChurchesModel } from './churches';
 
-export interface UnitModelAttributes
+export interface TFCCZoneModelAttributes
   extends Model<
-    InferAttributes<UnitModelAttributes>,
-    InferCreationAttributes<UnitModelAttributes>
+    InferAttributes<TFCCZoneModelAttributes>,
+    InferCreationAttributes<TFCCZoneModelAttributes>
   > {
-  // Some fields are optional when calling UserModel.create() or UserModel.build()
-  id: CreationOptional<number>;
-  dept_id: string;
-  u_names: string;
+  zone_id: CreationOptional<number>;
+  church_id: string;
+  zonal: string;
   createdAt: CreationOptional<string>;
   updatedAt: CreationOptional<string>;
 }
 
-export const UnitModel = sequelizeInstance.define<UnitModelAttributes>(
-  'unit',
+export const TFCCZoneModel = sequelizeInstance.define<TFCCZoneModelAttributes>(
+  'tfccZone',
   {
-    id: {
+    zone_id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    dept_id: {
-      type: DataTypes.STRING,
+    church_id: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
-    u_names: {
+    zonal: {
       type: DataTypes.STRING,
       allowNull: false,
+      comment: 'Name of Zone',
     },
+
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: Sequelize.fn('NOW'),
@@ -48,10 +49,10 @@ export const UnitModel = sequelizeInstance.define<UnitModelAttributes>(
     },
   },
   {
-    tableName: 'tbl_unit', // to be changed to units
+    tableName: 'zone_tbl', // to be changed to tfcc_zones
   }
 );
 
-UnitModel.belongsTo(DepartmentModel, {
-  foreignKey: 'dept_id',
+TFCCZoneModel.belongsTo(ChurchesModel, {
+  foreignKey: 'church_id',
 });

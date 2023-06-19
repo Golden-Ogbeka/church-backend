@@ -9,6 +9,10 @@ export const paginate = ({
   page: number;
   limit: number;
 }) => {
+  if (!page) {
+    throw Error('Please select a page');
+  }
+
   // in case page is less than or equal to zero, change to 1
   if (page <= 0) {
     page = 1;
@@ -37,12 +41,13 @@ export const getResponseVariables = (
   },
   limit: number
 ) => {
-  const pages = getPages(data, limit);
+  const pages = getPages(data, limit | DEFAULT_PAGE_LIMIT);
 
   const response = {
     data: data.rows,
     totalResults: data.count,
     totalPages: pages,
+    limit: limit | DEFAULT_PAGE_LIMIT,
   };
 
   return response;

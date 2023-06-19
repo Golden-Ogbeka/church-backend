@@ -49,6 +49,9 @@ router.post(
       .notEmpty()
       .withMessage('Name cannot be empty')
       .custom((value) => doesZoneExist(value)),
+    body('church_id', 'Church ID is required')
+      .exists()
+      .custom((value) => isValidID(value)),
   ],
   ZoneController.AddZone
 );
@@ -73,6 +76,9 @@ router.patch(
       .exists()
       .notEmpty()
       .withMessage('Name cannot be empty'),
+    body('church_id', 'Church ID is required')
+      .exists()
+      .custom((value) => isValidID(value)),
   ],
   ZoneController.UpdateZone
 );
