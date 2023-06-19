@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { body, header, param } from 'express-validator';
 import Controller from '../controllers/department';
-import { isAdmin } from '../middlewares/access';
+import { isAdmin, isSuperAdmin } from '../middlewares/access';
 import { isValidAPI, isValidID } from '../middlewares/shared';
 
 const router = Router();
@@ -64,6 +64,10 @@ router.put(
       .exists()
       .bail()
       .custom((value) => isValidAPI(value)),
+    header('authorization', 'Please specify an authorization header')
+      .exists()
+      .bail()
+      .custom((value) => isSuperAdmin(value)),
     param('id', 'ID is required')
       .exists()
       .custom((value) => isValidID(value)),
@@ -79,6 +83,10 @@ router.delete(
       .exists()
       .bail()
       .custom((value) => isValidAPI(value)),
+    header('authorization', 'Please specify an authorization header')
+      .exists()
+      .bail()
+      .custom((value) => isSuperAdmin(value)),
     param('id', 'ID is required')
       .exists()
       .custom((value) => isValidID(value)),

@@ -1,11 +1,11 @@
 import { isAdmin, isSuperAdmin } from '../middlewares/access';
 import { Router } from 'express';
 import { body, header, param } from 'express-validator';
-import Controller from '../controllers/unit';
+import Controller from '../controllers/churches';
 import { isValidAPI, isValidID } from '../middlewares/shared';
 
 const router = Router();
-const UnitController = Controller();
+const ChurchController = Controller();
 
 router.get(
   '/',
@@ -19,10 +19,10 @@ router.get(
       .bail()
       .custom((value) => isAdmin(value)),
   ],
-  UnitController.GetAllUnits
+  ChurchController.GetAllChurches
 );
 
-// Get unit by id
+// Get church by id
 router.get(
   '/view/:id',
   [
@@ -38,7 +38,7 @@ router.get(
       .bail()
       .custom((value) => isAdmin(value)),
   ],
-  UnitController.ViewUnit
+  ChurchController.ViewChurch
 );
 
 router.post(
@@ -48,18 +48,29 @@ router.post(
       .exists()
       .bail()
       .custom((value) => isValidAPI(value)),
-    body('u_names', 'Unit name is required')
+    body('church_label', 'Church label is required')
       .trim()
       .exists()
       .notEmpty()
-      .withMessage('Unit name cannot be empty'),
-    body('dept_id', 'Department ID is required')
+      .withMessage('Church label cannot be empty'),
+    body('location', 'Church location is required')
       .trim()
       .exists()
       .notEmpty()
-      .withMessage('Department ID cannot be empty'),
+      .withMessage('Church location cannot be empty'),
+    body('address', 'Church address is required')
+      .trim()
+      .exists()
+      .notEmpty()
+      .withMessage('Church address cannot be empty'),
+    body('contact_phone', 'Church address is required')
+      .trim()
+      .exists()
+      .notEmpty()
+      .withMessage('Church address cannot be empty'),
+    body('contact_email', 'Church email is required').trim().optional(),
   ],
-  UnitController.AddUnit
+  ChurchController.AddChurch
 );
 
 router.put(
@@ -76,10 +87,13 @@ router.put(
     param('id', 'ID is required')
       .exists()
       .custom((value) => isValidID(value)),
-    body('u_names', 'Unit name is required').optional().trim(),
-    body('dept_id').optional().trim(),
+    body('church_label', 'Church label is required').trim().optional(),
+    body('location', 'Church location is required').trim().optional(),
+    body('address', 'Church address is required').trim().optional(),
+    body('contact_phone', 'Church address is required').trim().optional(),
+    body('contact_email', 'Church email is required').trim().optional(),
   ],
-  UnitController.UpdateUnit
+  ChurchController.UpdateChurch
 );
 
 router.delete(
@@ -97,7 +111,7 @@ router.delete(
       .exists()
       .custom((value) => isValidID(value)),
   ],
-  UnitController.DeleteUnit
+  ChurchController.DeleteChurch
 );
 
 export default router;

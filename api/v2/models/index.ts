@@ -5,6 +5,13 @@ import { DepartmentModel } from './department';
 import { UnitModel } from './unit';
 import { AdminModel } from './admin';
 import { DevotionalModel } from './devotional';
+import { TFCCLeaderModel } from './tfccLeader';
+import { ChurchesModel } from './churches';
+import { TFCCZoneModel } from './tfccZone';
+import { TFCCCellModel } from './tfccCell';
+import { VisitorModel } from './visitor';
+import { AssignedFirstTimerModel } from './assignedFirstTimer';
+import { AssignedSecondTimerModel } from './assignedSecondTimer';
 
 const sequelizeDB: any = {};
 
@@ -31,6 +38,13 @@ sequelizeDB.DepartmentModel = DepartmentModel;
 sequelizeDB.UnitModel = UnitModel;
 sequelizeDB.AdminModel = AdminModel;
 sequelizeDB.DevotionalModel = DevotionalModel;
+sequelizeDB.TFCCLeaderModel = TFCCLeaderModel;
+sequelizeDB.ChurchesModel = ChurchesModel;
+sequelizeDB.TFCCZoneModel = TFCCZoneModel;
+sequelizeDB.TFCCCellModel = TFCCCellModel;
+sequelizeDB.VisitorModel = VisitorModel;
+sequelizeDB.AssignedFirstTimerModel = AssignedFirstTimerModel;
+sequelizeDB.AssignedSecondTimerModel = AssignedSecondTimerModel;
 
 // Associations
 Object.keys(sequelizeDB).forEach((modelName) => {

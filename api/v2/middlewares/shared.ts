@@ -1,4 +1,6 @@
-import TFCCZoneModel from '../../v1/models/tfccZone.model';
+import { ChurchesModel } from '../models/churches';
+import { TFCCLeaderModel } from '../models/tfccLeader';
+import { TFCCZoneModel } from '../models/tfccZone';
 
 export const isValidAPI = async (value: string) => {
   const API_KEY = process.env.API_KEY;
@@ -46,11 +48,13 @@ export const isValidAdminRole = (source: string) => {
   return true;
 };
 
-export const isValidZone = async (zone: string) => {
+export const isValidZoneId = async (zone: string) => {
   if (!zone) throw new Error('Invalid Zone!');
 
   const isValidZone = await TFCCZoneModel.findOne({
-    name: zone,
+    where: {
+      zone_id: zone,
+    },
   });
 
   if (!isValidZone) throw new Error('Invalid Zone!');
@@ -59,10 +63,38 @@ export const isValidZone = async (zone: string) => {
 };
 export const doesZoneExist = async (zone: string) => {
   const isValidZone = await TFCCZoneModel.findOne({
-    name: zone,
+    where: {
+      zonal: zone,
+    },
   });
 
   if (isValidZone) throw new Error('Zone already exists!');
+
+  return true;
+};
+export const isValidLeaderId = async (id: string) => {
+  if (!id) throw new Error('Invalid Leader ID!');
+
+  const isValidLeader = await TFCCLeaderModel.findOne({
+    where: {
+      id,
+    },
+  });
+
+  if (!isValidLeader) throw new Error('Invalid Leader ID!');
+
+  return true;
+};
+export const isValidChurchId = async (id: string) => {
+  if (!id) throw new Error('Invalid Church ID!');
+
+  const isValidChurch = await ChurchesModel.findOne({
+    where: {
+      church_id: id,
+    },
+  });
+
+  if (!isValidChurch) throw new Error('Invalid Church ID!');
 
   return true;
 };

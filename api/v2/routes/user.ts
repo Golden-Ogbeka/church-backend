@@ -183,8 +183,10 @@ router.post(
       .exists()
       .notEmpty()
       .withMessage('Marital status cannot be empty')
-      .isIn(['Married', 'Single', 'Widowed', 'Divorced'])
-      .withMessage('Gender is either Married, Single, Widowed or Divorced'),
+      .isIn(['Married', 'Single', 'Widowed', 'Divorced, Engaged'])
+      .withMessage(
+        'Marital status is either Married, Single, Widowed, Engaged or Divorced'
+      ),
   ],
   UserController.Register
 );

@@ -107,7 +107,7 @@ export const UserModel = sequelizeInstance.define<UserModelAttributes>(
     marital: {
       type: DataTypes.STRING,
       comment: 'Marital Status',
-      values: ['Married', 'Single', 'Widowed', 'Divorced'],
+      values: ['Married', 'Single', 'Widowed', 'Divorced', 'Engaged'],
     },
     pastors: {
       type: DataTypes.CHAR,
