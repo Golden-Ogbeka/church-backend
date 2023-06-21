@@ -13,6 +13,8 @@ import { VisitorModel } from './visitor';
 import { AssignedFirstTimerModel } from './assignedFirstTimer';
 import { AssignedSecondTimerModel } from './assignedSecondTimer';
 import { BulletinSubscribersModel } from './bulletinSubscribers';
+import { EventModel } from './event';
+import { EventGalleryModel } from './eventGallery';
 
 const sequelizeDB: any = {};
 
@@ -47,6 +49,8 @@ sequelizeDB.VisitorModel = VisitorModel;
 sequelizeDB.AssignedFirstTimerModel = AssignedFirstTimerModel;
 sequelizeDB.AssignedSecondTimerModel = AssignedSecondTimerModel;
 sequelizeDB.BulletinSubscribersModel = BulletinSubscribersModel;
+sequelizeDB.EventModel = EventModel;
+sequelizeDB.EventGalleryModel = EventGalleryModel;
 
 // Associations
 Object.keys(sequelizeDB).forEach((modelName) => {

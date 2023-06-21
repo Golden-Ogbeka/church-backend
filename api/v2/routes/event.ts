@@ -226,7 +226,7 @@ router.delete(
     param('id', 'Event ID is required')
       .exists()
       .custom((value) => isValidID(value)),
-    body('imageURL', 'Image URL is required').exists().trim(),
+    body('image_id', 'Image ID is required').exists().trim(),
   ],
   EventController.DeleteGalleryImage
 );
