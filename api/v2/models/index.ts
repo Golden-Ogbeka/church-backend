@@ -12,6 +12,7 @@ import { TFCCCellModel } from './tfccCell';
 import { VisitorModel } from './visitor';
 import { AssignedFirstTimerModel } from './assignedFirstTimer';
 import { AssignedSecondTimerModel } from './assignedSecondTimer';
+import { BulletinSubscribersModel } from './bulletinSubscribers';
 
 const sequelizeDB: any = {};
 
@@ -45,6 +46,7 @@ sequelizeDB.TFCCCellModel = TFCCCellModel;
 sequelizeDB.VisitorModel = VisitorModel;
 sequelizeDB.AssignedFirstTimerModel = AssignedFirstTimerModel;
 sequelizeDB.AssignedSecondTimerModel = AssignedSecondTimerModel;
+sequelizeDB.BulletinSubscribersModel = BulletinSubscribersModel;
 
 // Associations
 Object.keys(sequelizeDB).forEach((modelName) => {
