@@ -16,6 +16,7 @@ import TFCCLeaderRoutes from './tfccLeader';
 import VisitorRoutes from './visitor';
 import AssignedFirstTImerRoutes from './assignedFirstTimer';
 import AssignedSecondTImerRoutes from './assignedSecondTimer';
+import BulletinSubscriberRoutes from './bulletinSubscribers';
 
 const router = express.Router();
 
@@ -36,5 +37,6 @@ router.use('/church', ChurchRoutes);
 router.use('/visitor', VisitorRoutes);
 router.use('/assigned-first-timer', AssignedFirstTImerRoutes);
 router.use('/assigned-second-timer', AssignedSecondTImerRoutes);
+router.use('/bulletin/subscriber', BulletinSubscriberRoutes);
 
 export default router;
