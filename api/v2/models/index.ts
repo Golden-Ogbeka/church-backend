@@ -17,6 +17,7 @@ import { EventModel } from './event';
 import { EventGalleryModel } from './eventGallery';
 import { TestimonyModel } from './testimony';
 import { FeedbackModel } from './feedback';
+import { AnnouncementModel } from './announcement';
 
 const sequelizeDB: any = {};
 
@@ -54,7 +55,8 @@ sequelizeDB.BulletinSubscribersModel = BulletinSubscribersModel;
 sequelizeDB.EventModel = EventModel;
 sequelizeDB.EventGalleryModel = EventGalleryModel;
 sequelizeDB.TestimonyModel = TestimonyModel;
-sequelizeDB.TestimonyModel = FeedbackModel;
+sequelizeDB.FeedbackModel = FeedbackModel;
+sequelizeDB.AnnouncementModel = AnnouncementModel;
 
 // Associations
 Object.keys(sequelizeDB).forEach((modelName) => {
