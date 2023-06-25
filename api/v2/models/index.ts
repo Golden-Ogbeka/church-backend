@@ -15,6 +15,8 @@ import { AssignedSecondTimerModel } from './assignedSecondTimer';
 import { BulletinSubscribersModel } from './bulletinSubscribers';
 import { EventModel } from './event';
 import { EventGalleryModel } from './eventGallery';
+import { TestimonyModel } from './testimony';
+import { FeedbackModel } from './feedback';
 
 const sequelizeDB: any = {};
 
@@ -51,6 +53,8 @@ sequelizeDB.AssignedSecondTimerModel = AssignedSecondTimerModel;
 sequelizeDB.BulletinSubscribersModel = BulletinSubscribersModel;
 sequelizeDB.EventModel = EventModel;
 sequelizeDB.EventGalleryModel = EventGalleryModel;
+sequelizeDB.TestimonyModel = TestimonyModel;
+sequelizeDB.TestimonyModel = FeedbackModel;
 
 // Associations
 Object.keys(sequelizeDB).forEach((modelName) => {
