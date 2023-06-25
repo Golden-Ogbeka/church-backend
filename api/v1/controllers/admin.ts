@@ -4,7 +4,7 @@ import { AdminType } from '../../../types/index'
 import { getPaginationOptions } from '../../../utils/pagination'
 import { validationResult } from 'express-validator'
 import express from 'express'
-import AdminModel from '../../../models/admin.model'
+import AdminModel from '../models/admin.model';
 import { getDateFilters } from '../../../functions/filters'
 import { sendEmail } from '../../../utils/mailer'
 import jwt from 'jsonwebtoken'

@@ -7,13 +7,13 @@ import {
 import { getPaginationOptions } from '../../../utils/pagination'
 import { validationResult } from 'express-validator'
 import express from 'express'
-import UserModel from '../../../models/user.model'
-import AdminModel from '../../../models/admin.model'
-import AnnouncementModel from '../../../models/announcement.model'
-import DevotionalModel from '../../../models/devotional.model'
-import EventModel from '../../../models/event.model'
-import FeedbackModel from '../../../models/feedback.model'
-import TestimonyModel from '../../../models/testimony.model'
+import UserModel from '../models/user.model';
+import AdminModel from '../models/admin.model';
+import AnnouncementModel from '../models/announcement.model';
+import DevotionalModel from '../models/devotional.model';
+import EventModel from '../models/event.model';
+import FeedbackModel from '../models/feedback.model';
+import TestimonyModel from '../models/testimony.model';
 import { getDateFilters } from '../../../functions/filters'
 import { getTodaysDate } from '../../../functions/date'
 

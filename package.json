@@ -29,6 +29,7 @@
     "express": "^4.18.2",
     "express-jwt": "^8.2.1",
     "express-validator": "^6.14.2",
+    "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.0",
     "mailgen": "^2.0.27",
     "mongodb": "^4.13.0",
@@ -37,7 +38,10 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "multer-storage-cloudinary": "^4.0.0",
-    "nodemailer": "^6.8.0"
+    "mysql2": "^3.2.3",
+    "nodemailer": "^6.8.0",
+    "path": "^0.12.7",
+    "sequelize": "^6.31.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -51,7 +55,9 @@
     "@types/multer": "^1.4.7",
     "@types/node": "^18.11.18",
     "@types/nodemailer": "^6.4.7",
+    "@types/sequelize": "^4.28.14",
     "nodemon": "^2.0.20",
+    "sequelize-cli": "^6.6.0",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4"
   }

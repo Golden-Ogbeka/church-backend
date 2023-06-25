@@ -1,12 +1,12 @@
-import { isValidObjectId } from '../../../middlewares/shared';
-import { isAdmin, isSuperAdmin } from '../../../middlewares/auth'
-import { isValidAPI } from '../../../middlewares/shared'
-import { Router } from 'express'
-import { body, header, param, query } from 'express-validator'
-import Controller from '../controllers/admin'
+import { isValidObjectId } from '../middlewares/shared';
+import { isAdmin, isSuperAdmin } from '../middlewares/auth';
+import { isValidAPI } from '../middlewares/shared';
+import { Router } from 'express';
+import { body, header, param, query } from 'express-validator';
+import Controller from '../controllers/admin';
 
-const router = Router()
-const AdminController = Controller()
+const router = Router();
+const AdminController = Controller();
 
 router.get(
   '/',
@@ -21,7 +21,7 @@ router.get(
       .custom((value) => isSuperAdmin(value)),
   ],
   AdminController.GetAllAdmins
-)
+);
 
 router.post(
   '/',
@@ -45,7 +45,7 @@ router.post(
     body('fullname', 'Full name is required').trim().exists(),
   ],
   AdminController.AddAdmin
-)
+);
 
 // Change admin status
 router.patch(
@@ -70,7 +70,7 @@ router.patch(
       .withMessage('Status must be either true or false'),
   ],
   AdminController.ChangeAdminStatus
-)
+);
 
 // Make super admin
 router.patch(
@@ -91,7 +91,7 @@ router.patch(
       .custom((value) => isValidObjectId(value)),
   ],
   AdminController.MakeSuperAdmin
-)
+);
 
 // Get admin by id
 router.get(
@@ -110,7 +110,7 @@ router.get(
       .custom((value) => isValidObjectId(value)),
   ],
   AdminController.ViewAdmin
-)
+);
 
 router.post(
   '/login',
@@ -129,7 +129,7 @@ router.post(
     body('password', 'Password is required').trim().exists(),
   ],
   AdminController.Login
-)
+);
 
 router.post(
   '/reset-password',
@@ -147,7 +147,7 @@ router.post(
       .withMessage('Invalid Email format'),
   ],
   AdminController.ResetPasswordRequest
-)
+);
 
 router.post(
   '/reset-password/update',
@@ -171,6 +171,6 @@ router.post(
     body('verificationCode', 'Verification code is required').trim().exists(),
   ],
   AdminController.ResetPasswordUpdate
-)
+);
 
 export default router;
