@@ -8,59 +8,49 @@ import {
 } from 'sequelize';
 import { sequelizeInstance } from '../../../config/db';
 
-export interface FeedbackModelAttributes
+export interface AnnouncementModelAttributes
   extends Model<
-    InferAttributes<FeedbackModelAttributes>,
-    InferCreationAttributes<FeedbackModelAttributes>
+    InferAttributes<AnnouncementModelAttributes>,
+    InferCreationAttributes<AnnouncementModelAttributes>
   > {
   id: CreationOptional<number>;
-  fullName: string;
-  email: CreationOptional<string>;
-  phoneNumber: CreationOptional<string>;
-  content: string;
-  status: CreationOptional<'read' | 'unread'>;
-  source: CreationOptional<'web' | 'mobile'>;
+  title: string;
+  details: CreationOptional<string>;
+  priority: CreationOptional<number>;
+  image: string;
+  createdBy: CreationOptional<string>;
   updatedBy: CreationOptional<string>;
   createdAt: CreationOptional<string>;
   updatedAt: CreationOptional<string>;
 }
 
-export const FeedbackModel = sequelizeInstance.define<FeedbackModelAttributes>(
-  'feedback',
-  {
+export const AnnouncementModel =
+  sequelizeInstance.define<AnnouncementModelAttributes>('announcement', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    fullName: {
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    email: {
-      type: DataTypes.STRING,
-    },
-    phoneNumber: {
-      type: DataTypes.STRING,
-    },
-    content: {
+    details: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-
-    status: {
+    priority: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    image: {
       type: DataTypes.STRING,
       allowNull: false,
-      values: ['read', 'unread'],
-      defaultValue: 'unread',
     },
-    source: {
+    createdBy: {
       type: DataTypes.STRING,
-      allowNull: false,
-      values: ['web', 'mobile'],
-      defaultValue: 'web',
     },
-
     updatedBy: {
       type: DataTypes.STRING,
     },
@@ -72,5 +62,4 @@ export const FeedbackModel = sequelizeInstance.define<FeedbackModelAttributes>(
       type: DataTypes.DATE,
       defaultValue: Sequelize.fn('NOW'),
     },
-  }
-);
+  });

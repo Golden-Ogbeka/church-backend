@@ -1,21 +1,20 @@
+import { validationResult } from 'express-validator';
+import express from 'express';
+// import { getTodaysDate } from '../../../functions/date';
+import { UserModel } from '../models/user';
+import { FeedbackModel } from '../models/feedback';
+import { EventModel } from '../models/event';
+import { Op } from 'sequelize';
+import { AnnouncementModel } from '../models/announcement';
+import { TestimonyModel } from '../models/testimony';
+import { AdminModel } from '../models/admin';
+import { DevotionalModel } from '../models/devotional';
 import {
   FeedbackSummaryType,
   GeneralSummaryType,
   TestimonySummaryType,
   UserSummaryType,
-} from './../../../types/statistics'
-import { getPaginationOptions } from '../../../utils/pagination'
-import { validationResult } from 'express-validator'
-import express from 'express'
-import UserModel from '../../v1/models/user.model';
-import AdminModel from '../../v1/models/admin.model';
-import AnnouncementModel from '../../v1/models/announcement.model';
-import DevotionalModel from '../../v1/models/devotional.model';
-import EventModel from '../../v1/models/event.model';
-import FeedbackModel from '../../v1/models/feedback.model';
-import TestimonyModel from '../../v1/models/testimony.model';
-import { getDateFilters } from '../../../functions/filters'
-import { getTodaysDate } from '../../../functions/date'
+} from '../../../types/statistics';
 
 export default () => {
   const GetSummary = async (req: express.Request, res: express.Response) => {
@@ -26,20 +25,25 @@ export default () => {
         return res.status(422).json({ errors: errors.array() });
 
       // Get today's date
-      const todaysDate = getTodaysDate();
+      // const todaysDate = getTodaysDate();
 
-      const totalUsers = await UserModel.find();
-      const unreadFeedback = await FeedbackModel.find({ status: 'unread' });
-      const upcomingEvents = await EventModel.find({
-        date: { $gte: todaysDate },
+      const totalUsers = await UserModel.findAll();
+      const unreadFeedback = await FeedbackModel.findAll({
+        where: { status: 'unread' },
+      });
+      const upcomingEvents = await EventModel.findAll({
+        where: {
+          // date: { [Op.gte]: todaysDate },
+          date: { [Op.gte]: new Date() },
+        },
       });
 
-      const totalAnnouncements = await AnnouncementModel.find();
-      const pendingTestimonies = await TestimonyModel.find({
-        status: 'pending',
+      const totalAnnouncements = await AnnouncementModel.findAll();
+      const pendingTestimonies = await TestimonyModel.findAll({
+        where: { status: 'pending' },
       });
-      const totalAdmins = await AdminModel.find();
-      const totalDevotionals = await DevotionalModel.find();
+      const totalAdmins = await AdminModel.findAll();
+      const totalDevotionals = await DevotionalModel.findAll();
 
       const generalSummary: GeneralSummaryType = {
         totalUsers: totalUsers.length,
@@ -72,15 +76,15 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() });
 
-      const totalUsers = await UserModel.find();
-      const userRegisteredByMobile = await UserModel.find({
-        registrationSource: 'mobile',
+      const totalUsers = await UserModel.findAll();
+      const userRegisteredByMobile = await UserModel.findAll({
+        where: { registrationSource: 'mobile' },
       });
-      const userRegisteredByWeb = await UserModel.find({
-        registrationSource: 'web',
+      const userRegisteredByWeb = await UserModel.findAll({
+        where: { registrationSource: 'web' },
       });
-      const registeredMembers = await UserModel.find({
-        member: true,
+      const registeredMembers = await UserModel.findAll({
+        where: { member: true },
       });
 
       const userSummary: UserSummaryType = {
@@ -111,15 +115,15 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() });
 
-      const totalFeedback = await FeedbackModel.find();
-      const feedbackSentByMobile = await FeedbackModel.find({
-        source: 'mobile',
+      const totalFeedback = await FeedbackModel.findAll();
+      const feedbackSentByMobile = await FeedbackModel.findAll({
+        where: { source: 'mobile' },
       });
-      const feedbackSentByWeb = await FeedbackModel.find({
-        source: 'web',
+      const feedbackSentByWeb = await FeedbackModel.findAll({
+        where: { source: 'web' },
       });
-      const unreadFeedback = await FeedbackModel.find({
-        status: 'unread',
+      const unreadFeedback = await FeedbackModel.findAll({
+        where: { status: 'unread' },
       });
 
       const feedbackSummary: FeedbackSummaryType = {
@@ -150,15 +154,15 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() });
 
-      const totalTestimonies = await TestimonyModel.find();
-      const testimonySentByMobile = await TestimonyModel.find({
-        source: 'mobile',
+      const totalTestimonies = await TestimonyModel.findAll();
+      const testimonySentByMobile = await TestimonyModel.findAll({
+        where: { source: 'mobile' },
       });
-      const testimonySentByWeb = await TestimonyModel.find({
-        source: 'web',
+      const testimonySentByWeb = await TestimonyModel.findAll({
+        where: { source: 'web' },
       });
-      const pendingTestimonies = await TestimonyModel.find({
-        status: 'pending',
+      const pendingTestimonies = await TestimonyModel.findAll({
+        where: { status: 'pending' },
       });
 
       const testimonySummary: TestimonySummaryType = {
@@ -184,5 +188,5 @@ export default () => {
     GetFeedbackSummary,
     GetTestimonySummary,
     GetUserSummary,
-  }
-}
+  };
+};
