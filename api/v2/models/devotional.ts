@@ -45,7 +45,7 @@ export const DevotionalModel =
         allowNull: false,
       },
       scripture1: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       scripture2: {
@@ -57,7 +57,7 @@ export const DevotionalModel =
         allowNull: false,
       },
       contents: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       ditto: {

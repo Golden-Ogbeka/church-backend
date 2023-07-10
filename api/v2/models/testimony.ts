@@ -51,7 +51,7 @@ export const TestimonyModel =
         allowNull: false,
       },
       main_gist: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: false,
       },
       ditto: {
