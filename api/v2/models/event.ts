@@ -91,7 +91,7 @@ export const EventModel = sequelizeInstance.define<EventModelAttributes>(
       type: DataTypes.STRING,
     },
     requiredRegistrationDetails: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       get() {
         const rawValue = this.getDataValue('requiredRegistrationDetails');
         return rawValue ? JSON.parse(rawValue) : null;
@@ -99,7 +99,7 @@ export const EventModel = sequelizeInstance.define<EventModelAttributes>(
       defaultValue: JSON.stringify([]),
     },
     registrationEntries: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       get() {
         const rawValue = this.getDataValue('registrationEntries');
         return rawValue ? JSON.parse(rawValue) : null;
@@ -113,7 +113,7 @@ export const EventModel = sequelizeInstance.define<EventModelAttributes>(
       values: ['online', 'offline'],
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     location: {
       type: DataTypes.STRING,

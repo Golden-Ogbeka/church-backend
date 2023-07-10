@@ -44,7 +44,7 @@ export const FeedbackModel = sequelizeInstance.define<FeedbackModelAttributes>(
       type: DataTypes.STRING,
     },
     content: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
 

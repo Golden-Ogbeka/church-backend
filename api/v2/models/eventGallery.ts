@@ -30,7 +30,7 @@ export const EventGalleryModel =
       primaryKey: true,
     },
     imageURL: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     event_id: {

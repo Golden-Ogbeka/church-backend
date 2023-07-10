@@ -24,8 +24,9 @@ export interface AnnouncementModelAttributes
   updatedAt: CreationOptional<string>;
 }
 
-export const AnnouncementModel =
-  sequelizeInstance.define<AnnouncementModelAttributes>('announcement', {
+export const AnnouncementModel = sequelizeInstance.define<AnnouncementModelAttributes>(
+  'announcement',
+  {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -36,7 +37,7 @@ export const AnnouncementModel =
       allowNull: false,
     },
     details: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     priority: {
@@ -62,4 +63,5 @@ export const AnnouncementModel =
       type: DataTypes.DATE,
       defaultValue: Sequelize.fn('NOW'),
     },
-  });
+  }
+);
