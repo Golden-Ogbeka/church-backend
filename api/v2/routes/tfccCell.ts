@@ -61,28 +61,12 @@ router.post(
       .exists()
       .notEmpty()
       .withMessage('Address cannot be empty'),
-    body('cell_leader', 'Cell leader name is required')
-      .trim()
-      .exists()
-      .notEmpty()
-      .withMessage('Cell leader name cannot be empty'),
     body('cell_leader_id', 'Cell leader id is required')
       .trim()
       .exists()
       .notEmpty()
       .withMessage('Cell leader id cannot be empty')
       .custom((value) => isValidLeaderId(value)),
-    body('phone', 'Phone number is required')
-      .trim()
-      .exists()
-      .notEmpty()
-      .withMessage('Phone number cannot be empty'),
-    body('email', 'Phone number is required')
-      .trim()
-      .optional()
-      .isEmail()
-      .normalizeEmail({ all_lowercase: true })
-      .withMessage('Invalid Email format'),
   ],
   CellController.AddCell
 );
@@ -115,28 +99,12 @@ router.patch(
       .exists()
       .notEmpty()
       .withMessage('Address cannot be empty'),
-    body('cell_leader', 'Cell leader name is required')
-      .trim()
-      .exists()
-      .notEmpty()
-      .withMessage('Cell leader name cannot be empty'),
     body('cell_leader_id', 'Cell leader id is required')
       .trim()
       .exists()
       .notEmpty()
       .withMessage('Cell leader id cannot be empty')
       .custom((value) => isValidLeaderId(value)),
-    body('phone', 'Phone number is required')
-      .trim()
-      .exists()
-      .notEmpty()
-      .withMessage('Phone number cannot be empty'),
-    body('email', 'Phone number is required')
-      .trim()
-      .optional()
-      .isEmail()
-      .normalizeEmail({ all_lowercase: true })
-      .withMessage('Invalid Email format'),
   ],
   CellController.UpdateCell
 );

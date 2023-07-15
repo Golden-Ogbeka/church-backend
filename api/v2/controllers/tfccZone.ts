@@ -1,6 +1,7 @@
 import { validationResult } from 'express-validator';
 import express from 'express';
 import { TFCCZoneModel, TFCCZoneModelAttributes } from '../models/tfccZone';
+import { ChurchesModel } from '../models/churches';
 
 export default () => {
   const GetAllZones = async (
@@ -21,6 +22,7 @@ export default () => {
       // find all zones
 
       const zonesData = await TFCCZoneModel.findAll({
+        include: [ChurchesModel],
         order: [['zonal', 'ASC']],
       });
 
@@ -49,7 +51,9 @@ export default () => {
 
       // find zone
 
-      const zoneData = await TFCCZoneModel.findByPk(id);
+      const zoneData = await TFCCZoneModel.findByPk(id, {
+        include: [ChurchesModel],
+      });
 
       if (!zoneData) return res.status(404).json({ message: 'Zone not found' });
 

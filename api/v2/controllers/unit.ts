@@ -44,7 +44,9 @@ export default () => {
       const { id } = req.params;
 
       // find unit
-      const unitData = await UnitModel.findByPk(id);
+      const unitData = await UnitModel.findByPk(id, {
+        include: [DepartmentModel],
+      });
 
       if (!unitData) return res.status(404).json({ message: 'Unit not found' });
 

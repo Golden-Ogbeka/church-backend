@@ -80,7 +80,7 @@ export const EventModel = sequelizeInstance.define<EventModelAttributes>(
       type: DataTypes.INTEGER,
     },
     limitedDateRegistration: {
-      type: DataTypes.STRING,
+      type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
     },
