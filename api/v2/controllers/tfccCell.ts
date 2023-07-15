@@ -11,6 +11,9 @@ import {
 } from '../../../functions/filters';
 import { TFCCCellModel, TFCCCellModelAttributes } from '../models/tfccCell';
 import { paginate } from '../../../functions/pagination';
+import { ChurchesModel } from '../models/churches';
+import { TFCCZoneModel } from '../models/tfccZone';
+import { TFCCLeaderModel } from '../models/tfccLeader';
 
 export default () => {
   const GetAllCells = async (
@@ -33,6 +36,7 @@ export default () => {
       // find all cells
 
       const cellsData = await TFCCCellModel.findAndCountAll({
+        include: [ChurchesModel, TFCCZoneModel],
         order: [['zone_id', 'ASC']],
         ...getSequelizeDateFilters({ from, to }),
         ...paginate({ limit, page }),
@@ -63,7 +67,9 @@ export default () => {
 
       // find cell
 
-      const cellData = await TFCCCellModel.findByPk(id);
+      const cellData = await TFCCCellModel.findByPk(id, {
+        include: [ChurchesModel, TFCCZoneModel],
+      });
 
       if (!cellData) return res.status(404).json({ message: 'Cell not found' });
 
@@ -87,24 +93,21 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() });
 
-      const {
-        church_id,
-        zone_id,
-        host_address,
-        cell_leader,
-        cell_leader_id,
-        phone,
-        email,
-      } = req.body;
+      const { church_id, zone_id, host_address, cell_leader_id } = req.body;
+
+      const cellLeader = await TFCCLeaderModel.findByPk(cell_leader_id);
+
+      if (!cellLeader)
+        return res.status(404).json({ message: 'Cell Leader not found' });
 
       const cellData = await TFCCCellModel.create({
         church_id,
         zone_id,
         host_address,
-        cell_leader,
+        cell_leader: cellLeader.firstname + ' ' + cellLeader.lastname,
         cell_leader_id,
-        phone,
-        email,
+        phone: cellLeader.mobile,
+        email: cellLeader.email,
       });
 
       return res.status(200).json({
@@ -127,15 +130,7 @@ export default () => {
       if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() });
 
-      let {
-        church_id,
-        zone_id,
-        host_address,
-        cell_leader,
-        cell_leader_id,
-        phone,
-        email,
-      } = req.body;
+      let { church_id, zone_id, host_address, cell_leader_id } = req.body;
 
       const { id } = req.params;
 
@@ -146,13 +141,19 @@ export default () => {
       if (!existingCell)
         return res.status(404).json({ message: 'Cell not found' });
 
+      const cellLeader = await TFCCLeaderModel.findByPk(cell_leader_id);
+
+      if (!cellLeader)
+        return res.status(404).json({ message: 'Cell Leader not found' });
+
       existingCell.church_id = church_id;
       existingCell.zone_id = zone_id;
       existingCell.host_address = host_address;
-      existingCell.cell_leader = cell_leader;
+      existingCell.cell_leader =
+        cellLeader.firstname + ' ' + cellLeader.lastname;
       existingCell.cell_leader_id = cell_leader_id;
-      existingCell.phone = phone;
-      existingCell.email = email || existingCell.email;
+      existingCell.phone = cellLeader.mobile;
+      existingCell.email = cellLeader.email;
 
       await existingCell.save();
 

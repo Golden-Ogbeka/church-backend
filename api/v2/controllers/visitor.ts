@@ -1,3 +1,4 @@
+import { AssignedSecondTimerModel } from './../models/assignedSecondTimer';
 import { TFCCLeaderModel } from './../models/tfccLeader';
 import { validationResult } from 'express-validator';
 import express from 'express';
@@ -244,6 +245,9 @@ export default () => {
       existingVisitor.fname = fname;
       existingVisitor.lname = lname;
       existingVisitor.address = address;
+      existingVisitor.phone = phone;
+      existingVisitor.email = email;
+      existingVisitor.dated = dated;
       existingVisitor.nearest = nearest;
       existingVisitor.marital = marital;
       existingVisitor.gender = gender;
