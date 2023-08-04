@@ -183,7 +183,7 @@ router.post(
       .exists()
       .notEmpty()
       .withMessage('Marital status cannot be empty')
-      .isIn(['Married', 'Single', 'Widowed', 'Divorced, Engaged'])
+      .isIn(['Married', 'Single', 'Widowed', 'Divorced', 'Engaged'])
       .withMessage(
         'Marital status is either Married, Single, Widowed, Engaged or Divorced'
       ),
