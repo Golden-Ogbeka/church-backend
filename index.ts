@@ -12,8 +12,9 @@ const PORT = process.env.PORT || 5000;
 app.use(
   cors({
     origin: [
-      'https://tfh-admin.netlify.app', //website
-      'http://127.0.0.1:5173', // localhost
+      'https://tfh-admin.netlify.app', //admin web
+      'http://127.0.0.1:5173', // admin localhost
+      'http://localhost:3000', // web localhost
     ],
   })
 );
