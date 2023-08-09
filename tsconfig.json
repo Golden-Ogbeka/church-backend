@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
     /* Language and Environment */
+    "noImplicitAny": false,
     "target": "es2016", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     /* Modules */
-    "module": "commonjs", /* Specify what module code is generated. */
+    "module": "ESNext", /* Specify what module code is generated. */
+    "moduleResolution": "Node",
     /* Allow multiple folders to be treated as one when resolving modules. */
     "typeRoots": [
       "./node_modules/@types",
@@ -14,8 +16,13 @@
     "forceConsistentCasingInFileNames": true, /* Ensure that casing is correct in imports. */
     "strict": true, /* Enable all strict type-checking options. */
     "skipLibCheck": true, /* Skip type checking all .d.ts files. */
+    
   },
   "ts-node": {
-    "esm": true
-    }
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  },
+  "exclude": [
+    "node_modules",
+  ],
 }

@@ -1,5 +1,6 @@
 import express from 'express';
-const { Op } = require('sequelize');
+import { Op } from 'sequelize';
+// const { Op } = require('sequelize');
 
 export const getDateFilters = (
   req: express.Request<

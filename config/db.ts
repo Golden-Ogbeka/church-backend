@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { Sequelize } from 'sequelize';
 
-
 // Mongo DB
 mongoose.set('strictQuery', false);
 
@@ -16,9 +15,19 @@ export const connectMongoDB = async () => {
 };
 
 // MySQL
-export const sequelizeInstance = new Sequelize(process.env.MYSQL_URI!, {
-  dialect: 'mysql',
-});
+export const sequelizeInstance = new Sequelize(
+  process.env.MYSQL_DB!,
+  process.env.MYSQL_USER!,
+  process.env.MYSQL_PASSWORD!,
+  {
+    host: process.env.MYSQL_HOST!,
+    dialect:
+      'mysql' /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */,
+  }
+);
+// export const sequelizeInstance = new Sequelize(process.env.MYSQL_URI! || '', {
+//   dialect: 'mysql',
+// });
 // export const sequelizeInstance = new Sequelize(
 //   process.env.MYSQL_DB!,
 //   process.env.MYSQL_USER!,
