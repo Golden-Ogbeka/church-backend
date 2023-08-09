@@ -1,12 +1,13 @@
 {
   "name": "tfh-admin-backend",
   "version": "1.0.0",
-  "type": "module",
   "description": "",
+  "type": "module",
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node ./index.ts",
+    "type-start": "ts-node ./index.ts",
     "dev": "nodemon index.ts"
   },
   "repository": {
