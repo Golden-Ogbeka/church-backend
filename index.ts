@@ -14,6 +14,7 @@ app.use(
       'https://tfh-admin.netlify.app', //admin web
       'http://127.0.0.1:5173', // admin localhost
       'http://localhost:3000', // web localhost
+      'https://tfh-website.netlify.app/', //website
     ],
   })
 );
