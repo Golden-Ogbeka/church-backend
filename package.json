@@ -2,13 +2,11 @@
   "name": "tfh-admin-backend",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node ./index.ts",
-    "type-start": "ts-node ./index.ts",
-    "dev": "nodemon index.ts"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -46,21 +44,7 @@
     "sequelize": "^6.31.0"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.2",
-    "@types/cookie-parser": "^1.4.3",
-    "@types/cors": "^2.8.13",
-    "@types/express": "^4.17.15",
-    "@types/express-jwt": "^7.4.2",
-    "@types/jsonwebtoken": "^9.0.0",
-    "@types/mongoose": "^5.11.97",
-    "@types/morgan": "^1.9.4",
-    "@types/multer": "^1.4.7",
-    "@types/node": "^18.11.18",
-    "@types/nodemailer": "^6.4.7",
-    "@types/sequelize": "^4.28.14",
     "nodemon": "^2.0.20",
-    "sequelize-cli": "^6.6.0",
-    "ts-node": "^10.9.1",
-    "typescript": "^4.9.4"
+    "sequelize-cli": "^6.6.0"
   }
 }
