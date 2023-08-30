@@ -1,0 +1,69 @@
+const { DataTypes, Sequelize } = require('sequelize');
+const { sequelizeInstance } = require('../../../config/db');
+const { ChurchesModel } = require('./churches');
+const { TFCCLeaderModel } = require('./tfccLeader');
+const { TFCCZoneModel } = require('./tfccZone');
+
+const TFCCCellModel = sequelizeInstance.define(
+  'tfccCell',
+  {
+    cell_id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    church_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    zone_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    host_address: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    cell_leader: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    cell_leader_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      defaultValue: Sequelize.fn('NOW'),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      defaultValue: Sequelize.fn('NOW'),
+    },
+  },
+  {
+    tableName: 'cell_tbl', // to be changed to tfcc_cells
+    paranoid: true,
+  }
+);
+
+TFCCCellModel.belongsTo(ChurchesModel, {
+  foreignKey: 'church_id',
+});
+
+TFCCCellModel.belongsTo(TFCCZoneModel, {
+  foreignKey: 'zone_id',
+});
+
+TFCCCellModel.belongsTo(TFCCLeaderModel, {
+  foreignKey: 'cell_leader_id',
+});
+
+module.exports = { TFCCCellModel };
