@@ -42,7 +42,7 @@ const Controller = () => {
 
       const { id } = req.params;
 
-      // find unit
+      // find subscriber
       const unitData = await BulletinSubscribersModel.findByPk(id);
 
       if (!unitData)
@@ -50,7 +50,7 @@ const Controller = () => {
 
       return res.status(200).json({
         message: 'Subscriber retrieved',
-        unit: unitData,
+        subscriber: unitData,
       });
     } catch (error) {
       return res
@@ -68,7 +68,7 @@ const Controller = () => {
 
       const { address } = req.body;
 
-      // check if unit exists
+      // check if subscriber exists
       let existingSubscriber = await BulletinSubscribersModel.findOne({
         where: { address },
       });
@@ -83,7 +83,7 @@ const Controller = () => {
 
       return res.status(200).json({
         message: 'Subscription successful',
-        unit: newSubscriber,
+        subscriber: newSubscriber,
       });
     } catch (error) {
       return res
@@ -102,12 +102,12 @@ const Controller = () => {
       const { subscribed } = req.body;
       const { id } = req.params;
 
-      // check if unit exists
+      // check if subscriber exists
       let existingSubscriber = await BulletinSubscribersModel.findByPk(id);
       if (!existingSubscriber)
         return res.status(400).json({ message: 'Subscriber not found' });
 
-      // Check if other unit exists with this name
+      // Check if other subscriber exists with this name
 
       existingSubscriber.subscribed = subscribed;
 
@@ -115,7 +115,7 @@ const Controller = () => {
 
       return res.status(200).json({
         message: 'Subscriber Updated',
-        unit: existingSubscriber,
+        subscriber: existingSubscriber,
       });
     } catch (error) {
       return res
@@ -133,7 +133,7 @@ const Controller = () => {
 
       const { id } = req.params;
 
-      // check if unit exists
+      // check if subscriber exists
       let existingSubscriber = await BulletinSubscribersModel.findByPk(id);
       if (!existingSubscriber)
         return res.status(400).json({ message: 'Subscriber not found' });
