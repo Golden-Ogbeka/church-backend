@@ -8,6 +8,8 @@ const VisitorModel = sequelizeInstance.define(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+      allowNull: true,
+      defaultValue: 0,
     },
     fname: {
       type: DataTypes.STRING,

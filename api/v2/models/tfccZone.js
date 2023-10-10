@@ -9,6 +9,8 @@ const TFCCZoneModel = sequelizeInstance.define(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+      allowNull: true,
+      defaultValue: 0,
     },
     church_id: {
       type: DataTypes.INTEGER,

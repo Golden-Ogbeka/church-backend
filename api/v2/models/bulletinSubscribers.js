@@ -8,6 +8,8 @@ const BulletinSubscribersModel = sequelizeInstance.define(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+      allowNull: true,
+      defaultValue: 0,
     },
     address: {
       type: DataTypes.STRING,

@@ -9,6 +9,8 @@ const EventModel = sequelizeInstance.define(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+      allowNull: true,
+      defaultValue: 0,
     },
     name: {
       type: DataTypes.STRING,
