@@ -36,6 +36,7 @@ const TFCCZoneModel = sequelizeInstance.define(
 
 TFCCZoneModel.belongsTo(ChurchesModel, {
   foreignKey: 'church_id',
+  constraints: false,
 });
 
 module.exports = { TFCCZoneModel };

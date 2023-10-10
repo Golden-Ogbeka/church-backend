@@ -141,10 +141,12 @@ const UserModel = sequelizeInstance.define(
 
 UserModel.belongsTo(DepartmentModel, {
   foreignKey: 'dept',
+  constraints: false,
 });
 
 UserModel.belongsTo(UnitModel, {
   foreignKey: 'd_unit',
+  constraints: false,
 });
 
 // UserModel.prototype.toJSON = function () {

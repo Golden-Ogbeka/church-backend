@@ -104,6 +104,7 @@ const EventModel = sequelizeInstance.define(
 EventModel.hasMany(EventGalleryModel, {
   foreignKey: 'event_id',
   as: 'gallery',
+  constraints: false,
 });
 
 module.exports = { EventModel };

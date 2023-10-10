@@ -56,14 +56,17 @@ const TFCCCellModel = sequelizeInstance.define(
 
 TFCCCellModel.belongsTo(ChurchesModel, {
   foreignKey: 'church_id',
+  constraints: false,
 });
 
 TFCCCellModel.belongsTo(TFCCZoneModel, {
   foreignKey: 'zone_id',
+  constraints: false,
 });
 
 TFCCCellModel.belongsTo(TFCCLeaderModel, {
   foreignKey: 'cell_leader_id',
+  constraints: false,
 });
 
 module.exports = { TFCCCellModel };
