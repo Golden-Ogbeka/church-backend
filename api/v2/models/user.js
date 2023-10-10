@@ -10,6 +10,8 @@ const UserModel = sequelizeInstance.define(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+      allowNull: true,
+      defaultValue: 0,
     },
     titles: {
       type: DataTypes.STRING,
@@ -141,10 +143,12 @@ const UserModel = sequelizeInstance.define(
 
 UserModel.belongsTo(DepartmentModel, {
   foreignKey: 'dept',
+  constraints: false,
 });
 
 UserModel.belongsTo(UnitModel, {
   foreignKey: 'd_unit',
+  constraints: false,
 });
 
 // UserModel.prototype.toJSON = function () {

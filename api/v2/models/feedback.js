@@ -6,6 +6,8 @@ const FeedbackModel = sequelizeInstance.define('feedback', {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
+    allowNull: true,
+    defaultValue: 0,
   },
   fullName: {
     type: DataTypes.STRING,

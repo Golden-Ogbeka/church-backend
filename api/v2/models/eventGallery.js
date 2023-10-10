@@ -6,6 +6,8 @@ const EventGalleryModel = sequelizeInstance.define('event_gallery', {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
+    allowNull: true,
+    defaultValue: 0,
   },
   imageURL: {
     type: DataTypes.TEXT,

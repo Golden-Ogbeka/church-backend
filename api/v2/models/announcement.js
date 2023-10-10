@@ -6,6 +6,8 @@ const AnnouncementModel = sequelizeInstance.define('announcement', {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
+    allowNull: true,
+    defaultValue: 0,
   },
   title: {
     type: DataTypes.STRING,

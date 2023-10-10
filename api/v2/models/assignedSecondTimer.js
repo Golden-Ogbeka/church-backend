@@ -10,6 +10,8 @@ const AssignedSecondTimerModel = sequelizeInstance.define(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+      allowNull: true,
+      defaultValue: 0,
     },
     v_id: {
       type: DataTypes.INTEGER,

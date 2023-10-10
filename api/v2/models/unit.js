@@ -9,6 +9,8 @@ const UnitModel = sequelizeInstance.define(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+      allowNull: true,
+      defaultValue: 0,
     },
     dept_id: {
       type: DataTypes.STRING,
@@ -34,6 +36,7 @@ const UnitModel = sequelizeInstance.define(
 
 UnitModel.belongsTo(DepartmentModel, {
   foreignKey: 'dept_id',
+  constraints: false,
 });
 
 module.exports = { UnitModel };
