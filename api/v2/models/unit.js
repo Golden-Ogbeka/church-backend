@@ -34,6 +34,7 @@ const UnitModel = sequelizeInstance.define(
 
 UnitModel.belongsTo(DepartmentModel, {
   foreignKey: 'dept_id',
+  constraints: false,
 });
 
 module.exports = { UnitModel };
