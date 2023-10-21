@@ -5,11 +5,11 @@ const BulletinSubscribersModel = sequelizeInstance.define(
   'bulletinSubscribers',
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      autoIncrement: false,
+      allowNull: false,
       primaryKey: true,
-      allowNull: true,
-      defaultValue: 0,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
     },
     address: {
       type: DataTypes.STRING,

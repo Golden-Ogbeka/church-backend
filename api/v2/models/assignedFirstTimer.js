@@ -7,11 +7,11 @@ const AssignedFirstTimerModel = sequelizeInstance.define(
   'assignedFirstTimer',
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      autoIncrement: false,
+      allowNull: false,
       primaryKey: true,
-      allowNull: true,
-      defaultValue: 0,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
     },
     v_id: {
       type: DataTypes.INTEGER,

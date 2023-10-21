@@ -5,11 +5,11 @@ const ChurchesModel = sequelizeInstance.define(
   'church',
   {
     church_id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      autoIncrement: false,
+      allowNull: false,
       primaryKey: true,
-      allowNull: true,
-      defaultValue: 0,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
     },
     church_label: {
       type: DataTypes.STRING,

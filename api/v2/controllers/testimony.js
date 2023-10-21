@@ -95,6 +95,7 @@ const Controller = () => {
         testimony: testimonyData,
       });
     } catch (error) {
+      console.log(error);
       return res
         .status(500)
         .json({ message: error?.message || 'Internal Server Error' });
