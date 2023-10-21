@@ -3,11 +3,11 @@ const { sequelizeInstance } = require('../../../config/db');
 
 const EventGalleryModel = sequelizeInstance.define('event_gallery', {
   id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
+    autoIncrement: false,
+    allowNull: false,
     primaryKey: true,
-    allowNull: true,
-    defaultValue: 0,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
   },
   imageURL: {
     type: DataTypes.TEXT,

@@ -5,11 +5,11 @@ const AdminModel = sequelizeInstance.define(
   'admin',
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      autoIncrement: false,
+      allowNull: false,
       primaryKey: true,
-      allowNull: true,
-      defaultValue: 0,
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
     },
     fullname: {
       type: DataTypes.STRING,
