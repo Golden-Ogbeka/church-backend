@@ -51,6 +51,7 @@ const Controller = () => {
       const devotionalsData = await DevotionalModel.findAndCountAll({
         order: [['ditto', 'DESC']],
         where: { ditto: { [Op.lte]: new Date() } },
+        limit,
       });
 
       return res.status(200).json({
@@ -164,7 +165,8 @@ const Controller = () => {
         return res.status(404).json({ message: 'Devotional not found' });
 
       //increase views
-      devotionalData.increment('views');
+      // devotionalData.increment('views');
+      // Devotional would be fetched but may not be read
 
       return res.status(200).json({
         message: 'Devotional retrieved',
