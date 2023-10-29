@@ -12,9 +12,9 @@ app.use(
   cors({
     origin: [
       'https://tfh-admin.netlify.app', //admin web
+      'https://tfh-website.netlify.app', //website
       'http://127.0.0.1:5173', // admin localhost
       'http://localhost:3000', // web localhost
-      'https://tfh-website.netlify.app/', //website
     ],
   })
 );
