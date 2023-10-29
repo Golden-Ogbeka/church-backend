@@ -223,8 +223,10 @@ const Controller = () => {
               text: 'Reset password',
               fallback: true,
               link: `${
-                process.env.ADMIN_DASHBOARD_URL || ''
-              }/reset-password/update/${verificationCode}`,
+                process.env.WEBSITE_URL || ''
+              }/auth/reset-password?email=${
+                existingUser?.email
+              }&verificationCode=${verificationCode}`,
             },
           },
           signature: 'Regards',

@@ -23,7 +23,7 @@ const Controller = () => {
 
       // find all admins
       const adminsData = await AdminModel.findAndCountAll({
-        order: [['id', 'ASC']],
+        order: [['active', 'DESC']],
         ...getSequelizeDateFilters({ from, to }),
         ...paginate({ limit, page }),
       });
